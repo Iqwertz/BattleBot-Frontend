@@ -3,4 +3,40 @@
   height: 90vh;
   background-color: rgb(32, 32, 32);
   border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  flex-grow: 1;
+  flex-basis: auto;
+  padding: 5px;
+
+  .tile-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    flex-grow: 1;
+    flex-basis: auto;
+
+    .tile {
+      display: flex;
+      flex-grow: 1;
+      border: 1px solid rgb(32, 32, 32);
+
+      &.white {
+        background-color: white;
+      }
+
+      &.red {
+        background-color: red;
+      }
+
+      &.black {
+        background-color: black;
+      }
+
+      &.darkred {
+        background-color: darkred;
+      }
+    }
+  }
 }

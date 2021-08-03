@@ -1,5 +1,14 @@
 <div class="battle-map-container">
-  <div class="tile-row" *ngFor="let tileRow of battleMap">
-    <div class="tile" *ngFor="let tile of tileRow"></div>
+  <div class="tile-row" *ngFor="let tileRow of simulation.map">
+    <div
+      class="tile"
+      *ngFor="let tile of tileRow"
+      [ngClass]="{
+        white: tile.type == 'air',
+        black: tile.type == 'wall',
+        red: tile.type == 'track',
+        darkred: tile.type == 'player'
+      }"
+    ></div>
   </div>
 </div>
