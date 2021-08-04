@@ -1,5 +1,7 @@
+import { newArray } from '@angular/compiler/src/util';
 import { Component, OnInit } from '@angular/core';
 import { environment } from 'src/environments/environment';
+var perlin = require('perlin-noise');
 
 export type TileTypes = 'air' | 'wall' | 'player' | 'track';
 
@@ -26,6 +28,7 @@ export interface Bot {
   position: number[];
   color: number;
   track: number[][];
+  trackLength: number;
   direction: Direction;
   brain: BrainData;
   crashed: boolean;
@@ -33,7 +36,7 @@ export interface Bot {
 
 export interface SimulationData {
   bots: Bot[];
-  map: TileData[][];
+  obstacleMap: boolean[][];
 }
 
 @Component({
@@ -43,12 +46,14 @@ export interface SimulationData {
 })
 export class BattleMapComponent implements OnInit {
   simulationSpeed = environment.simulationSpeed;
-  battleMapSize: number[] = [50, 50];
+  battleMapSize: number[] = [60, 60];
   emptyTile: TileData = {
     type: 'air',
   };
-  emptyMap: TileData[][] = this.fill2DArray(this.battleMapSize, this.emptyTile);
-  battleMap: TileData[][] = this.emptyMap.slice(0);
+
+  battleMapBuffer: Uint8Array = this.generateArrayBuffer(
+    this.battleMapSize[0] * this.battleMapSize[1]
+  );
 
   bot: Bot = {
     name: 'Bot1',
@@ -56,6 +61,7 @@ export class BattleMapComponent implements OnInit {
     position: [this.battleMapSize[0] - 1, 0],
     direction: 'up',
     track: [],
+    trackLength: 7,
     crashed: false,
     brain: {
       default: {
@@ -80,6 +86,7 @@ export class BattleMapComponent implements OnInit {
     position: [this.battleMapSize[0] / 2, this.battleMapSize[1] / 2],
     direction: 'right',
     track: [],
+    trackLength: 40,
     crashed: false,
     brain: {
       default: {
@@ -98,6 +105,13 @@ export class BattleMapComponent implements OnInit {
           'right',
           'forward',
           'left',
+          'left',
+          'left',
+          'forward',
+          'forward',
+          'forward',
+          'right',
+          'right',
         ],
       },
     },
@@ -105,37 +119,52 @@ export class BattleMapComponent implements OnInit {
 
   simulation: SimulationData = {
     bots: [this.bot, this.bot2],
-    map: this.battleMap,
+    obstacleMap: this.generateObstacleMap(this.battleMapSize),
   };
 
   constructor() {}
 
   ngOnInit(): void {
     this.startSimulation();
-    console.log(this.battleMap);
   }
 
-  fill2DArray(size: number[], value: any): any[][] {
-    let createdArray = [];
-    for (let j = 0; j < size[0]; j++) {
-      let row = [];
-      for (let i = 0; i < size[1]; i++) {
-        row.push(Object.create(value));
+  generateArrayBuffer(bufferSize: number): Uint8Array {
+    let buffer = new ArrayBuffer(bufferSize);
+    let view = new Uint8Array(buffer);
+
+    return view;
+  }
+
+  generateObstacleMap(size: number[]): boolean[][] {
+    let obstacleMap: boolean[][] = [];
+    let noiseMap = perlin.generatePerlinNoise(
+      size[0],
+      size[1],
+      environment.obstacleNoiseSettings
+    );
+
+    for (let i = 0; i < size[0]; i++) {
+      let row: boolean[] = [];
+      for (let j = 0; j < size[1]; j++) {
+        let index = i * size[0] + j;
+        if (noiseMap[index] > 0.65) {
+          row.push(true);
+        } else {
+          row.push(false);
+        }
       }
-      createdArray.push(row);
+      obstacleMap.push(row);
     }
 
-    return createdArray;
+    return obstacleMap;
   }
 
   startSimulation() {
     this.renderOntoMap();
-    this.clearMapArray();
     this.simulateStep();
   }
 
   simulateStep() {
-    this.clearMapArray();
     for (let bot of this.simulation.bots) {
       if (!bot.crashed) {
         let nextInstruction =
@@ -148,6 +177,7 @@ export class BattleMapComponent implements OnInit {
         let newBotPos: number[] = bot.position.slice(0);
 
         bot.direction = movingDirection;
+
         switch (movingDirection) {
           case 'down':
             newBotPos[1]--;
@@ -164,6 +194,11 @@ export class BattleMapComponent implements OnInit {
         }
 
         if (!this.checkPositionInBounds(newBotPos)) {
+          bot.track.push(bot.position.slice(0));
+
+          if (bot.track.length > bot.trackLength) {
+            bot.track.shift();
+          }
           bot.position = newBotPos;
         } else {
           this.botOutOfBounds(bot);
@@ -233,37 +268,43 @@ export class BattleMapComponent implements OnInit {
   }
 
   renderOntoMap() {
-    //this.simulation.map = this.emptyMap;
+    this.battleMapBuffer = this.generateArrayBuffer(
+      this.battleMapSize[0] * this.battleMapSize[1]
+    );
+
+    for (let i = 0; i < this.battleMapSize[0]; i++) {
+      for (let j = 0; j < this.battleMapSize[1]; j++) {
+        if (this.simulation.obstacleMap[i][j]) {
+          this.setToBattleMapBuffer([i, j], 1);
+        }
+      }
+    }
 
     for (let bot of this.simulation.bots) {
-      this.simulation.map[bot.position[0]][bot.position[1]].type = 'player';
-      this.simulation.map[bot.position[0]][bot.position[1]].color = bot.color;
+      this.setToBattleMapBuffer(bot.position, 2);
+      //this.simulation.map[bot.position[0]][bot.position[1]].type = 'player';
+      //this.simulation.map[bot.position[0]][bot.position[1]].color = bot.color;
 
       for (let trackElement of bot.track) {
-        console.log(trackElement);
-        this.simulation.map[trackElement[0]][trackElement[1]].type = 'track';
-        this.simulation.map[trackElement[0]][trackElement[1]].color =
-          this.changeColorLightness(bot.color, 0x50);
+        this.setToBattleMapBuffer(trackElement, 3);
       }
     }
   }
 
-  private clearMapArray() {
-    if (typeof Worker !== 'undefined') {
-      // Create a new
-      const worker = new Worker(new URL('./deep-copy.worker', import.meta.url));
-      worker.onmessage = ({ data }) => {
-        this.emptyMap = data;
-      };
-      worker.postMessage({
-        size: this.battleMapSize,
-        value: this.emptyTile,
-      });
-    } else {
-      console.log('Worker not available');
-      // Web Workers are not supported in this environment.
-      // You should add a fallback so that your program still executes correctly.
+  private setToBattleMapBuffer(pos: number[], value: number) {
+    this.battleMapBuffer[pos[0] * this.battleMapSize[0] + pos[1]] = value;
+  }
+
+  getBattleMapBufferValue(x: number, y: number): number {
+    return this.battleMapBuffer[x * this.battleMapSize[0] + y];
+  }
+
+  //isnt very clean but angular cant loop over numbers only collections :(
+  fakeArray(length: number): Array<any> {
+    if (length >= 0) {
+      return new Array(length);
     }
+    return new Array(0);
   }
 
   private changeColorLightness(color: number, lightness: number): number {
