@@ -4,9 +4,9 @@
 
 export const environment = {
   production: false,
-  simulationSpeed: 10,
+  simulationSpeed: 50,
   obstacleNoiseSettings: {
-    octaveCount: 3,
+    octaveCount: 4,
     amplitude: 0.2,
     persistence: 0.1,
   },
