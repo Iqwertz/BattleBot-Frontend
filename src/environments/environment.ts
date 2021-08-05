@@ -8,11 +8,11 @@ export const environment = {
   production: false,
   simulationSpeed: 1,
   obstacleNoiseSettings: {
-    octaveCount: 3,
+    octaveCount: 5,
     amplitude: 0.2,
     persistence: 0.1,
   },
-  byteColorMap: {
+  byteColorMap: {  //spielerspur farbe muss immer um eines höher sein als spieler
     0: '#fff',    //weiß
     1: '#000000', //schwarz
     2: '#000000', //unused

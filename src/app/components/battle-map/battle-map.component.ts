@@ -19,7 +19,7 @@ export type Direction = 'left' | 'right' | 'up' | 'down';
 
 export type Operator = '==' | '!=';
 
-export type BotVarRef = 'radarLeft' | 'radarRight' | 'radarForward';
+export type BotVarRef = 'radarLeft' | 'radarRight' | 'radarForward' | 'trackRadarLeft' | 'trackRadarRight' | 'trackRadarForward';
 
 export interface LogicTest {
   variable: BotVarRef;
@@ -35,19 +35,20 @@ export interface LogicInstruction {
 }
 
 export interface InstructionSet {
-  progress: number;
+  progress?: number;
   instructions: (Instruction | LogicInstruction)[];
 }
 
 export interface BotVars {
   obstacleRadar: RadarStatus;
+  trackRadar: RadarStatus;
 }
 
 export interface BrainData {
   vars: BotVars;
   default: InstructionSet;
   onWallDetected: InstructionSet;
-  onBorderDetected?: InstructionSet;
+  onTrackDetected: InstructionSet;
 }
 
 export interface RadarStatus {
@@ -69,7 +70,7 @@ export interface Bot {
 }
 
 export interface SimulationData {
-  bots: Bot[];
+  bots: Map<number, Bot>;
   obstacleMap: boolean[][];
 }
 
@@ -81,7 +82,7 @@ export interface SimulationData {
 export class BattleMapComponent implements OnInit {
   simulationSpeed = environment.simulationSpeed;
   byteColorMap = new Map(Object.entries(environment.byteColorMap))
-  battleMapSize: number[] = [100, 100];
+  battleMapSize: number[] = [70, 70];
   emptyTile: TileData = {
     type: 'air',
   };
@@ -91,22 +92,25 @@ export class BattleMapComponent implements OnInit {
     this.battleMapSize[0] * this.battleMapSize[1]
   );
 
+  emptyRadar: RadarStatus = {
+    forward: false,
+    left: false,
+    right: false,
+  }
+
   bot: Bot = {
     name: 'Bot1',
     color: 3,
     position: [this.battleMapSize[0] - 20, 20],
     direction: 'up',
     track: [],
-    trackLength: 100,
+    trackLength: 500,
     trackColor: 4,
     crashed: false,
     brain: {
       vars: {
-        obstacleRadar: {
-          forward: false,
-          left: false,
-          right: false,
-        },
+        obstacleRadar: this.emptyRadar,
+        trackRadar: this.emptyRadar
       },
       default: {
         progress: 0,
@@ -178,6 +182,47 @@ export class BattleMapComponent implements OnInit {
           },
         ],
       },
+      onTrackDetected: {
+        instructions: [
+          {
+            test: {
+              operator: '==',
+              value: 'true',
+              variable: 'trackRadarForward',
+            },
+            whenTrue: {
+              instructions: ['left', 'left', 'forward'],
+            },
+            else: {
+              instructions: [
+                {
+                  test: {
+                    operator: '==',
+                    value: 'true',
+                    variable: 'trackRadarLeft',
+                  },
+                  whenTrue: {
+                    instructions: ['left', 'left', 'forward'],
+                  },
+                  type: 'if',
+                },
+                {
+                  test: {
+                    operator: '==',
+                    value: 'true',
+                    variable: 'trackRadarRight',
+                  },
+                  whenTrue: {
+                    instructions: ['left', 'left', 'forward'],
+                  },
+                  type: 'if',
+                }
+              ]
+            },
+            type: 'if',
+          },
+        ],
+      },
     },
   };
 
@@ -190,16 +235,13 @@ export class BattleMapComponent implements OnInit {
     ],
     direction: 'left',
     track: [],
-    trackLength: 1000,
+    trackLength: 500,
     trackColor: 6,
     crashed: false,
     brain: {
       vars: {
-        obstacleRadar: {
-          forward: false,
-          left: false,
-          right: false,
-        },
+        obstacleRadar: this.emptyRadar,
+        trackRadar: this.emptyRadar
       },
       default: {
         progress: 0,
@@ -285,20 +327,66 @@ export class BattleMapComponent implements OnInit {
           },
         ],
       },
+      onTrackDetected: {
+        instructions: [
+          {
+            test: {
+              operator: '==',
+              value: 'true',
+              variable: 'trackRadarForward',
+            },
+            whenTrue: {
+              instructions: ['left', 'left', 'forward'],
+            },
+            else: {
+              instructions: [
+                {
+                  test: {
+                    operator: '==',
+                    value: 'true',
+                    variable: 'trackRadarLeft',
+                  },
+                  whenTrue: {
+                    instructions: ['left', 'left', 'forward'],
+                  },
+                  type: 'if',
+                },
+                {
+                  test: {
+                    operator: '==',
+                    value: 'true',
+                    variable: 'trackRadarRight',
+                  },
+                  whenTrue: {
+                    instructions: ['left', 'left', 'forward'],
+                  },
+                  type: 'if',
+                }
+              ]
+            },
+            type: 'if',
+          },
+        ],
+      },
     },
   };
 
   simulation: SimulationData = {
-    bots: [this.bot, this.bot2],
-    obstacleMap: this.generateObstacleMap(this.battleMapSize),
+    bots: new Map<number, Bot>(),
+    obstacleMap: []
   };
 
   constructor() { }
 
   ngOnInit(): void {
-    for (let bot of this.simulation.bots) {
+    this.simulation.obstacleMap = this.generateObstacleMap(this.battleMapSize),
+
+      this.simulation.bots.set(this.bot.color, this.bot);
+    this.simulation.bots.set(this.bot2.color, this.bot2);
+
+    this.simulation.bots.forEach((bot) => {
       this.setRandomStart(bot, 4);
-    }
+    })
     this.startSimulation();
   }
 
@@ -339,7 +427,7 @@ export class BattleMapComponent implements OnInit {
   }
 
   simulateStep() {
-    for (let bot of this.simulation.bots) {
+    this.simulation.bots.forEach((bot) => {
       if (!bot.crashed) {
         this.checkForEvents(bot);
 
@@ -387,7 +475,7 @@ export class BattleMapComponent implements OnInit {
           this.botOutOfBounds(bot);
         }
       }
-    }
+    });
 
     this.renderOntoMap();
     setTimeout(() => {
@@ -414,6 +502,9 @@ export class BattleMapComponent implements OnInit {
       let defaultIn: Instruction[] = [];
       let stepFound = false;
       while (!stepFound) {
+        if (bot.brain.default.progress == undefined) {
+          bot.brain.default.progress = 0;
+        }
         let ins = bot.brain.default.instructions[bot.brain.default.progress];
 
         if (ins == 'forward') {
@@ -439,8 +530,24 @@ export class BattleMapComponent implements OnInit {
   checkForEvents(bot: Bot): Instruction[] | null {
     if (this.checkWalls(bot)) {
       return this.executeLogic(bot.brain.onWallDetected, 0, bot.brain.vars);
+    } else if (this.checkTracks(bot)) {
+      return this.executeLogic(bot.brain.onTrackDetected, 0, bot.brain.vars);
     }
     return null;
+  }
+
+  checkTracks(bot: Bot): boolean {
+    bot.brain.vars.trackRadar = {
+      left: this.checkTrackDir(bot, 'left'),
+      right: this.checkTrackDir(bot, 'right'),
+      forward: this.checkTrackDir(bot, 'forward'),
+    };
+
+    return (
+      bot.brain.vars.trackRadar.left ||
+      bot.brain.vars.trackRadar.right ||
+      bot.brain.vars.trackRadar.forward
+    );
   }
 
   checkWalls(bot: Bot): boolean {
@@ -455,6 +562,34 @@ export class BattleMapComponent implements OnInit {
       bot.brain.vars.obstacleRadar.right ||
       bot.brain.vars.obstacleRadar.forward
     );
+  }
+
+  checkTrackDir(bot: Bot, ins: Instruction): boolean {
+    let detected = false;
+    let relativePos: number[] = this.getRelativePosition(
+      bot.direction,
+      ins,
+      bot.position
+    );
+    if (!this.checkPositionOutOfBounds(relativePos)) {
+      let posVal = this.getBattleMapBufferValue(relativePos[0], relativePos[1]);
+      if (posVal != bot.trackColor) {
+        if (this.isPlayerTrackByte(this.getBattleMapBufferValue(relativePos[0], relativePos[1]))) {
+          detected = true;
+        }
+      }
+    }
+
+    return detected;
+  }
+
+  isPlayerTrackByte(b: number): boolean {
+    for (let k of this.simulation.bots.keys()) {
+      if (b == k + 1) {
+        return true;
+      }
+    }
+    return false;
   }
 
   checkWallDir(bot: Bot, ins: Instruction): boolean {
@@ -559,6 +694,12 @@ export class BattleMapComponent implements OnInit {
       return bVar.obstacleRadar.left.toString();
     } else if (ref == 'radarRight') {
       return bVar.obstacleRadar.right.toString();
+    } else if (ref == 'trackRadarForward') {
+      return bVar.trackRadar.forward.toString();
+    } else if (ref == 'trackRadarLeft') {
+      return bVar.trackRadar.left.toString();
+    } else if (ref == 'trackRadarRight') {
+      return bVar.trackRadar.right.toString();
     }
 
     return '';
@@ -649,12 +790,12 @@ export class BattleMapComponent implements OnInit {
       }
     }
 
-    for (let bot of this.simulation.bots) {
+    this.simulation.bots.forEach((bot) => {
       for (let trackElement of bot.track) {
-        this.setToBattleMapBuffer(trackElement, bot.color);
+        this.setToBattleMapBuffer(trackElement, bot.trackColor);
       }
-      this.setToBattleMapBuffer(bot.position, bot.trackColor);
-    }
+      this.setToBattleMapBuffer(bot.position, bot.color);
+    });
   }
 
   private setToBattleMapBuffer(pos: number[], value: number) {
@@ -677,7 +818,7 @@ export class BattleMapComponent implements OnInit {
     let foundValid = false;
 
     while (!foundValid) {
-      let randomStart = [Math.floor(Math.random() * this.battleMapSize[0]), Math.floor(Math.random() * this.battleMapSize[1])]
+      let randomStart = [Math.floor(Math.random() * this.battleMapSize[0] - 2 * area) + area, Math.floor(Math.random() * this.battleMapSize[1] - 2 * area) + area]
       let obstacleNear = false;
       let checkSpotStart = [randomStart[0] - Math.floor(area / 2), randomStart[1] - Math.floor(area / 2)]
       for (let i = 0; i < area; i++) {
