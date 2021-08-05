@@ -2,14 +2,29 @@
 // `ng build` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+import { StringMap } from "@angular/compiler/src/compiler_facade_interface";
+
 export const environment = {
   production: false,
-  simulationSpeed: 50,
+  simulationSpeed: 1,
   obstacleNoiseSettings: {
-    octaveCount: 4,
+    octaveCount: 3,
     amplitude: 0.2,
     persistence: 0.1,
   },
+  byteColorMap: {
+    0: '#fff',    //weiß
+    1: '#000000', //schwarz
+    2: '#000000', //unused
+    3: '#3d47ff', //spieler 1
+    4: '#7a81ff', //spieler 1 spur
+    5: '#2eff39', //spieler 2
+    6: '#7aff81',  //spieler 2 spur
+    7: '#ff2e2e', //spieler 3
+    8: '#ff6969', //spieler 3 spur
+    9: '#fff021', //spieler 4
+    10: '#fff569'  //spieler 4 spur
+  }
 };
 
 /*

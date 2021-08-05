@@ -1,17 +1,4 @@
 <div class="battle-map-container">
-  <!-- <div class="tile-row" *ngFor="let tileRow of battleMapBuffer">
-    <div
-      class="tile"
-      *ngFor="let tile of tileRow"
-      [ngClass]="{
-        white: tile == 0,
-        black: tile == 1,
-        red: tile == 2,
-        darkred: tile == 3
-      }"
-    ></div>
-  </div> -->
-
   <div
     class="tile-row"
     *ngFor="let item of fakeArray(battleMapSize[0]); let i = index"
@@ -19,12 +6,15 @@
     <div
       class="tile"
       *ngFor="let item of fakeArray(battleMapSize[1]); let j = index"
-      [ngClass]="{
+      [style.background-color]="
+        byteColorMap.get(getBattleMapBufferValue(i, j).toString())
+      "
+    ></div>
+  </div>
+</div>
+<!--       [ngClass]="{
         white: getBattleMapBufferValue(i, j) == 0,
         black: getBattleMapBufferValue(i, j) == 1,
         red: getBattleMapBufferValue(i, j) == 2,
         darkred: getBattleMapBufferValue(i, j) == 3
-      }"
-    ></div>
-  </div>
-</div>
+      }" -->

@@ -62,6 +62,7 @@ export interface Bot {
   color: number;
   track: number[][];
   trackLength: number;
+  trackColor: number;
   direction: Direction;
   brain: BrainData;
   crashed: boolean;
@@ -79,10 +80,12 @@ export interface SimulationData {
 })
 export class BattleMapComponent implements OnInit {
   simulationSpeed = environment.simulationSpeed;
-  battleMapSize: number[] = [60, 60];
+  byteColorMap = new Map(Object.entries(environment.byteColorMap))
+  battleMapSize: number[] = [100, 100];
   emptyTile: TileData = {
     type: 'air',
   };
+
 
   battleMapBuffer: Uint8Array = this.generateArrayBuffer(
     this.battleMapSize[0] * this.battleMapSize[1]
@@ -90,11 +93,12 @@ export class BattleMapComponent implements OnInit {
 
   bot: Bot = {
     name: 'Bot1',
-    color: 0x59ffc2,
-    position: [this.battleMapSize[0] - 1, 0],
+    color: 3,
+    position: [this.battleMapSize[0] - 20, 20],
     direction: 'up',
     track: [],
-    trackLength: 7,
+    trackLength: 100,
+    trackColor: 4,
     crashed: false,
     brain: {
       vars: {
@@ -110,30 +114,84 @@ export class BattleMapComponent implements OnInit {
           'forward',
           'forward',
           'left',
+          'forward', 'forward', 'forward',
           'forward',
           'forward',
           'right',
+          'forward',
           'right',
+          'forward',
+          'forward',
+          'forward',
+          'forward',
           'left',
+          'forward',
+          'forward',
+          'forward',
+          'forward',
+          'forward',
         ],
       },
       onWallDetected: {
         progress: 0,
-        instructions: [],
+        instructions: [
+          {
+            test: {
+              operator: '==',
+              value: 'true',
+              variable: 'radarForward',
+            },
+            whenTrue: {
+              progress: 0,
+              instructions: ['left', 'left', 'forward'],
+            },
+            else: {
+              progress: 0,
+              instructions: [
+                {
+                  test: {
+                    operator: '==',
+                    value: 'true',
+                    variable: 'radarLeft',
+                  },
+                  whenTrue: {
+                    progress: 0,
+                    instructions: ['left', 'left', 'forward'],
+                  },
+                  type: 'if',
+                },
+                {
+                  test: {
+                    operator: '==',
+                    value: 'true',
+                    variable: 'radarRight',
+                  },
+                  whenTrue: {
+                    progress: 0,
+                    instructions: ['left', 'left', 'forward'],
+                  },
+                  type: 'if',
+                }
+              ]
+            },
+            type: 'if',
+          },
+        ],
       },
     },
   };
 
   bot2: Bot = {
     name: 'Bot2',
-    color: 0x59ffc2,
+    color: 5,
     position: [
       Math.round(this.battleMapSize[0] / 2),
       Math.round(this.battleMapSize[1] / 2),
     ],
     direction: 'left',
     track: [],
-    trackLength: 40,
+    trackLength: 1000,
+    trackColor: 6,
     crashed: false,
     brain: {
       vars: {
@@ -194,29 +252,34 @@ export class BattleMapComponent implements OnInit {
               progress: 0,
               instructions: ['left', 'left', 'forward'],
             },
-            type: 'if',
-          },
-          {
-            test: {
-              operator: '==',
-              value: 'true',
-              variable: 'radarLeft',
-            },
-            whenTrue: {
+            else: {
               progress: 0,
-              instructions: ['left', 'left', 'forward'],
-            },
-            type: 'if',
-          },
-          {
-            test: {
-              operator: '==',
-              value: 'true',
-              variable: 'radarRight',
-            },
-            whenTrue: {
-              progress: 0,
-              instructions: ['left', 'left', 'forward'],
+              instructions: [
+                {
+                  test: {
+                    operator: '==',
+                    value: 'true',
+                    variable: 'radarLeft',
+                  },
+                  whenTrue: {
+                    progress: 0,
+                    instructions: ['left', 'left', 'forward'],
+                  },
+                  type: 'if',
+                },
+                {
+                  test: {
+                    operator: '==',
+                    value: 'true',
+                    variable: 'radarRight',
+                  },
+                  whenTrue: {
+                    progress: 0,
+                    instructions: ['left', 'left', 'forward'],
+                  },
+                  type: 'if',
+                }
+              ]
             },
             type: 'if',
           },
@@ -226,13 +289,16 @@ export class BattleMapComponent implements OnInit {
   };
 
   simulation: SimulationData = {
-    bots: [this.bot2], //this.bot2
+    bots: [this.bot, this.bot2],
     obstacleMap: this.generateObstacleMap(this.battleMapSize),
   };
 
-  constructor() {}
+  constructor() { }
 
   ngOnInit(): void {
+    for (let bot of this.simulation.bots) {
+      this.setRandomStart(bot, 4);
+    }
     this.startSimulation();
   }
 
@@ -452,7 +518,6 @@ export class BattleMapComponent implements OnInit {
             );
             calculatedInstructions =
               calculatedInstructions.concat(executeResult);
-            console.log(calculatedInstructions);
           } else if (instruction.else != undefined) {
             let executeResult = this.executeLogic(
               instruction.else!,
@@ -585,13 +650,10 @@ export class BattleMapComponent implements OnInit {
     }
 
     for (let bot of this.simulation.bots) {
-      this.setToBattleMapBuffer(bot.position, 2);
-      //this.simulation.map[bot.position[0]][bot.position[1]].type = 'player';
-      //this.simulation.map[bot.position[0]][bot.position[1]].color = bot.color;
-
       for (let trackElement of bot.track) {
-        this.setToBattleMapBuffer(trackElement, 3);
+        this.setToBattleMapBuffer(trackElement, bot.color);
       }
+      this.setToBattleMapBuffer(bot.position, bot.trackColor);
     }
   }
 
@@ -611,12 +673,34 @@ export class BattleMapComponent implements OnInit {
     return new Array(0);
   }
 
+  setRandomStart(bot: Bot, area: number) {
+    let foundValid = false;
+
+    while (!foundValid) {
+      let randomStart = [Math.floor(Math.random() * this.battleMapSize[0]), Math.floor(Math.random() * this.battleMapSize[1])]
+      let obstacleNear = false;
+      let checkSpotStart = [randomStart[0] - Math.floor(area / 2), randomStart[1] - Math.floor(area / 2)]
+      for (let i = 0; i < area; i++) {
+        for (let j = 0; j < area; j++) {
+          if (this.simulation.obstacleMap[checkSpotStart[0] + i][checkSpotStart[1] + j]) {
+            obstacleNear = true;
+          }
+        }
+      }
+
+      if (!obstacleNear) {
+        bot.position = randomStart;
+        foundValid = true;
+      }
+    }
+  }
+
   private changeColorLightness(color: number, lightness: number): number {
     return (
       Math.max(0, Math.min((color & 0xff0000) / 0x10000 + lightness, 0xff)) *
-        0x10000 +
+      0x10000 +
       Math.max(0, Math.min((color & 0x00ff00) / 0x100 + lightness, 0xff)) *
-        0x100 +
+      0x100 +
       Math.max(0, Math.min((color & 0x0000ff) + lightness, 0xff))
     );
   }
