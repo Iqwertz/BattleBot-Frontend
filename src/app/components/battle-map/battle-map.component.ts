@@ -25,6 +25,7 @@ export interface LogicTest {
   variable: BotVarRef;
   operator: Operator;
   value: string;
+}
 
 export interface LogicInstruction {
   type: LogicInstructionType;
