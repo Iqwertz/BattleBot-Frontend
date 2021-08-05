@@ -104,7 +104,7 @@ export class BattleMapComponent implements OnInit {
     position: [this.battleMapSize[0] - 20, 20],
     direction: 'up',
     track: [],
-    trackLength: 500,
+    trackLength: 1500,
     trackColor: 4,
     crashed: false,
     brain: {
@@ -235,7 +235,7 @@ export class BattleMapComponent implements OnInit {
     ],
     direction: 'left',
     track: [],
-    trackLength: 500,
+    trackLength: 1500,
     trackColor: 6,
     crashed: false,
     brain: {
