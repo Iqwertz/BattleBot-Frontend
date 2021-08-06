@@ -1,0 +1,28 @@
+<div class="ide-container">
+  <div class="terminals-container">
+    <div
+      cdkDropList
+      #terminalList="cdkDropList"
+      [cdkDropListData]="terminal"
+      class="drop-terminal drag-list drag-list"
+      (cdkDropListDropped)="drop($event)"
+    >
+      <div class="draggable-item" *ngFor="let item of terminal" cdkDrag>
+        <app-dragdrop-command [command]="item"></app-dragdrop-command>
+      </div>
+    </div>
+  </div>
+  <div
+    cdkDropList
+    #commandsList="cdkDropList"
+    [cdkDropListData]="commands"
+    [cdkDropListConnectedTo]="[terminalList]"
+    class="commands-container drag-list"
+    (cdkDropListDropped)="drop($event)"
+    cdkDropListSortingDisabled
+  >
+    <div class="draggable-item" *ngFor="let item of commands" cdkDrag>
+      <app-dragdrop-command [command]="item"></app-dragdrop-command>
+    </div>
+  </div>
+</div>

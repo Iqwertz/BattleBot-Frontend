@@ -1,0 +1,68 @@
+@import "./src/scss/variables";
+
+.ide-container {
+  width: 100%;
+  height: 100%;
+  border-radius: 15px;
+  background-color: $default-black;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+
+  .terminals-container {
+    height: 90%;
+    width: 65%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+
+    .drop-terminal {
+      width: 100%;
+      height: 300px;
+      background-color: $terminal-color;
+      border-radius: 15px;
+      padding: 10px;
+      display: flex;
+      align-items: flex-start;
+      flex-flow: column;
+    }
+  }
+  .commands-container {
+    height: 90%;
+    width: 28%;
+    background-color: $terminal-color;
+    border-radius: 15px;
+    padding: 10px 0;
+    display: flex;
+    align-items: center;
+    flex-flow: column;
+  }
+}
+
+.draggable-item {
+  margin: 5px;
+}
+
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: 4px;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+    0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.draggable-item:last-child {
+  border: none;
+  border-radius: 15px;
+}
+
+.drag-list.cdk-drop-list-dragging .draggable-item:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}

@@ -1,0 +1,47 @@
+@import "./src/scss/variables";
+
+.editor-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  flex-flow: row;
+  justify-content: space-around;
+
+  .ide-container {
+    width: 68%;
+    height: 90%;
+  }
+
+  .side-panel {
+    height: 90%;
+    width: 30%;
+    display: flex;
+    flex-flow: column;
+    justify-content: space-between;
+    align-items: center;
+
+    .setting-container {
+      height: 49%;
+      width: 100%;
+      border-radius: 15px;
+      background-color: $default-black;
+    }
+
+    .map-container {
+      height: 49%;
+      width: 100%;
+      border-radius: 15px;
+      background-color: $default-black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .map {
+        width: calc(100% - 25px);
+        height: calc(100% - 25px);
+      }
+    }
+  }
+}

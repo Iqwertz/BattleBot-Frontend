@@ -6,7 +6,7 @@ import { StringMap } from '@angular/compiler/src/compiler_facade_interface';
 
 export const environment = {
   production: false,
-  simulationSpeed: 1000,
+  simulationSpeed: 100,
   defaultMapSize: [20, 20],
   obstacleNoiseSettings: {
     threshold: 0.65,

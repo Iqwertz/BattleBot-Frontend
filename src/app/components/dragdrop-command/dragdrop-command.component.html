@@ -1,0 +1,10 @@
+<div
+  class="command-container"
+  [ngClass]="{
+    left: command.type == 'left',
+    right: command.type == 'right',
+    forward: command.type == 'forward'
+  }"
+>
+  {{ command.type }}
+</div>
