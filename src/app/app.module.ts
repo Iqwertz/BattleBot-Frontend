@@ -12,6 +12,7 @@ import { SimulationSettingsComponent } from './components/simulation-settings/si
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { DragdropCommandComponent } from './components/dragdrop-command/dragdrop-command.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { DragdropCommandComponent } from './components/dragdrop-command/dragdrop
     AppRoutingModule,
     BrowserAnimationsModule,
     DragDropModule,
+    FontAwesomeModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

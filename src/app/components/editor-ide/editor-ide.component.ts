@@ -56,5 +56,9 @@ export class EditorIdeComponent implements OnInit {
     }
   }
 
+  deleteFromTerminal(index: number) {
+    this.terminal.splice(index, 1);
+  }
+
   ngOnInit(): void {}
 }

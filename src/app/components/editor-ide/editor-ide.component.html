@@ -7,8 +7,16 @@
       class="drop-terminal drag-list drag-list"
       (cdkDropListDropped)="drop($event)"
     >
-      <div class="draggable-item" *ngFor="let item of terminal" cdkDrag>
-        <app-dragdrop-command [command]="item"></app-dragdrop-command>
+      <div
+        class="draggable-item"
+        *ngFor="let item of terminal; let i = index"
+        cdkDrag
+      >
+        <app-dragdrop-command
+          [isDeletable]="true"
+          [command]="item"
+          (onDelete)="deleteFromTerminal(i)"
+        ></app-dragdrop-command>
       </div>
     </div>
   </div>
@@ -22,7 +30,10 @@
     cdkDropListSortingDisabled
   >
     <div class="draggable-item" *ngFor="let item of commands" cdkDrag>
-      <app-dragdrop-command [command]="item"></app-dragdrop-command>
+      <app-dragdrop-command
+        [isDeletable]="false"
+        [command]="item"
+      ></app-dragdrop-command>
     </div>
   </div>
 </div>

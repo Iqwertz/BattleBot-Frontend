@@ -6,5 +6,8 @@
     forward: command.type == 'forward'
   }"
 >
-  {{ command.type }}
+  <fa-icon [icon]="iconMap.get(command.type)!"></fa-icon>
+  <div class="delete" *ngIf="isDeletable">
+    <fa-icon (click)="delete()" [icon]="iconMap.get('delete')!"></fa-icon>
+  </div>
 </div>
