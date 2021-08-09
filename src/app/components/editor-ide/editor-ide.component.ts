@@ -10,7 +10,6 @@ import {
   CdkDropList,
   copyArrayItem,
   moveItemInArray,
-  transferArrayItem,
 } from '@angular/cdk/drag-drop';
 
 export type FunctionTypes = 'end' | 'else';
@@ -28,7 +27,7 @@ export interface Command {
   styleUrls: ['./editor-ide.component.scss'],
 })
 export class EditorIdeComponent implements OnInit, AfterViewInit {
-  constructor(private botCompiler: BotCompilerService) {}
+  constructor(private botCompiler: BotCompilerService) { }
 
   left: Command = {
     type: 'left',
@@ -149,23 +148,29 @@ export class EditorIdeComponent implements OnInit, AfterViewInit {
     let currentIndent = 0;
     for (let i = 0; i < this.terminal.length; i++) {
       let ins: Command = this.terminal[i];
-
-      ins.indent = currentIndent;
-
       if (this.isLogic(ins)) {
+        console.log('isLogic')
+        this.terminal[i].indent = currentIndent;
         currentIndent += this.indent;
       } else if (ins.type == 'end') {
+        console.log('end')
         currentIndent -= this.indent;
-        ins.indent = currentIndent;
+        this.terminal[i].indent = currentIndent;
       } else if (ins.type == 'else') {
-        ins.indent = currentIndent - this.indent;
+        console.log('else')
+        this.terminal[i].indent = currentIndent - this.indent;
+      } else {
+        this.terminal[i].indent = currentIndent;
       }
+
+      console.log(currentIndent);
+      console.log(this.terminal)
     }
 
-    console.log(this.terminal);
+    console.log(this.terminal)
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   ngAfterViewInit(): void {
     this.commandsConnectedLists.push(this.terminalListRef!);
