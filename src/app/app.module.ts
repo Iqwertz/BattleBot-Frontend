@@ -13,6 +13,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { DragdropCommandComponent } from './components/dragdrop-command/dragdrop-command.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { MatSelectModule } from '@angular/material/select';
+import { DragdropLogicCommandComponent } from './components/dragdrop-logic-command/dragdrop-logic-command.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +26,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     EditorIdeComponent,
     SimulationSettingsComponent,
     DragdropCommandComponent,
+    DragdropLogicCommandComponent,
   ],
   imports: [
     BrowserModule,
@@ -31,6 +34,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     BrowserAnimationsModule,
     DragDropModule,
     FontAwesomeModule,
+    MatSelectModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

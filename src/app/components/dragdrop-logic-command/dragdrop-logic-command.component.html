@@ -1,0 +1,114 @@
+<div
+  class="command-container"
+  [ngClass]="{
+    when: command.type == 'if'
+  }"
+>
+  <div *ngIf="isPreview" class="preview">
+    if (<i>var</i> <i> == </i> <i>value</i>) &#123;
+  </div>
+  <div *ngIf="!isPreview" class="interactive">
+    <div class="logic-test">
+      if (
+      <mat-form-field appearance="fill" class="withoutArrow">
+        <mat-select [(value)]="logicTest.variable">
+          <mat-option>None</mat-option>
+          <mat-option value="option1">Option 1</mat-option>
+          <mat-option value="option2">Option 2</mat-option>
+          <mat-option value="option3">Option 3</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-select [(value)]="logicTest.operator">
+          <mat-option>None</mat-option>
+          <mat-option value="option1">Option 1</mat-option>
+          <mat-option value="option2">Option 2</mat-option>
+          <mat-option value="option3">Option 3</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-select [(value)]="logicTest.value">
+          <mat-option>None</mat-option>
+          <mat-option value="option1">Option 1</mat-option>
+          <mat-option value="option2">Option 2</mat-option>
+          <mat-option value="option3">Option 3</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      )&#123;
+    </div>
+    <div class="drop-field when-true">
+      <div
+        cdkDropList
+        #dropList="cdkDropList"
+        [cdkDropListData]="whenTrueCommands"
+        class="drop-terminal drag-list drag-list"
+        (cdkDropListDropped)="drop($event)"
+      >
+        <div
+          class="draggable-item"
+          *ngFor="let item of whenTrueCommands; let i = index"
+          cdkDrag
+        >
+          <app-dragdrop-command
+            *ngIf="isInstruction(item)"
+            [isDeletable]="true"
+            [command]="item"
+            (onDelete)="deleteFromTerminal(i, 'whenTrue')"
+          ></app-dragdrop-command>
+
+          <app-dragdrop-logic-command
+            *ngIf="!isInstruction(item)"
+            [isDeletable]="true"
+            [isPreview]="false"
+            [command]="item"
+            (onDelete)="deleteFromTerminal(i, 'whenTrue')"
+            (addDropRef)="addDropField($event)"
+            (removeDropRef)="removeDropField($event)"
+          ></app-dragdrop-logic-command>
+        </div>
+      </div>
+      &#125;
+    </div>
+  </div>
+  <div class="delete" *ngIf="isDeletable">
+    <fa-icon (click)="delete()" [icon]="faDelete"></fa-icon>
+  </div>
+</div>
+
+<!-- <div *ngIf="command.type == 'if'"> juliano
+    if (
+    <mat-form-field appearance="fill">
+      <mat-label>Select an Variable</mat-label>
+      <mat-select [(value)]="variable">
+        <mat-option>None</mat-option>
+        <mat-option value="option1">Option 1</mat-option>
+        <mat-option value="option2">Option 2</mat-option>
+        <mat-option value="option3">Option 3</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Select an operator</mat-label>
+      <mat-select [(value)]="operator">
+        <mat-option>None</mat-option>
+        <mat-option value="option1">Option 1</mat-option>
+        <mat-option value="option2">Option 2</mat-option>
+        <mat-option value="option3">Option 3</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Select an value</mat-label>
+      <mat-select [(value)]="value">
+        <mat-option>None</mat-option>
+        <mat-option value="option1">Option 1</mat-option>
+        <mat-option value="option2">Option 2</mat-option>
+        <mat-option value="option3">Option 3</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    )
+  </div> -->

@@ -3,10 +3,14 @@
   [ngClass]="{
     left: command.type == 'left',
     right: command.type == 'right',
-    forward: command.type == 'forward'
+    forward: command.type == 'forward',
+    when: command.type == 'if'
   }"
 >
-  <fa-icon [icon]="iconMap.get(command.type)!"></fa-icon>
+  <fa-icon
+    *ngIf="command.type != 'if'"
+    [icon]="iconMap.get(command.type)!"
+  ></fa-icon>
   <div class="delete" *ngIf="isDeletable">
     <fa-icon (click)="delete()" [icon]="iconMap.get('delete')!"></fa-icon>
   </div>

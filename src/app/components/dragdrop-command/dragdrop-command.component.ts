@@ -24,6 +24,10 @@ export class DragdropCommandComponent implements OnInit {
 
   iconMap: Map<string, IconDefinition> = new Map();
 
+  variable = '';
+  operator = '';
+  value = '';
+
   constructor() {}
 
   ngOnInit(): void {

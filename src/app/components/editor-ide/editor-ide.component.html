@@ -13,10 +13,21 @@
         cdkDrag
       >
         <app-dragdrop-command
+          *ngIf="isInstruction(item)"
           [isDeletable]="true"
           [command]="item"
           (onDelete)="deleteFromTerminal(i)"
         ></app-dragdrop-command>
+
+        <app-dragdrop-logic-command
+          *ngIf="!isInstruction(item)"
+          [isDeletable]="true"
+          [isPreview]="false"
+          [command]="item"
+          (onDelete)="deleteFromTerminal(i)"
+          (addDropRef)="addDropField($event)"
+          (removeDropRef)="removeDropField($event)"
+        ></app-dragdrop-logic-command>
       </div>
     </div>
   </div>
@@ -24,16 +35,24 @@
     cdkDropList
     #commandsList="cdkDropList"
     [cdkDropListData]="commands"
-    [cdkDropListConnectedTo]="[terminalList]"
+    [cdkDropListConnectedTo]="commandsConnectedLists"
     class="commands-container drag-list"
     (cdkDropListDropped)="drop($event)"
     cdkDropListSortingDisabled
   >
     <div class="draggable-item" *ngFor="let item of commands" cdkDrag>
       <app-dragdrop-command
+        *ngIf="isInstruction(item)"
         [isDeletable]="false"
         [command]="item"
       ></app-dragdrop-command>
+
+      <app-dragdrop-logic-command
+        *ngIf="!isInstruction(item)"
+        [isDeletable]="false"
+        [isPreview]="true"
+        [command]="item"
+      ></app-dragdrop-logic-command>
     </div>
   </div>
 </div>
