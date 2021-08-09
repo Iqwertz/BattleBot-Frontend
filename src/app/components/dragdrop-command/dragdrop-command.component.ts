@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Command } from '../editor-ide/editor-ide.component';
+import { BotCompilerService } from '../../services/bot-compiler.service';
+
 import {
   faArrowUp,
   faArrowLeft,
@@ -16,6 +18,7 @@ import {
 export class DragdropCommandComponent implements OnInit {
   @Input() command: Command = {
     type: 'forward',
+    indent: 0,
   };
 
   @Input() isDeletable: boolean = true;
@@ -28,7 +31,7 @@ export class DragdropCommandComponent implements OnInit {
   operator = '';
   value = '';
 
-  constructor() {}
+  constructor(private botCompiler: BotCompilerService) {}
 
   ngOnInit(): void {
     this.iconMap.set('left', faArrowLeft);
@@ -39,5 +42,9 @@ export class DragdropCommandComponent implements OnInit {
 
   delete() {
     this.onDelete.emit(true);
+  }
+
+  isInstruction(ins: any) {
+    return this.botCompiler.checkIfDirectionInstruction(ins);
   }
 }

@@ -8,6 +8,64 @@
       (cdkDropListDropped)="drop($event)"
     >
       <div
+        [style.left]="item.indent + 'px'"
+        class="draggable-item"
+        *ngFor="let item of terminal; let i = index"
+        cdkDrag
+      >
+        <app-dragdrop-command
+          *ngIf="!isLogic(item)"
+          [isDeletable]="true"
+          [command]="item"
+          (onDelete)="deleteFromTerminal(i)"
+        ></app-dragdrop-command>
+
+        <app-dragdrop-logic-command
+          *ngIf="isLogic(item)"
+          [isDeletable]="true"
+          [isPreview]="false"
+          [command]="item"
+          (onDelete)="deleteFromTerminal(i)"
+        ></app-dragdrop-logic-command>
+      </div>
+    </div>
+  </div>
+  <div
+    cdkDropList
+    #commandsList="cdkDropList"
+    [cdkDropListData]="commands"
+    [cdkDropListConnectedTo]="commandsConnectedLists"
+    class="commands-container drag-list"
+    (cdkDropListDropped)="drop($event)"
+    cdkDropListSortingDisabled
+  >
+    <div class="draggable-item" *ngFor="let item of commands" cdkDrag>
+      <app-dragdrop-command
+        *ngIf="!isLogic(item)"
+        [isDeletable]="false"
+        [command]="item"
+      ></app-dragdrop-command>
+
+      <app-dragdrop-logic-command
+        *ngIf="isLogic(item)"
+        [isDeletable]="false"
+        [isPreview]="true"
+        [command]="item"
+      ></app-dragdrop-logic-command>
+    </div>
+  </div>
+</div>
+
+<!-- <div class="ide-container">
+  <div class="terminals-container">
+    <div
+      cdkDropList
+      #terminalList="cdkDropList"
+      [cdkDropListData]="terminal"
+      class="drop-terminal drag-list drag-list"
+      (cdkDropListDropped)="drop($event)"
+    >
+      <div
         class="draggable-item"
         *ngFor="let item of terminal; let i = index"
         cdkDrag
@@ -56,3 +114,4 @@
     </div>
   </div>
 </div>
+ -->

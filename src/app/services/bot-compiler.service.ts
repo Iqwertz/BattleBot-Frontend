@@ -104,6 +104,21 @@ export class BotCompilerService {
     }
     return false;
   }
+
+  /**
+   * checks if the given parameter is an Instructio or a Logic Instruction, Returns True when it is an Instruction
+   *
+   * @param {any} instruction
+   * @return {*}  {instruction is LogicInstruction}
+   * @memberof BotCompilerService
+   */
+  checkIfLogicInstruction(instruction: any): instruction is LogicInstruction {
+    if (instruction == 'if') {
+      return true;
+    }
+    return false;
+  }
+
   /**
    *calculates the NextInstruction for a Bot and returns it
    *

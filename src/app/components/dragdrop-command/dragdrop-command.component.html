@@ -4,14 +4,18 @@
     left: command.type == 'left',
     right: command.type == 'right',
     forward: command.type == 'forward',
-    when: command.type == 'if'
+    else: command.type == 'else',
+    end: command.type == 'end'
   }"
 >
-  <fa-icon
-    *ngIf="command.type != 'if'"
-    [icon]="iconMap.get(command.type)!"
-  ></fa-icon>
-  <div class="delete" *ngIf="isDeletable">
+  <div *ngIf="isInstruction(command.type)">
+    <fa-icon [icon]="iconMap.get(command.type)!"></fa-icon>
+  </div>
+  <div *ngIf="!isInstruction(command.type)">
+    <div *ngIf="command.type == 'end'">&#125;</div>
+    <div *ngIf="command.type == 'else'">&#125; else &#123;</div>
+  </div>
+  <div class="delete" *ngIf="isDeletable && command.type != 'end'">
     <fa-icon (click)="delete()" [icon]="iconMap.get('delete')!"></fa-icon>
   </div>
 </div>

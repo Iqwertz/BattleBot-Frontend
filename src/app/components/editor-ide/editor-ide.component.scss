@@ -41,7 +41,9 @@
 }
 
 .draggable-item {
+  position: relative;
   margin: 5px;
+  left: 0;
 }
 
 .cdk-drag-preview {
