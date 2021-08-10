@@ -8,7 +8,7 @@
       (cdkDropListDropped)="drop($event)"
     >
       <div
-        [style.left.px]="item.indent"
+        [style.margin-left.px]="item.indent"
         class="draggable-item"
         *ngFor="let item of terminal; let i = index"
         cdkDrag

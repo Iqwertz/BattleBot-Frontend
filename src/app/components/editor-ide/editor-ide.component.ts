@@ -11,6 +11,7 @@ import {
   copyArrayItem,
   moveItemInArray,
 } from '@angular/cdk/drag-drop';
+import { cloneDeep } from 'lodash';
 
 export type FunctionTypes = 'end' | 'else';
 export type CommandType = Instruction | LogicInstructionType | FunctionTypes;
@@ -27,7 +28,7 @@ export interface Command {
   styleUrls: ['./editor-ide.component.scss'],
 })
 export class EditorIdeComponent implements OnInit, AfterViewInit {
-  constructor(private botCompiler: BotCompilerService) { }
+  constructor(private botCompiler: BotCompilerService) {}
 
   left: Command = {
     type: 'left',
@@ -86,12 +87,11 @@ export class EditorIdeComponent implements OnInit, AfterViewInit {
         event.currentIndex
       );
     } else {
-      copyArrayItem(
-        event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex
+      const clone = cloneDeep(
+        event.previousContainer.data[event.previousIndex]
       );
+      event.container.data.splice(event.currentIndex, 0, clone);
+
       if (event.previousContainer.data[event.previousIndex].type == 'if') {
         event.container.data.splice(event.currentIndex + 1, 0, { type: 'end' });
       }
@@ -134,6 +134,8 @@ export class EditorIdeComponent implements OnInit, AfterViewInit {
     }
 
     this.terminal.splice(index, 1);
+
+    this.calcIndent();
   }
 
   isInstruction(instruction: any) {
@@ -148,29 +150,32 @@ export class EditorIdeComponent implements OnInit, AfterViewInit {
     let currentIndent = 0;
     for (let i = 0; i < this.terminal.length; i++) {
       let ins: Command = this.terminal[i];
+      console.log(currentIndent);
       if (this.isLogic(ins)) {
-        console.log('isLogic')
+        console.log('isLogic');
+        console.log(this.terminal);
         this.terminal[i].indent = currentIndent;
+        console.log(this.terminal);
         currentIndent += this.indent;
+        console.log(this.terminal);
       } else if (ins.type == 'end') {
-        console.log('end')
+        console.log('end');
         currentIndent -= this.indent;
         this.terminal[i].indent = currentIndent;
       } else if (ins.type == 'else') {
-        console.log('else')
+        console.log('else');
         this.terminal[i].indent = currentIndent - this.indent;
       } else {
         this.terminal[i].indent = currentIndent;
       }
 
       console.log(currentIndent);
-      console.log(this.terminal)
     }
 
-    console.log(this.terminal)
+    console.log(this.terminal);
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   ngAfterViewInit(): void {
     this.commandsConnectedLists.push(this.terminalListRef!);
