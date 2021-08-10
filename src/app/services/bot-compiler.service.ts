@@ -15,16 +15,19 @@ export type LogicInstructionType = 'if';
 export type Direction = 'left' | 'right' | 'up' | 'down';
 
 // available operator
-export type Operator = '==' | '!=';
+export const _Operators = ['==', '!='] as const;
+export type Operator = typeof _Operators[number];
 
 //references to the bot variables, is decoded in the getBotVarFromRef() function
-export type BotVarRef =
-  | 'radarLeft'
-  | 'radarRight'
-  | 'radarForward'
-  | 'trackRadarLeft'
-  | 'trackRadarRight'
-  | 'trackRadarForward';
+export const _BotVars = [
+  'radarLeft',
+  'radarRight',
+  'radarForward',
+  'trackRadarLeft',
+  'trackRadarRight',
+  'trackRadarForward',
+] as const;
+export type BotVarRef = typeof _BotVars[number];
 
 // a logic test  (like x == y),
 export interface LogicTest {

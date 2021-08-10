@@ -5,35 +5,40 @@
   }"
 >
   <div *ngIf="isPreview" class="preview">
-    if (<i>var</i> <i> == </i> <i>value</i>) &#123;
+    <div>if (<i>var</i> <i> == </i> <i>value</i>) &#123;</div>
   </div>
   <div *ngIf="!isPreview" class="interactive">
     <div class="logic-test">
       if (
-      <mat-form-field appearance="fill" class="withoutArrow">
-        <mat-select [(value)]="logicTest.variable">
-          <mat-option>None</mat-option>
-          <mat-option value="option1">Option 1</mat-option>
-          <mat-option value="option2">Option 2</mat-option>
-          <mat-option value="option3">Option 3</mat-option>
+      <mat-form-field class="value">
+        <mat-select
+          (selectionChange)="logicTestChanged()"
+          [(value)]="logicTest.variable"
+        >
+          <mat-option *ngFor="let v of variables" [value]="v">
+            {{ v }}
+          </mat-option>
         </mat-select>
       </mat-form-field>
 
-      <mat-form-field appearance="fill">
-        <mat-select [(value)]="logicTest.operator">
-          <mat-option>None</mat-option>
-          <mat-option value="option1">Option 1</mat-option>
-          <mat-option value="option2">Option 2</mat-option>
-          <mat-option value="option3">Option 3</mat-option>
+      <mat-form-field class="operator">
+        <mat-select
+          (selectionChange)="logicTestChanged()"
+          [(value)]="logicTest.operator"
+        >
+          <mat-option *ngFor="let op of operators" [value]="op">
+            {{ op }}
+          </mat-option>
         </mat-select>
       </mat-form-field>
 
-      <mat-form-field appearance="fill">
-        <mat-select [(value)]="logicTest.value">
-          <mat-option>None</mat-option>
-          <mat-option value="option1">Option 1</mat-option>
-          <mat-option value="option2">Option 2</mat-option>
-          <mat-option value="option3">Option 3</mat-option>
+      <mat-form-field class="value">
+        <mat-select
+          (selectionChange)="logicTestChanged()"
+          [(value)]="logicTest.value"
+        >
+          <mat-option value="option1">true</mat-option>
+          <mat-option value="option2">false</mat-option>
         </mat-select>
       </mat-form-field>
 
@@ -43,39 +48,4 @@
       <fa-icon (click)="delete()" [icon]="faDelete"></fa-icon>
     </div>
   </div>
-
-  <!-- <div *ngIf="command.type == 'if'"> juliano
-    if (
-    <mat-form-field appearance="fill">
-      <mat-label>Select an Variable</mat-label>
-      <mat-select [(value)]="variable">
-        <mat-option>None</mat-option>
-        <mat-option value="option1">Option 1</mat-option>
-        <mat-option value="option2">Option 2</mat-option>
-        <mat-option value="option3">Option 3</mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <mat-form-field appearance="fill">
-      <mat-label>Select an operator</mat-label>
-      <mat-select [(value)]="operator">
-        <mat-option>None</mat-option>
-        <mat-option value="option1">Option 1</mat-option>
-        <mat-option value="option2">Option 2</mat-option>
-        <mat-option value="option3">Option 3</mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <mat-form-field appearance="fill">
-      <mat-label>Select an value</mat-label>
-      <mat-select [(value)]="value">
-        <mat-option>None</mat-option>
-        <mat-option value="option1">Option 1</mat-option>
-        <mat-option value="option2">Option 2</mat-option>
-        <mat-option value="option3">Option 3</mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    )
-  </div> -->
 </div>

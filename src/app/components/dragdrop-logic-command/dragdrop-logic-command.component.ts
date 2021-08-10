@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { Command } from '../editor-ide/editor-ide.component';
+import { _BotVars, _Operators } from '../../services/bot-compiler.service';
 import {
   LogicTest,
   BotCompilerService,
@@ -17,10 +18,13 @@ export class DragdropLogicCommandComponent implements OnInit {
     indent: 0,
   };
 
+  variables = _BotVars;
+  operators = _Operators;
+
   logicTest: LogicTest = {
-    operator: '==',
+    operator: this.operators[0],
     value: 'true',
-    variable: 'radarForward',
+    variable: this.variables[0],
   };
 
   whenTrueCommands = [];
@@ -31,11 +35,15 @@ export class DragdropLogicCommandComponent implements OnInit {
 
   @Output() onDelete = new EventEmitter<boolean>();
 
+  @Output() logicTestData = new EventEmitter<LogicTest>();
+
   faDelete = faTimes;
 
   constructor(private botCompiler: BotCompilerService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log(_BotVars);
+  }
 
   delete() {
     this.onDelete.emit(true);
@@ -43,5 +51,9 @@ export class DragdropLogicCommandComponent implements OnInit {
 
   isInstruction(instruction: any) {
     return this.botCompiler.checkIfDirectionInstruction(instruction.type);
+  }
+
+  logicTestChanged() {
+    this.logicTestData.emit(this.logicTest);
   }
 }

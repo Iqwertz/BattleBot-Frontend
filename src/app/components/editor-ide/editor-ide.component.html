@@ -4,7 +4,7 @@
       cdkDropList
       #terminalList="cdkDropList"
       [cdkDropListData]="terminal"
-      class="drop-terminal drag-list drag-list"
+      class="drop-terminal drag-list drag-list terminal-scrollbar"
       (cdkDropListDropped)="drop($event)"
     >
       <div
@@ -26,6 +26,7 @@
           [isPreview]="false"
           [command]="item"
           (onDelete)="deleteFromTerminal(i)"
+          (logicTestData)="item.test = $event"
         ></app-dragdrop-logic-command>
       </div>
     </div>
@@ -35,7 +36,7 @@
     #commandsList="cdkDropList"
     [cdkDropListData]="commands"
     [cdkDropListConnectedTo]="commandsConnectedLists"
-    class="commands-container drag-list"
+    class="commands-container drag-list terminal-scrollbar"
     (cdkDropListDropped)="drop($event)"
     cdkDropListSortingDisabled
   >
