@@ -1,7 +1,12 @@
 <div class="ide-container">
   <div class="terminals-container terminal-scrollbar">
     <div *ngFor="let terminal of terminals | keyvalue">
-      <div class="terminal-label">{{ terminal.key }}:</div>
+      <div class="terminal-label">
+        {{ terminal.key }}:
+        <div *ngIf="!terminal.value.allowLogic" (click)="preCompileTerminals()">
+          &nbsp;(no Logic)
+        </div>
+      </div>
       <app-drop-terminal
         class="terminal"
         [(terminalCommands)]="terminal.value.commands"
@@ -36,63 +41,3 @@
     </div>
   </div>
 </div>
-
-<!-- <div class="ide-container">
-  <div class="terminals-container">
-    <div
-      cdkDropList
-      #terminalList="cdkDropList"
-      [cdkDropListData]="terminal"
-      class="drop-terminal drag-list drag-list"
-      (cdkDropListDropped)="drop($event)"
-    >
-      <div
-        class="draggable-item"
-        *ngFor="let item of terminal; let i = index"
-        cdkDrag
-      >
-        <app-dragdrop-command
-          *ngIf="isInstruction(item)"
-          [isDeletable]="true"
-          [command]="item"
-          (onDelete)="deleteFromTerminal(i)"
-        ></app-dragdrop-command>
-
-        <app-dragdrop-logic-command
-          *ngIf="!isInstruction(item)"
-          [isDeletable]="true"
-          [isPreview]="false"
-          [command]="item"
-          (onDelete)="deleteFromTerminal(i)"
-          (addDropRef)="addDropField($event)"
-          (removeDropRef)="removeDropField($event)"
-        ></app-dragdrop-logic-command>
-      </div>
-    </div>
-  </div>
-  <div
-    cdkDropList
-    #commandsList="cdkDropList"
-    [cdkDropListData]="commands"
-    [cdkDropListConnectedTo]="commandsConnectedLists"
-    class="commands-container drag-list"
-    (cdkDropListDropped)="drop($event)"
-    cdkDropListSortingDisabled
-  >
-    <div class="draggable-item" *ngFor="let item of commands" cdkDrag>
-      <app-dragdrop-command
-        *ngIf="isInstruction(item)"
-        [isDeletable]="false"
-        [command]="item"
-      ></app-dragdrop-command>
-
-      <app-dragdrop-logic-command
-        *ngIf="!isInstruction(item)"
-        [isDeletable]="false"
-        [isPreview]="true"
-        [command]="item"
-      ></app-dragdrop-logic-command>
-    </div>
-  </div>
-</div>
- -->

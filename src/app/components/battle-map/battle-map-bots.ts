@@ -1,12 +1,9 @@
 import { Bot } from './battle-map.component';
 import { environment } from '../../../environments/environment';
-import { RadarStatus } from 'src/app/services/bot-compiler.service';
-
-const emptyRadar: RadarStatus = {
-  forward: false,
-  left: false,
-  right: false,
-};
+import {
+  defaultBotVars,
+  RadarStatus,
+} from 'src/app/services/bot-compiler.service';
 
 const defaultTrackLength = 25;
 
@@ -20,10 +17,7 @@ export const bot1: Bot = {
   trackColor: 4,
   crashed: false,
   brain: {
-    vars: {
-      obstacleRadar: emptyRadar,
-      trackRadar: emptyRadar,
-    },
+    vars: defaultBotVars,
     default: {
       progress: 0,
       instructions: [
@@ -153,10 +147,7 @@ export const bot2: Bot = {
   trackColor: 6,
   crashed: false,
   brain: {
-    vars: {
-      obstacleRadar: emptyRadar,
-      trackRadar: emptyRadar,
-    },
+    vars: defaultBotVars,
     default: {
       progress: 0,
       instructions: [
@@ -295,10 +286,7 @@ export const bot3: Bot = {
   trackColor: 8,
   crashed: false,
   brain: {
-    vars: {
-      obstacleRadar: emptyRadar,
-      trackRadar: emptyRadar,
-    },
+    vars: defaultBotVars,
     default: {
       progress: 0,
       instructions: [

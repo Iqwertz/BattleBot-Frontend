@@ -56,6 +56,9 @@ export interface BotVars {
   trackRadar: RadarStatus;
 }
 
+//all Brain Callbyacks
+export type BrainFunctions = 'default' | 'onWallDetected' | 'onTrackDetected';
+
 //Data of a bots Brain, on.. are callbacks for events
 export interface BrainData {
   vars: BotVars;
@@ -70,6 +73,17 @@ export interface RadarStatus {
   forward: boolean;
   right: boolean;
 }
+
+export const emptyRadar: RadarStatus = {
+  forward: false,
+  left: false,
+  right: false,
+};
+
+export const defaultBotVars: BotVars = {
+  obstacleRadar: emptyRadar,
+  trackRadar: emptyRadar,
+};
 
 /**
  *This Service handles all the compiler logic of a bot.
@@ -91,13 +105,11 @@ export class BotCompilerService {
   /**
    * checks if the given parameter is an Instructio or a Logic Instruction, Returns True when it is an Instruction
    *
-   * @param {(Instruction | LogicInstruction)} instruction
+   * @param {any} instruction
    * @return {*}  {instruction is Instruction}
    * @memberof BotCompilerService
    */
-  checkIfDirectionInstruction(
-    instruction: Instruction | LogicInstruction
-  ): instruction is Instruction {
+  checkIfDirectionInstruction(instruction: any): instruction is Instruction {
     if (
       instruction === 'forward' ||
       instruction === 'left' ||

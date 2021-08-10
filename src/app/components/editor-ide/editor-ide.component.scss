@@ -21,6 +21,8 @@
     }
 
     .terminal-label {
+      display: flex;
+      flex-flow: row;
       font-family: "JetBrains Mono", monospace;
       color: #fff;
       font-size: 1em;

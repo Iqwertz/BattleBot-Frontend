@@ -4,8 +4,12 @@ import {
   BotCompilerService,
   LogicTest,
 } from '../../services/bot-compiler.service';
-import { LogicInstructionType } from '../../services/bot-compiler.service';
+import {
+  LogicInstructionType,
+  BrainFunctions,
+} from '../../services/bot-compiler.service';
 import { CdkDropList } from '@angular/cdk/drag-drop';
+import { PrecompilerService } from '../../services/precompiler.service';
 
 export type FunctionTypes = 'end' | 'else';
 export type CommandType = Instruction | LogicInstructionType | FunctionTypes;
@@ -27,7 +31,10 @@ export interface Terminal {
   styleUrls: ['./editor-ide.component.scss'],
 })
 export class EditorIdeComponent implements OnInit, AfterViewInit {
-  constructor(private botCompiler: BotCompilerService) {}
+  constructor(
+    private botCompiler: BotCompilerService,
+    private preCompiler: PrecompilerService
+  ) {}
 
   left: Command = {
     type: 'left',
@@ -68,7 +75,7 @@ export class EditorIdeComponent implements OnInit, AfterViewInit {
     this.end,
   ];
 
-  terminals: Map<string, Terminal> = new Map();
+  terminals: Map<BrainFunctions, Terminal> = new Map();
 
   @ViewChild('terminalList') terminalListRef?: CdkDropList;
 
@@ -80,7 +87,7 @@ export class EditorIdeComponent implements OnInit, AfterViewInit {
       allowLogic: false,
     });
 
-    this.terminals.set('onObstacleDetected', {
+    this.terminals.set('onWallDetected', {
       commands: [],
       allowLogic: true,
     });
@@ -93,6 +100,11 @@ export class EditorIdeComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.commandsConnectedLists.push(this.terminalListRef!);
+  }
+
+  preCompileTerminals() {
+    let result = this.preCompiler.terminalMapToBrainData(this.terminals);
+    console.log(result);
   }
 
   addDropField(ref: CdkDropList) {
