@@ -49,3 +49,24 @@ body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+
+.terminal-scrollbar {
+  scrollbar-width: $terminal-scrollbarWidth;
+  scrollbar-color: $terminal-scrollbarThumb $terminal-scrollbarBg;
+}
+.terminal-scrollbar::-webkit-scrollbar {
+  width: $terminal-scrollbarWidth;
+}
+.terminal-scrollbar::-webkit-scrollbar-track {
+  background: $terminal-scrollbarBg;
+  border-radius: $terminal-scrollbarWidth;
+}
+.terminal-scrollbar::-webkit-scrollbar-thumb {
+  background-color: $terminal-scrollbarThumb;
+  border-radius: $terminal-scrollbarWidth;
+  border: 3px solid $terminal-scrollbarBg;
+}
+
+.terminal-scrollbar::-webkit-scrollbar-corner {
+  display: none;
+}

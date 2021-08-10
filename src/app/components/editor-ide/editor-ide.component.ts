@@ -5,13 +5,7 @@ import {
   LogicTest,
 } from '../../services/bot-compiler.service';
 import { LogicInstructionType } from '../../services/bot-compiler.service';
-import {
-  CdkDragDrop,
-  CdkDropList,
-  copyArrayItem,
-  moveItemInArray,
-} from '@angular/cdk/drag-drop';
-import { cloneDeep } from 'lodash';
+import { CdkDropList } from '@angular/cdk/drag-drop';
 
 export type FunctionTypes = 'end' | 'else';
 export type CommandType = Instruction | LogicInstructionType | FunctionTypes;
@@ -20,6 +14,11 @@ export interface Command {
   type: CommandType;
   indent: number;
   test?: LogicTest;
+}
+
+export interface Terminal {
+  commands: Command[];
+  allowLogic: boolean;
 }
 
 @Component({
@@ -69,34 +68,31 @@ export class EditorIdeComponent implements OnInit, AfterViewInit {
     this.end,
   ];
 
-  terminal: Command[] = [];
-
-  deleteBetweenStatemen: boolean = true;
-
-  indent: number = 40;
+  terminals: Map<string, Terminal> = new Map();
 
   @ViewChild('terminalList') terminalListRef?: CdkDropList;
 
   commandsConnectedLists: CdkDropList[] = [];
 
-  drop(event: any) {
-    if (event.previousContainer === event.container) {
-      moveItemInArray(
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex
-      );
-    } else {
-      const clone = cloneDeep(
-        event.previousContainer.data[event.previousIndex]
-      );
-      event.container.data.splice(event.currentIndex, 0, clone);
+  ngOnInit(): void {
+    this.terminals.set('default', {
+      commands: [],
+      allowLogic: false,
+    });
 
-      if (event.previousContainer.data[event.previousIndex].type == 'if') {
-        event.container.data.splice(event.currentIndex + 1, 0, { type: 'end' });
-      }
-    }
-    this.calcIndent();
+    this.terminals.set('onObstacleDetected', {
+      commands: [],
+      allowLogic: true,
+    });
+
+    this.terminals.set('onTrackDetected', {
+      commands: [],
+      allowLogic: true,
+    });
+  }
+
+  ngAfterViewInit(): void {
+    this.commandsConnectedLists.push(this.terminalListRef!);
   }
 
   addDropField(ref: CdkDropList) {
@@ -109,75 +105,11 @@ export class EditorIdeComponent implements OnInit, AfterViewInit {
     this.commandsConnectedLists.splice(i, 1);
   }
 
-  deleteFromTerminal(index: number) {
-    if (this.isLogic(this.terminal[index])) {
-      let indentCounter = 0;
-      for (let i = index + 1; i < this.terminal.length; i++) {
-        let ins: Command = this.terminal[i];
-        console.log(ins);
-
-        if (this.isLogic(ins)) {
-          indentCounter++;
-        } else if (ins.type == 'end') {
-          if (indentCounter == 0) {
-            if (this.deleteBetweenStatemen) {
-              this.terminal.splice(index + 1, i - index);
-            } else {
-              this.terminal.splice(i, 1);
-            }
-            break;
-          } else {
-            indentCounter--;
-          }
-        }
-      }
-    }
-
-    this.terminal.splice(index, 1);
-
-    this.calcIndent();
-  }
-
   isInstruction(instruction: any) {
     return this.botCompiler.checkIfDirectionInstruction(instruction.type);
   }
 
   isLogic(instruction: any) {
     return this.botCompiler.checkIfLogicInstruction(instruction.type);
-  }
-
-  calcIndent() {
-    let currentIndent = 0;
-    for (let i = 0; i < this.terminal.length; i++) {
-      let ins: Command = this.terminal[i];
-      console.log(currentIndent);
-      if (this.isLogic(ins)) {
-        console.log('isLogic');
-        console.log(this.terminal);
-        this.terminal[i].indent = currentIndent;
-        console.log(this.terminal);
-        currentIndent += this.indent;
-        console.log(this.terminal);
-      } else if (ins.type == 'end') {
-        console.log('end');
-        currentIndent -= this.indent;
-        this.terminal[i].indent = currentIndent;
-      } else if (ins.type == 'else') {
-        console.log('else');
-        this.terminal[i].indent = currentIndent - this.indent;
-      } else {
-        this.terminal[i].indent = currentIndent;
-      }
-
-      console.log(currentIndent);
-    }
-
-    console.log(this.terminal);
-  }
-
-  ngOnInit(): void {}
-
-  ngAfterViewInit(): void {
-    this.commandsConnectedLists.push(this.terminalListRef!);
   }
 }

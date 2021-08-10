@@ -15,6 +15,7 @@ import { DragdropCommandComponent } from './components/dragdrop-command/dragdrop
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { MatSelectModule } from '@angular/material/select';
 import { DragdropLogicCommandComponent } from './components/dragdrop-logic-command/dragdrop-logic-command.component';
+import { DropTerminalComponent } from './components/drop-terminal/drop-terminal.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { DragdropLogicCommandComponent } from './components/dragdrop-logic-comma
     SimulationSettingsComponent,
     DragdropCommandComponent,
     DragdropLogicCommandComponent,
+    DropTerminalComponent,
   ],
   imports: [
     BrowserModule,

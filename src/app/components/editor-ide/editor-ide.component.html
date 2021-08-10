@@ -1,34 +1,15 @@
 <div class="ide-container">
-  <div class="terminals-container">
-    <div
-      cdkDropList
-      #terminalList="cdkDropList"
-      [cdkDropListData]="terminal"
-      class="drop-terminal drag-list drag-list terminal-scrollbar"
-      (cdkDropListDropped)="drop($event)"
-    >
-      <div
-        [style.margin-left.px]="item.indent"
-        class="draggable-item"
-        *ngFor="let item of terminal; let i = index"
-        cdkDrag
+  <div class="terminals-container terminal-scrollbar">
+    <div *ngFor="let terminal of terminals | keyvalue">
+      <div class="terminal-label">{{ terminal.key }}:</div>
+      <app-drop-terminal
+        class="terminal"
+        [(terminalCommands)]="terminal.value.commands"
+        (addDropRef)="addDropField($event)"
+        (removeDropRef)="removeDropField($event)"
+        [allowLogic]="terminal.value.allowLogic"
       >
-        <app-dragdrop-command
-          *ngIf="!isLogic(item)"
-          [isDeletable]="true"
-          [command]="item"
-          (onDelete)="deleteFromTerminal(i)"
-        ></app-dragdrop-command>
-
-        <app-dragdrop-logic-command
-          *ngIf="isLogic(item)"
-          [isDeletable]="true"
-          [isPreview]="false"
-          [command]="item"
-          (onDelete)="deleteFromTerminal(i)"
-          (logicTestData)="item.test = $event"
-        ></app-dragdrop-logic-command>
-      </div>
+      </app-drop-terminal>
     </div>
   </div>
   <div
@@ -37,7 +18,6 @@
     [cdkDropListData]="commands"
     [cdkDropListConnectedTo]="commandsConnectedLists"
     class="commands-container drag-list terminal-scrollbar"
-    (cdkDropListDropped)="drop($event)"
     cdkDropListSortingDisabled
   >
     <div class="draggable-item" *ngFor="let item of commands" cdkDrag>
