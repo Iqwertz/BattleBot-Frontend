@@ -2,6 +2,7 @@ import { Command } from './../editor-ide/editor-ide.component';
 import {
   AfterViewInit,
   Component,
+  ElementRef,
   EventEmitter,
   Input,
   OnDestroy,
@@ -34,6 +35,9 @@ export class DropTerminalComponent implements OnInit, AfterViewInit, OnDestroy {
   @Output() removeDropRef = new EventEmitter<CdkDropList>();
 
   @ViewChild('terminalList') terminalRef!: CdkDropList;
+
+  currentDragPreviewCommands: Command[] = [];
+
   ngOnInit(): void {}
 
   ngAfterViewInit(): void {
@@ -51,6 +55,14 @@ export class DropTerminalComponent implements OnInit, AfterViewInit, OnDestroy {
         event.previousIndex,
         event.currentIndex
       );
+      if (this.currentDragPreviewCommands.length > 1) {
+        event.container.data.splice(
+          event.currentIndex + 1,
+          0,
+          ...this.currentDragPreviewCommands.slice(1)
+        );
+      }
+      console.log(event.container.data);
     } else {
       if (!this.allowLogic) {
         if (
@@ -72,7 +84,17 @@ export class DropTerminalComponent implements OnInit, AfterViewInit, OnDestroy {
     this.calcIndent();
   }
 
-  deleteFromTerminal(index: number) {
+  dragStarted(event: any, index: number) {
+    console.log(event);
+    this.currentDragPreviewCommands = this.calculatePreviewCommands(index);
+    this.deleteFromTerminal(index, false);
+  }
+
+  dragMoved(e: any) {
+    // console.log(e);
+  }
+
+  deleteFromTerminal(index: number, includeIndex: boolean) {
     if (this.isLogic(this.terminalCommands[index])) {
       let indentCounter = 0;
       for (let i = index + 1; i < this.terminalCommands.length; i++) {
@@ -95,7 +117,9 @@ export class DropTerminalComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     }
 
-    this.terminalCommands.splice(index, 1);
+    if (includeIndex) {
+      this.terminalCommands.splice(index, 1);
+    }
 
     this.calcIndent();
   }
@@ -118,6 +142,44 @@ export class DropTerminalComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     this.terminalCommandsChange.emit(this.terminalCommands);
+  }
+
+  calculatePreviewCommands(index: number): Command[] {
+    let commands: Command[] = [];
+    if (this.isLogicElement(this.terminalCommands[index])) {
+      commands = this.getCommandsBetweenIf(this.terminalCommands.slice(index));
+    } else {
+      commands.push(this.terminalCommands[index]);
+    }
+    console.log(commands);
+    return commands;
+  }
+
+  getCommandsBetweenIf(commands: Command[]): Command[] {
+    if (!this.botCompiler.checkIfLogicInstruction(commands[0].type)) {
+      console.log('invalid CommandSet');
+      return [];
+    }
+
+    let calcCommands: Command[] = [];
+
+    let indentCounter = 0;
+    for (let i = 0; i < commands.length; i++) {
+      let ins: Command = commands[i];
+
+      if (this.botCompiler.checkIfLogicInstruction(ins.type)) {
+        indentCounter++;
+      } else if (ins.type == 'else') {
+      } else if (ins.type == 'end') {
+        indentCounter--;
+        if (indentCounter == 0) {
+          calcCommands = commands.slice(0, i + 1);
+          break;
+        }
+      }
+    }
+
+    return calcCommands;
   }
 
   isLogicElement(instruction: any): boolean {
