@@ -121,9 +121,9 @@ export class BotCompilerService {
   }
 
   /**
-   * checks if the given parameter is an Instructio or a Logic Instruction, Returns True when it is an Instruction
+   * checks if the given parameter is an Instruction or a Logic Instruction, Returns True when it is an Instruction
    *
-   * @param {any} instruction
+   * @param {any} instruction has to be a instruction type (instruction.type)
    * @return {*}  {instruction is LogicInstruction}
    * @memberof BotCompilerService
    */

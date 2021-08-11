@@ -13,11 +13,6 @@ import {
   styleUrls: ['./dragdrop-logic-command.component.scss'],
 })
 export class DragdropLogicCommandComponent implements OnInit {
-  @Input() command: Command = {
-    type: 'if',
-    indent: 0,
-  };
-
   variables = _BotVars;
   operators = _Operators;
 
@@ -25,6 +20,12 @@ export class DragdropLogicCommandComponent implements OnInit {
     operator: this.operators[0],
     value: 'true',
     variable: this.variables[0],
+  };
+
+  @Input() command: Command = {
+    type: 'if',
+    test: this.logicTest,
+    indent: 0,
   };
 
   whenTrueCommands = [];
@@ -42,7 +43,7 @@ export class DragdropLogicCommandComponent implements OnInit {
   constructor(private botCompiler: BotCompilerService) {}
 
   ngOnInit(): void {
-    console.log(_BotVars);
+    this.logicTestData.emit(this.logicTest);
   }
 
   delete() {

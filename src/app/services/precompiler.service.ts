@@ -11,6 +11,12 @@ import {
   Instruction,
 } from './bot-compiler.service';
 
+export interface CalculatedIfCommands {
+  endIndex: number;
+  whenTrue: Command[];
+  whenElse: Command[];
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -28,47 +34,73 @@ export class PrecompilerService {
         let newIns: Instruction = command.type;
         insSet.instructions.push(newIns);
       } else if (command.type == 'if') {
-        let calcCommands = this.getCommandsOfIf(commands.slice(i));
-        let whenTrue: InstructionSet = this.commandsToInstructionset(
-          calcCommands[0]
-        );
-        let newIns: LogicInstruction = {
-          type: command.type,
-          test: command.test!,
-          whenTrue: whenTrue,
-        };
+        if (!command.test) {
+          console.log('error: Logic Command without test');
+        } else {
+          let calcCommands = this.getCommandsOfIf(commands.slice(i));
 
-        if (calcCommands[1]) {
-          let whenElse = this.commandsToInstructionset(calcCommands[1]);
-          newIns.else = whenElse;
+          if (calcCommands.endIndex != -1) {
+            let whenTrue: InstructionSet = this.commandsToInstructionset(
+              calcCommands.whenTrue
+            );
+            let newIns: LogicInstruction = {
+              type: command.type,
+              test: command.test,
+              whenTrue: whenTrue,
+            };
+
+            if (calcCommands.whenElse.length > 0) {
+              let whenElse = this.commandsToInstructionset(
+                calcCommands.whenElse
+              );
+              newIns.else = whenElse;
+            }
+
+            insSet.instructions.push(newIns);
+
+            i += calcCommands.endIndex;
+          }
         }
+      } else {
+        console.log(command);
       }
     }
     return insSet;
   }
 
   /**
-   *extracts the commands of an If statement list for when true and else, returns an Array of Command Arrays, in the first Element are the when True Commands in the Second the else commands (optional)
+   *extracts the commands of an If statement list for when true and else,
+   *returns an Array of Command Arrays and a Number,
+   *in the first Element is the Index of the last end statement,
+   *in the second Element are the when True Commands,
+   *in the third Element the else commands (optional)
    *The first instruction of the passed Commands array has to be Logic
    *
-   * @param {Command[]} commands
+   *
+   * @param {(Command[] | number)[]} commands
    * @return {*}  {Command[][]}
    * @memberof PrecompilerService
    */
-  getCommandsOfIf(commands: Command[]): Command[][] {
-    if (!this.botCompiler.checkIfLogicInstruction(commands[0])) {
-      return [];
+  getCommandsOfIf(commands: Command[]): CalculatedIfCommands {
+    if (!this.botCompiler.checkIfLogicInstruction(commands[0].type)) {
+      console.log('invalid CommandSet');
+      return {
+        endIndex: -1,
+        whenElse: [],
+        whenTrue: [],
+      };
     }
 
     let whenTrue: Command[] = [];
     let whenElse: Command[] = [];
 
+    let endIndex: number = -1;
     let indentCounter = 0;
     let elseFound = -1;
     for (let i = 0; i < commands.length; i++) {
       let ins: Command = commands[i];
 
-      if (this.botCompiler.checkIfLogicInstruction(ins)) {
+      if (this.botCompiler.checkIfLogicInstruction(ins.type)) {
         indentCounter++;
       } else if (ins.type == 'else') {
         indentCounter--;
@@ -80,6 +112,7 @@ export class PrecompilerService {
       } else if (ins.type == 'end') {
         indentCounter--;
         if (indentCounter == 0) {
+          endIndex = i;
           if (elseFound != -1) {
             whenElse = commands.slice(elseFound + 1, i);
           } else {
@@ -90,10 +123,11 @@ export class PrecompilerService {
       }
     }
 
-    let results: Command[][] = [whenTrue];
-    if (elseFound != -1) {
-      results.push(whenElse);
-    }
+    let results: CalculatedIfCommands = {
+      endIndex: endIndex,
+      whenTrue: whenTrue,
+      whenElse: whenElse,
+    };
 
     return results;
   }
