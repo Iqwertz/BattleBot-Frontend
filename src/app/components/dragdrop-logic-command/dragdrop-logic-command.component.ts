@@ -1,7 +1,15 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { Command } from '../editor-ide/editor-ide.component';
 import { _BotVars, _Operators } from '../../services/bot-compiler.service';
+import { AfterViewInit } from '@angular/core';
 import {
   LogicTest,
   BotCompilerService,
@@ -12,7 +20,7 @@ import {
   templateUrl: './dragdrop-logic-command.component.html',
   styleUrls: ['./dragdrop-logic-command.component.scss'],
 })
-export class DragdropLogicCommandComponent implements OnInit {
+export class DragdropLogicCommandComponent implements OnInit, AfterViewInit {
   variables = _BotVars;
   operators = _Operators;
 
@@ -22,11 +30,18 @@ export class DragdropLogicCommandComponent implements OnInit {
     variable: this.variables[0],
   };
 
-  @Input() command: Command = {
+  command: Command = {
     type: 'if',
     test: this.logicTest,
     indent: 0,
   };
+
+  @Input() set setCommand(cmd: Command) {
+    this.command = cmd;
+    if (cmd.test) {
+      this.logicTest = cmd.test;
+    }
+  }
 
   whenTrueCommands = [];
 
@@ -40,7 +55,14 @@ export class DragdropLogicCommandComponent implements OnInit {
 
   faDelete = faTimes;
 
-  constructor(private botCompiler: BotCompilerService) {}
+  constructor(
+    private botCompiler: BotCompilerService,
+    private ref: ElementRef
+  ) {}
+
+  ngAfterViewInit(): void {
+    // console.log(this.ref.nativeElement.getBoundingClientRect());
+  }
 
   ngOnInit(): void {
     this.logicTestData.emit(this.logicTest);

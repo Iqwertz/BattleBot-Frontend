@@ -13,6 +13,7 @@ import {
 import { CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
 import { cloneDeep } from 'lodash';
 import { BotCompilerService } from '../../services/bot-compiler.service';
+import { CommandType } from '../editor-ide/editor-ide.component';
 
 @Component({
   selector: 'app-drop-terminal',
@@ -24,6 +25,7 @@ export class DropTerminalComponent implements OnInit, AfterViewInit, OnDestroy {
 
   deleteBetweenStatemen: boolean = true;
   indent: number = 40;
+  undraggable: CommandType[] = ['else', 'end'];
 
   @Input() terminalCommands: Command[] = [];
   @Output() terminalCommandsChange = new EventEmitter<Command[]>();
@@ -62,7 +64,6 @@ export class DropTerminalComponent implements OnInit, AfterViewInit, OnDestroy {
           ...this.currentDragPreviewCommands.slice(1)
         );
       }
-      console.log(event.container.data);
     } else {
       if (!this.allowLogic) {
         if (
@@ -85,7 +86,6 @@ export class DropTerminalComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   dragStarted(event: any, index: number) {
-    console.log(event);
     this.currentDragPreviewCommands = this.calculatePreviewCommands(index);
     this.deleteFromTerminal(index, false);
   }
@@ -151,7 +151,6 @@ export class DropTerminalComponent implements OnInit, AfterViewInit, OnDestroy {
     } else {
       commands.push(this.terminalCommands[index]);
     }
-    console.log(commands);
     return commands;
   }
 

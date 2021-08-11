@@ -11,8 +11,10 @@
       class="draggable-item"
       *ngFor="let item of terminalCommands; let i = index"
       cdkDrag
+      [cdkDragDisabled]="undraggable.indexOf(item.type) != -1"
       (cdkDragStarted)="dragStarted($event, i)"
       (cdkDragMoved)="dragMoved($event)"
+      (drag)="dragMoved($event)"
     >
       <app-dragdrop-command
         *ngIf="!isLogic(item)"
@@ -25,7 +27,7 @@
         *ngIf="isLogic(item)"
         [isDeletable]="true"
         [isPreview]="false"
-        [command]="item"
+        [setCommand]="item"
         (onDelete)="deleteFromTerminal(i, true)"
         (logicTestData)="item.test = $event"
       ></app-dragdrop-logic-command>
