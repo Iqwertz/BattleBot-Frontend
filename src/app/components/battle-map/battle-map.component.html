@@ -1,4 +1,7 @@
-<div class="battle-map-container">
+<div
+  class="battle-map-container"
+  *ngIf="simulationStatusVar.simulationGenerated"
+>
   <div
     class="tile-row"
     *ngFor="let item of fakeArray(battleMapSize[0]); let i = index"

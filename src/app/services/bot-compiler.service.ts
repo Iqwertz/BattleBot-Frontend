@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BattleMapBufferService } from './battle-map-buffer.service';
-import {
-  Bot,
-  SimulationData,
-} from '../components/battle-map/battle-map.component';
+import { Bot } from '../components/battle-map/battle-map.component';
+import { SimulationData } from './simulation.service';
+import { environment } from '../../environments/environment';
 
 //available Instructions, Instructions are relativew to the bots facing direction
 export type Instruction = 'forward' | 'left' | 'right';
@@ -97,10 +96,21 @@ export const defaultBotVars: BotVars = {
 export class BotCompilerService {
   constructor(private battleMapBufferService: BattleMapBufferService) {}
   battleMapSize: number[] = [];
+
   simulation: SimulationData = {
     bots: new Map(),
     obstacleMap: [],
+    size: [0, 0],
+    statusVar: {
+      simulationGenerated: false,
+      simulationSpeed: environment.simulationSpeed,
+      simulationStarted: false,
+    },
   };
+
+  setSimulationData(sim: SimulationData) {
+    this.simulation = sim;
+  }
 
   /**
    * checks if the given parameter is an Instructio or a Logic Instruction, Returns True when it is an Instruction

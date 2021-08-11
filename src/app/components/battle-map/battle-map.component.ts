@@ -7,7 +7,11 @@ import {
   BrainData,
   Direction,
 } from '../../services/bot-compiler.service';
-var perlin = require('perlin-noise');
+import { SimulationData } from 'src/app/services/simulation.service';
+import {
+  SimulationService,
+  SimulationStatusVar,
+} from '../../services/simulation.service';
 
 //configuration of a bot
 export interface Bot {
@@ -20,12 +24,6 @@ export interface Bot {
   direction: Direction;
   brain: BrainData;
   crashed: boolean;
-}
-
-//simulation
-export interface SimulationData {
-  bots: Map<number, Bot>;
-  obstacleMap: boolean[][];
 }
 
 /**
@@ -46,202 +44,30 @@ export class BattleMapComponent implements OnInit {
   byteColorMap = new Map(Object.entries(environment.byteColorMap));
   battleMapSize: number[] = environment.defaultMapSize;
 
-  simulation: SimulationData = {
-    bots: new Map<number, Bot>(),
-    obstacleMap: [],
+  simulationStatusVar: SimulationStatusVar = {
+    simulationGenerated: false,
+    simulationSpeed: 0,
+    simulationStarted: false,
   };
 
   constructor(
-    private botCompilerService: BotCompilerService,
-    private battleMapBufferService: BattleMapBufferService
-  ) {}
+    private battleMapBufferService: BattleMapBufferService,
+    private simulationService: SimulationService
+  ) {
+    this.simulationStatusVar = this.simulationService.simulation.statusVar;
+  }
 
   ngOnInit(): void {
-    (this.simulation.obstacleMap = this.generateObstacleMap(
-      this.battleMapSize
-    )), //generate a obstacle Map
-      //add Bots to simulation
-      this.simulation.bots.set(bot1.color, bot1);
-    this.simulation.bots.set(bot2.color, bot2);
-    this.simulation.bots.set(bot3.color, bot3);
-
-    //generate random starts for the bots
+    this.simulationService.generateNewSimulation([200, 200]);
+    this.simulationService.setBot(bot1);
+    this.simulationService.setBot(bot2);
+    this.simulationService.setBot(bot3);
+    console.log(this.simulationService.simulation.statusVar);
+    console.log(this.simulationStatusVar);
+    /*//generate random starts for the bots
     this.simulation.bots.forEach((bot) => {
       this.setRandomStart(bot, 3);
-    });
-    this.startSimulation(); //start the simulation
-  }
-
-  /**
-   *generates an obstacle map with perlin noise
-   *
-   * @param {number[]} size
-   * @return {*}  {boolean[][]} - the generated map
-   * @memberof BattleMapComponent
-   */
-  generateObstacleMap(size: number[]): boolean[][] {
-    let obstacleMap: boolean[][] = [];
-    let noiseMap = perlin.generatePerlinNoise(
-      size[0],
-      size[1],
-      environment.obstacleNoiseSettings
-    ); //generate 1d perlin noise array
-
-    for (let i = 0; i < size[0]; i++) {
-      //map 1d array onto 2d map
-      let row: boolean[] = [];
-      for (let j = 0; j < size[1]; j++) {
-        let index = i * size[0] + j;
-        if (noiseMap[index] > environment.obstacleNoiseSettings.threshold) {
-          row.push(true);
-        } else {
-          row.push(false);
-        }
-      }
-      obstacleMap.push(row);
-    }
-
-    return obstacleMap;
-  }
-
-  /**
-   *Starts the simulation by configuring all Services it and initiation the first Step
-   *
-   * @memberof BattleMapComponent
-   */
-  startSimulation() {
-    this.configureBattleMap();
-    this.configureCompiler();
-    this.simulateStep();
-  }
-
-  /**
-   *configures all vars of the compiler service
-   *
-   * @memberof BattleMapComponent
-   */
-  configureCompiler() {
-    this.botCompilerService.battleMapSize = this.battleMapSize;
-    this.botCompilerService.simulation = this.simulation;
-  }
-
-  /**
-   *configures all vars for the battleMap service
-   *
-   * @memberof BattleMapComponent
-   */
-  configureBattleMap() {
-    this.battleMapBufferService.battleMapSize = this.battleMapSize;
-    this.battleMapBufferService.clearArrayBuffer();
-  }
-
-  /**
-   *simulates a step and calls itself with a timeout
-   *
-   * @memberof BattleMapComponent
-   */
-  simulateStep() {
-    this.simulation.bots.forEach((bot) => {
-      //go through each bot
-      if (!bot.crashed) {
-        //check if bot crashed
-
-        let nextInstruction = this.botCompilerService.getNextInstruction(bot); //calculate the next instructions
-
-        for (let i = 0; i < nextInstruction.length; i++) {
-          //execute the instructions
-          bot.direction = this.botCompilerService.calculateMoveDirection(
-            bot.direction,
-            nextInstruction[i]
-          );
-        }
-
-        let movingDirection: Direction =
-          this.botCompilerService.calculateMoveDirection(
-            bot.direction,
-            'forward'
-          ); //calculate moving direction
-
-        let newBotPos: number[] = bot.position.slice(0); //create a  copy of the bot position
-
-        bot.direction = movingDirection;
-
-        switch (
-          movingDirection //change bot position according to the
-        ) {
-          case 'down':
-            newBotPos[0]++;
-            break;
-          case 'left':
-            newBotPos[1]--;
-            break;
-          case 'up':
-            newBotPos[0]--;
-            break;
-          case 'right':
-            newBotPos[1]++;
-            break;
-        }
-
-        if (!this.botCompilerService.checkPositionOutOfBounds(newBotPos)) {
-          //check if newPosition is out of bounds(crashed)
-          bot.track.push(bot.position.slice(0));
-
-          if (bot.track.length > bot.trackLength) {
-            bot.track.shift();
-          }
-          bot.position = newBotPos;
-        } else {
-          this.botOutOfBounds(bot); //alert bot out of bounds
-        }
-      }
-    });
-
-    this.renderOntoMap(); //render new map
-    setTimeout(() => {
-      this.simulateStep();
-    }, this.simulationSpeed); //set timeout for next step
-  }
-
-  /**
-   *handle bot out of bounds
-   *
-   * @param {Bot} bot
-   * @memberof BattleMapComponent
-   */
-  botOutOfBounds(bot: Bot) {
-    console.log(`${bot.name} crashed into a wall`);
-    bot.crashed = true;
-  }
-
-  /**
-   *render all Layers onto the ArrayBuffer
-   *
-   * @memberof BattleMapComponent
-   */
-  renderOntoMap() {
-    this.battleMapBufferService.clearArrayBuffer(); //clear the map
-
-    for (let i = 0; i < this.battleMapSize[0]; i++) {
-      //render obstacles
-      for (let j = 0; j < this.battleMapSize[1]; j++) {
-        if (this.simulation.obstacleMap[i][j]) {
-          this.battleMapBufferService.setToBattleMapBuffer([i, j], 1);
-        }
-      }
-    }
-
-    this.simulation.bots.forEach((bot) => {
-      //render each bot
-      for (let trackElement of bot.track) {
-        //render tracks
-        this.battleMapBufferService.setToBattleMapBuffer(
-          trackElement,
-          bot.trackColor
-        );
-      }
-      this.battleMapBufferService.setToBattleMapBuffer(bot.position, bot.color); //render bot
-    });
+    }); */
   }
 
   /**
@@ -278,7 +104,7 @@ export class BattleMapComponent implements OnInit {
    * @param {number} area
    * @memberof BattleMapComponent
    */
-  setRandomStart(bot: Bot, area: number) {
+  /* setRandomStart(bot: Bot, area: number) {
     let foundValid = false;
 
     while (!foundValid) {
@@ -310,5 +136,5 @@ export class BattleMapComponent implements OnInit {
         }
       } catch {} //not clean! I know but will be removed in the end
     }
-  }
+  } */
 }
