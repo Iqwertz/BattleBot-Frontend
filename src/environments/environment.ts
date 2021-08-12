@@ -18,7 +18,7 @@ export const environment = {
   byteColorMap: {
     //spielerspur farbe muss immer um eines höher sein als spieler
     0: '#fff', //weiß
-    1: '#000000', //schwarz
+    1: '#000000', //schwarz //obstacle
     2: '#000000', //unused
     3: '#3bff00', //spieler 1 (reserved vor Bot in editor)
     4: '#a5ff8a', //spieler 1 spur

@@ -42,3 +42,11 @@
     }
   }
 }
+
+.botCursor:hover {
+  cursor: url("../../../assets/microchip-solid.png"), pointer;
+}
+
+.banCursor:hover {
+  cursor: not-allowed;
+}
