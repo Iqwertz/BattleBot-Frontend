@@ -1,3 +1,4 @@
+import { SetPlacingBot } from './../../store/app.action';
 import { Component, OnInit } from '@angular/core';
 import { SimulationService } from '../../services/simulation.service';
 import {
@@ -11,7 +12,7 @@ import {
 import { defaultBots } from '../battle-map/battle-map-bots';
 import { environment } from '../../../environments/environment';
 import { AppState } from '../../store/app.state';
-import { Select } from '@ngxs/store';
+import { Select, Store } from '@ngxs/store';
 import { Bot } from '../battle-map/battle-map.component';
 
 @Component({
@@ -22,7 +23,7 @@ import { Bot } from '../battle-map/battle-map.component';
 export class BattleMapControlsComponent implements OnInit {
   @Select(AppState.compiledBot) compiledBot$: any;
 
-  constructor(public simulationService: SimulationService) {}
+  constructor(public simulationService: SimulationService, private store: Store) { }
 
   compiledBotAvailable = false;
 
@@ -92,7 +93,9 @@ export class BattleMapControlsComponent implements OnInit {
     this.simulationService.setBot(bot);
   }
 
-  setBot() {}
+  setBot() {
+    this.store.dispatch(new SetPlacingBot(true));
+  }
 
   private getRandomInt(min: number, max: number): number {
     min = Math.ceil(min);

@@ -1,3 +1,6 @@
+import { SetPlacingBot } from './../../store/app.action';
+import { AppState } from './../../store/app.state';
+import { Select, Store } from '@ngxs/store';
 import { Component, OnInit } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { defaultBots } from './battle-map-bots';
@@ -34,17 +37,30 @@ export class BattleMapComponent implements OnInit {
   //variables
   byteColorMap = new Map(Object.entries(environment.byteColorMap));
 
+  @Select(AppState.placingBot) placingBot$: any;
+  placingBot: boolean = false;
+
+  @Select(AppState.compiledBot) compiledBot$: any;
+  compiledBot: Bot | undefined;
+
   constructor(
     private battleMapBufferService: BattleMapBufferService,
-    public simulationService: SimulationService
-  ) {}
+    public simulationService: SimulationService,
+    private store: Store,
+  ) { }
 
   ngOnInit(): void {
+
+    this.placingBot$.subscribe((val: boolean) => {
+      this.placingBot = val;
+    })
+
+
+    this.compiledBot$.subscribe((bot: Bot) => {
+      this.compiledBot = bot;
+    })
+
     this.simulationService.generateNewSimulation([50, 50]);
-    this.simulationService.setBot(defaultBots[0]);
-    this.simulationService.setBot(defaultBots[1]);
-    this.simulationService.setBot(defaultBots[2]);
-    this.simulationService.start();
   }
 
   /**
@@ -72,5 +88,13 @@ export class BattleMapComponent implements OnInit {
       return new Array(length);
     }
     return new Array(0);
+  }
+
+  tileSelected(x: number, y: number) {
+    if (this.placingBot && this.compiledBot) {
+      this.compiledBot.position = [x, y];
+      this.simulationService.setBot(this.compiledBot);
+      this.store.dispatch(new SetPlacingBot(false));
+    }
   }
 }

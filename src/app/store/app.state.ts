@@ -13,16 +13,18 @@
 
 import { State, Action, StateContext, Selector } from '@ngxs/store';
 import { Bot } from '../components/battle-map/battle-map.component';
-import { SetCompiledBot } from './app.action';
+import { SetCompiledBot, SetPlacingBot } from './app.action';
 
 export interface AppStateModel {
   compiledBot: Bot | undefined;
+  placingBot: boolean;
 }
 
 @State<AppStateModel>({
   name: 'appState',
   defaults: {
     compiledBot: undefined,
+    placingBot: false,
   },
 })
 export class AppState {
@@ -32,9 +34,21 @@ export class AppState {
   }
 
   @Action(SetCompiledBot)
-  setUserId(context: StateContext<AppStateModel>, action: SetCompiledBot) {
+  setCompiledBot(context: StateContext<AppStateModel>, action: SetCompiledBot) {
     context.patchState({
       compiledBot: action.compiledBot,
+    });
+  }
+
+  @Selector()
+  static placingBot(state: AppStateModel) {
+    return state.placingBot;
+  }
+
+  @Action(SetPlacingBot)
+  setPlacingBot(context: StateContext<AppStateModel>, action: SetPlacingBot) {
+    context.patchState({
+      placingBot: action.placingBot,
     });
   }
 }

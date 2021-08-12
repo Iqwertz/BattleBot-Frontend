@@ -1,7 +1,7 @@
 <div
   class="battle-map-container"
   [ngClass]="{
-    botCursor: true
+    botCursor: placingBot
   }"
   *ngIf="simulationService.simulation.statusVar.simulationGenerated"
 >
@@ -15,8 +15,9 @@
     <div
       class="tile"
       [ngClass]="{
-        botCursor: true,
-        banCursor: getBattleMapBufferValue(i, j) == 1
+        botCursor: placingBot,
+        banCursor: getBattleMapBufferValue(i, j) == 1 && placingBot,
+        placing: getBattleMapBufferValue(i, j) != 1 && placingBot
       }"
       *ngFor="
         let item of fakeArray(simulationService.simulation.size[1]);
@@ -25,6 +26,7 @@
       [style.background-color]="
         byteColorMap.get(getBattleMapBufferValue(i, j).toString())
       "
+      (click)="tileSelected(i, j)"
     ></div>
   </div>
 </div>

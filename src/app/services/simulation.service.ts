@@ -42,7 +42,7 @@ export class SimulationService {
   constructor(
     private botCompilerService: BotCompilerService,
     private battleMapBufferService: BattleMapBufferService
-  ) {}
+  ) { }
 
   generateNewSimulation(size: number[], obstacleMapSettings?: any) {
     this.clear();
@@ -225,7 +225,7 @@ export class SimulationService {
         bot.direction = movingDirection;
 
         switch (
-          movingDirection //change bot position according to the
+        movingDirection //change bot position according to the
         ) {
           case 'down':
             newBotPos[0]++;
@@ -241,7 +241,7 @@ export class SimulationService {
             break;
         }
 
-        if (!this.botCompilerService.checkPositionOutOfBounds(newBotPos)) {
+        if (!this.botCompilerService.checkPositionOutOfBounds(newBotPos) && !this.battleMapBufferService.getBattleMapBufferValue(newBotPos[0], newBotPos[1])) {
           //check if newPosition is out of bounds(crashed)
           bot.track.push(bot.position.slice(0));
 
@@ -308,7 +308,7 @@ export class SimulationService {
             break;
           } else if (
             this.simulation.obstacleMap[checkSpotStart[0] + i][
-              checkSpotStart[1] + j
+            checkSpotStart[1] + j
             ]
           ) {
             obstacleNear = true;
