@@ -1,0 +1,28 @@
+@import "./src/scss/variables";
+
+.controls-container {
+  height: 100%;
+  width: 100%;
+  background-color: $default-black;
+  border-radius: 25px;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+
+  .control-button {
+    border-radius: 100%;
+    background-color: $controls-button-color;
+    margin: 4px;
+    position: relative;
+    width: 3.5vw;
+    height: 3.5vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    fa-icon {
+      font-size: 2em;
+    }
+  }
+}

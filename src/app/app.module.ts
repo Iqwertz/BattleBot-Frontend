@@ -17,6 +17,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { DragdropLogicCommandComponent } from './components/dragdrop-logic-command/dragdrop-logic-command.component';
 import { DropTerminalComponent } from './components/drop-terminal/drop-terminal.component';
 import { DragdropPreviewComponent } from './components/dragdrop-preview/dragdrop-preview.component';
+import { BattleMapControlsComponent } from './components/battle-map-controls/battle-map-controls.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 @NgModule({
   declarations: [
@@ -31,6 +34,7 @@ import { DragdropPreviewComponent } from './components/dragdrop-preview/dragdrop
     DragdropLogicCommandComponent,
     DropTerminalComponent,
     DragdropPreviewComponent,
+    BattleMapControlsComponent,
   ],
   imports: [
     BrowserModule,
@@ -39,6 +43,8 @@ import { DragdropPreviewComponent } from './components/dragdrop-preview/dragdrop
     DragDropModule,
     FontAwesomeModule,
     MatSelectModule,
+    MatTooltipModule,
+    MatButtonToggleModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

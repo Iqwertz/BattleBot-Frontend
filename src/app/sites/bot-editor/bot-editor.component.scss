@@ -22,25 +22,43 @@
     justify-content: space-between;
     align-items: center;
 
-    .setting-container {
+    .info-container {
       height: 49%;
       width: 100%;
       border-radius: 15px;
       background-color: $default-black;
+
+      .toggle {
+      }
     }
 
-    .map-container {
+    .bottom-right {
       height: 49%;
       width: 100%;
       border-radius: 15px;
-      background-color: $default-black;
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
       align-items: center;
 
-      .map {
-        width: calc(100% - 25px);
-        height: calc(100% - 25px);
+      .map-container {
+        margin: 0 10px 0 0;
+        height: 100%;
+        width: 80%;
+        border-radius: 15px;
+        background-color: $default-black;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .map {
+          width: calc(100% - 25px);
+          height: calc(100% - 25px);
+        }
+      }
+      .controls {
+        height: 100%;
+        width: 20%;
+        margin: 0 0 0 5px;
       }
     }
   }

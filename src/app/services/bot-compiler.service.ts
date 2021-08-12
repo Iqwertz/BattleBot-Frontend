@@ -105,6 +105,7 @@ export class BotCompilerService {
       simulationGenerated: false,
       simulationSpeed: environment.simulationSpeed,
       simulationStarted: false,
+      simulationPaused: false,
     },
   };
 

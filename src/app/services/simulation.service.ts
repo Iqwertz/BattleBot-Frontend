@@ -19,6 +19,7 @@ export interface SimulationStatusVar {
   simulationSpeed: number;
   simulationGenerated: boolean;
   simulationStarted: boolean;
+  simulationPaused: boolean;
 }
 
 @Injectable({
@@ -33,6 +34,7 @@ export class SimulationService {
       simulationGenerated: false,
       simulationSpeed: environment.simulationSpeed,
       simulationStarted: false,
+      simulationPaused: false,
     },
   };
   simulation: SimulationData = cloneDeep(this.emptySimulation); //Hier weiter mit simulationvar changed und subscribe in battlemap compoonent
@@ -44,17 +46,35 @@ export class SimulationService {
 
   generateNewSimulation(size: number[], obstacleMapSettings?: any) {
     this.clear();
+
     this.simulation.obstacleMap = this.generateObstacleMap(
       size,
       obstacleMapSettings
     );
     this.simulation.size = size;
 
+    this.configureBattleMap();
+    this.configureCompiler();
+
     this.simulation.statusVar.simulationGenerated = true;
+
+    this.renderOntoMap();
   }
 
   setBot(bot: Bot) {
-    this.simulation.bots.set(bot.color, bot);
+    if (!bot) {
+      return;
+    }
+    let clonedBot = cloneDeep(bot);
+    if (this.simulation.statusVar.simulationGenerated) {
+      if (
+        this.botCompilerService.checkPositionOutOfBounds(clonedBot.position)
+      ) {
+        this.setRandomStart(clonedBot, 3);
+      }
+      this.simulation.bots.set(clonedBot.color, clonedBot);
+      this.renderOntoMap();
+    }
   }
 
   /**
@@ -63,8 +83,9 @@ export class SimulationService {
    * @memberof SimulationService
    */
   start() {
-    this.configureBattleMap();
     this.configureCompiler();
+    this.simulation.statusVar.simulationStarted = true;
+    this.simulation.statusVar.simulationPaused = false;
     this.simulateStep();
   }
 
@@ -74,9 +95,22 @@ export class SimulationService {
     this.simulation = cloneDeep(this.emptySimulation);
   }
 
-  pause() {}
+  pause() {
+    this.simulation.statusVar.simulationPaused = true;
+  }
 
-  setSpeed() {}
+  resume() {
+    this.simulation.statusVar.simulationPaused = false;
+    this.simulateStep();
+  }
+
+  reset() {
+    this.simulation.bots = new Map();
+  }
+
+  setSpeed(speed: number) {
+    this.simulation.statusVar.simulationSpeed = speed;
+  }
 
   /**
    *configures all vars of the compiler service
@@ -222,9 +256,15 @@ export class SimulationService {
     });
 
     this.renderOntoMap(); //render new map
-    setTimeout(() => {
-      this.simulateStep();
-    }, this.simulation.statusVar.simulationSpeed); //set timeout for next step
+
+    if (
+      !this.simulation.statusVar.simulationPaused &&
+      this.simulation.statusVar.simulationStarted
+    ) {
+      setTimeout(() => {
+        this.simulateStep();
+      }, this.simulation.statusVar.simulationSpeed); //set timeout for next step
+    }
   }
 
   /**
@@ -236,5 +276,53 @@ export class SimulationService {
   botOutOfBounds(bot: Bot) {
     console.log(`${bot.name} crashed into a wall`);
     bot.crashed = true;
+  }
+
+  /**
+   *creates a random stArting point in an clear area on the map
+   *
+   * @param {Bot} bot
+   * @param {number} area
+   * @memberof SimulationService
+   */
+  setRandomStart(bot: Bot, area: number) {
+    let foundValid = false;
+
+    while (!foundValid) {
+      let randomStart = [
+        Math.floor(Math.random() * this.simulation.size[0] - 2 * area) + area,
+        Math.floor(Math.random() * this.simulation.size[1] - 2 * area) + area,
+      ];
+      let obstacleNear = false;
+      let checkSpotStart = [
+        randomStart[0] - Math.floor(area / 2),
+        randomStart[1] - Math.floor(area / 2),
+      ];
+      for (let i = 0; i < area; i++) {
+        for (let j = 0; j < area; j++) {
+          if (
+            this.botCompilerService.checkPositionOutOfBounds(checkSpotStart)
+          ) {
+            obstacleNear = true;
+            i = area;
+            break;
+          } else if (
+            this.simulation.obstacleMap[checkSpotStart[0] + i][
+              checkSpotStart[1] + j
+            ]
+          ) {
+            obstacleNear = true;
+            console.log('near Obstacle');
+            i = area;
+            break;
+          }
+        }
+      }
+
+      if (!obstacleNear) {
+        bot.position = randomStart;
+        foundValid = true;
+      }
+    }
   }
 }

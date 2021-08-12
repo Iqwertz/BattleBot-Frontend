@@ -1,0 +1,52 @@
+<div class="controls-container">
+  <div
+    class="control-button"
+    matTooltip="Generate a new simulation"
+    matTooltipPosition="left"
+    (click)="generate()"
+  >
+    <fa-icon [icon]="faPlus"></fa-icon>
+  </div>
+
+  <div
+    class="control-button"
+    matTooltip="Start simulation"
+    matTooltipPosition="left"
+    *ngIf="
+      simulationService.simulation.statusVar.simulationPaused ||
+      !simulationService.simulation.statusVar.simulationStarted
+    "
+    (click)="start()"
+  >
+    <fa-icon [icon]="faPlay"></fa-icon>
+  </div>
+
+  <div
+    class="control-button"
+    matTooltip="Pause simulation"
+    matTooltipPosition="left"
+    *ngIf="
+      !simulationService.simulation.statusVar.simulationPaused &&
+      simulationService.simulation.statusVar.simulationStarted
+    "
+    (click)="pause()"
+  >
+    <fa-icon [icon]="faPause"></fa-icon>
+  </div>
+  <div
+    class="control-button"
+    matTooltip="Reset simulation"
+    matTooltipPosition="left"
+    (click)="reset()"
+  >
+    <fa-icon [icon]="faRedo"></fa-icon>
+  </div>
+  <div
+    class="control-button"
+    matTooltip="Add random bot"
+    matTooltipPosition="left"
+    (click)="randomBot()"
+  >
+    <fa-icon [icon]="faRobot"></fa-icon>
+  </div>
+</div>

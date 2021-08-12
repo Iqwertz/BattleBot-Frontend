@@ -3,11 +3,23 @@
     <app-editor-ide> </app-editor-ide>
   </div>
   <div class="side-panel">
-    <div class="setting-container"></div>
-
-    <div class="map-container">
-      <div class="map">
-        <app-battle-map></app-battle-map>
+    <div class="info-container">
+      <div class="toggle">
+        <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
+          <mat-button-toggle value="bold">Bold</mat-button-toggle>
+          <mat-button-toggle value="italic">Italic</mat-button-toggle>
+          <mat-button-toggle value="underline">Underline</mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
+    </div>
+    <div class="bottom-right">
+      <div class="map-container">
+        <div class="map">
+          <app-battle-map></app-battle-map>
+        </div>
+      </div>
+      <div class="controls">
+        <app-battle-map-controls></app-battle-map-controls>
       </div>
     </div>
   </div>

@@ -1,14 +1,20 @@
 <div
   class="battle-map-container"
-  *ngIf="simulationStatusVar.simulationGenerated"
+  *ngIf="simulationService.simulation.statusVar.simulationGenerated"
 >
   <div
     class="tile-row"
-    *ngFor="let item of fakeArray(battleMapSize[0]); let i = index"
+    *ngFor="
+      let item of fakeArray(simulationService.simulation.size[0]);
+      let i = index
+    "
   >
     <div
       class="tile"
-      *ngFor="let item of fakeArray(battleMapSize[1]); let j = index"
+      *ngFor="
+        let item of fakeArray(simulationService.simulation.size[1]);
+        let j = index
+      "
       [style.background-color]="
         byteColorMap.get(getBattleMapBufferValue(i, j).toString())
       "
