@@ -1,7 +1,7 @@
 import { SetPlacingBot } from './../../store/app.action';
 import { AppState } from './../../store/app.state';
 import { Select, Store } from '@ngxs/store';
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { defaultBots } from './battle-map-bots';
 import { BattleMapBufferService } from '../../services/battle-map-buffer.service';
@@ -36,6 +36,14 @@ export interface Bot {
 export class BattleMapComponent implements OnInit {
   //variables
   byteColorMap = new Map(Object.entries(environment.byteColorMap));
+
+  @HostListener('document:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    let key = event.key;
+    if (key === 'Escape') {
+      this.store.dispatch(new SetPlacingBot(false));
+    }
+  }
 
   @Select(AppState.placingBot) placingBot$: any;
   placingBot: boolean = false;

@@ -1,3 +1,4 @@
+import { ConsoleService } from './../../services/console.service';
 import { SetPlacingBot } from './../../store/app.action';
 import { Component, OnInit } from '@angular/core';
 import { SimulationService } from '../../services/simulation.service';
@@ -23,7 +24,7 @@ import { Bot } from '../battle-map/battle-map.component';
 export class BattleMapControlsComponent implements OnInit {
   @Select(AppState.compiledBot) compiledBot$: any;
 
-  constructor(public simulationService: SimulationService, private store: Store) { }
+  constructor(public simulationService: SimulationService, private store: Store, private consoleService: ConsoleService) { }
 
   compiledBotAvailable = false;
 
@@ -45,6 +46,7 @@ export class BattleMapControlsComponent implements OnInit {
   faMicrochip = faMicrochip;
 
   generate() {
+    this.consoleService.clear();
     this.simulationService.generateNewSimulation([50, 50]);
   }
 

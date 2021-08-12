@@ -1,3 +1,4 @@
+import { ConsoleService } from './../../services/console.service';
 import { Component, OnInit } from '@angular/core';
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import { BrainData } from '../../services/bot-compiler.service';
@@ -5,9 +6,9 @@ import { PrecompilerService } from '../../services/precompiler.service';
 import { TerminalsService } from '../../services/terminals.service';
 import { Bot } from '../battle-map/battle-map.component';
 import { environment } from '../../../environments/environment';
-import { Select, Store } from '@ngxs/store';
+import { Store } from '@ngxs/store';
 import { SetCompiledBot } from '../../store/app.action';
-import { AppState } from '../../store/app.state';
+
 
 @Component({
   selector: 'app-console',
@@ -18,10 +19,13 @@ export class ConsoleComponent implements OnInit {
   constructor(
     private preCompiler: PrecompilerService,
     private terminalService: TerminalsService,
-    private store: Store
-  ) {}
+    private store: Store,
+    public consoleService: ConsoleService
+  ) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+
+  }
 
   faPlay = faPlay;
 

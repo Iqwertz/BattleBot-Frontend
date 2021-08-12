@@ -1,3 +1,4 @@
+import { ConsoleService } from './console.service';
 import { Command } from './../components/editor-ide/editor-ide.component';
 import { Injectable } from '@angular/core';
 import { Terminal } from './terminals.service';
@@ -21,7 +22,7 @@ export interface CalculatedIfCommands {
   providedIn: 'root',
 })
 export class PrecompilerService {
-  constructor(private botCompiler: BotCompilerService) {}
+  constructor(private botCompiler: BotCompilerService, private consoleService: ConsoleService) { }
 
   commandsToInstructionset(commands: Command[] | undefined): InstructionSet {
     let insSet: InstructionSet = { instructions: [] };
@@ -36,6 +37,7 @@ export class PrecompilerService {
       } else if (command.type == 'if') {
         if (!command.test) {
           console.log('error: Logic Command without test');
+          this.consoleService.print('Error: Logic Command without test')
         } else {
           let calcCommands = this.getCommandsOfIf(commands.slice(i));
 
@@ -84,6 +86,7 @@ export class PrecompilerService {
   getCommandsOfIf(commands: Command[]): CalculatedIfCommands {
     if (!this.botCompiler.checkIfLogicInstruction(commands[0].type)) {
       console.log('invalid CommandSet');
+      this.consoleService.print('invalid CommandSet')
       return {
         endIndex: -1,
         whenElse: [],
@@ -133,14 +136,15 @@ export class PrecompilerService {
   }
 
   terminalMapToBrainData(terminals: Map<BrainFunctions, Terminal>): BrainData {
-    console.log(terminals);
-    console.log(terminals.get('onWallDetected')?.commands);
+    this.consoleService.print('compiling default...')
     let def: InstructionSet = this.commandsToInstructionset(
       terminals.get('default')?.commands
     );
+    this.consoleService.print('compiling onWallDetected...')
     let wallDetect: InstructionSet = this.commandsToInstructionset(
       terminals.get('onWallDetected')?.commands
     );
+    this.consoleService.print('compiling onTrackDetected...')
     let trackDetect: InstructionSet = this.commandsToInstructionset(
       terminals.get('onTrackDetected')?.commands
     );
@@ -152,6 +156,7 @@ export class PrecompilerService {
       onWallDetected: wallDetect,
     };
 
+    this.consoleService.print('Compiling successfull...')
     return brainData;
   }
 }
