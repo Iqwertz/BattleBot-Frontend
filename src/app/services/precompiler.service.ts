@@ -1,6 +1,6 @@
 import { Command } from './../components/editor-ide/editor-ide.component';
 import { Injectable } from '@angular/core';
-import { Terminal } from '../components/editor-ide/editor-ide.component';
+import { Terminal } from './terminals.service';
 import {
   BrainData,
   defaultBotVars,

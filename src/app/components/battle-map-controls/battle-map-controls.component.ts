@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SimulationService } from '../../services/simulation.service';
 import {
+  faMicrochip,
   faPause,
   faPlay,
   faPlus,
@@ -9,6 +10,9 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { defaultBots } from '../battle-map/battle-map-bots';
 import { environment } from '../../../environments/environment';
+import { AppState } from '../../store/app.state';
+import { Select } from '@ngxs/store';
+import { Bot } from '../battle-map/battle-map.component';
 
 @Component({
   selector: 'app-battle-map-controls',
@@ -16,15 +20,28 @@ import { environment } from '../../../environments/environment';
   styleUrls: ['./battle-map-controls.component.scss'],
 })
 export class BattleMapControlsComponent implements OnInit {
+  @Select(AppState.compiledBot) compiledBot$: any;
+
   constructor(public simulationService: SimulationService) {}
 
-  ngOnInit(): void {}
+  compiledBotAvailable = false;
+
+  ngOnInit(): void {
+    this.compiledBot$.subscribe((cBot: Bot) => {
+      if (cBot) {
+        this.compiledBotAvailable = true;
+      } else {
+        this.compiledBotAvailable = false;
+      }
+    });
+  }
 
   faPlay = faPlay;
   faPause = faPause;
   faPlus = faPlus;
   faRedo = faRedo;
   faRobot = faRobot;
+  faMicrochip = faMicrochip;
 
   generate() {
     this.simulationService.generateNewSimulation([50, 50]);
@@ -74,6 +91,9 @@ export class BattleMapControlsComponent implements OnInit {
     bot.trackColor = botColor + 1;
     this.simulationService.setBot(bot);
   }
+
+  setBot() {}
+
   private getRandomInt(min: number, max: number): number {
     min = Math.ceil(min);
     max = Math.floor(max);

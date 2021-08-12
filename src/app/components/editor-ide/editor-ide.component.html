@@ -1,6 +1,6 @@
 <div class="ide-container">
   <div class="terminals-container terminal-scrollbar">
-    <div *ngFor="let terminal of terminals | keyvalue">
+    <div *ngFor="let terminal of terminalService.terminals | keyvalue">
       <div class="terminal-label">
         {{ terminal.key }}:
         <div *ngIf="!terminal.value.allowLogic" (click)="preCompileTerminals()">

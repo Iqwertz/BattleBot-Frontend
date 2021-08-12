@@ -2,12 +2,11 @@
 // `ng build` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-import { StringMap } from '@angular/compiler/src/compiler_facade_interface';
-
 export const environment = {
   production: false,
   simulationSpeed: 100,
   defaultMapSize: [20, 20],
+  defaultTrackLength: 10,
   obstacleNoiseSettings: {
     threshold: 0.65,
     octaveCount: 4,

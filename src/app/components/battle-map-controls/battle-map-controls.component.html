@@ -49,4 +49,14 @@
   >
     <fa-icon [icon]="faRobot"></fa-icon>
   </div>
+
+  <div
+    class="control-button"
+    matTooltip="Set Compiled Bot"
+    matTooltipPosition="left"
+    (click)="setBot()"
+    *ngIf="compiledBotAvailable"
+  >
+    <fa-icon [icon]="faMicrochip"></fa-icon>
+  </div>
 </div>

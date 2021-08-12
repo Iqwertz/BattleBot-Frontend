@@ -20,6 +20,9 @@ import { DragdropPreviewComponent } from './components/dragdrop-preview/dragdrop
 import { BattleMapControlsComponent } from './components/battle-map-controls/battle-map-controls.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { ConsoleComponent } from './components/console/console.component';
+import { NgxsModule } from '@ngxs/store';
+import { AppState } from './store/app.state';
 
 @NgModule({
   declarations: [
@@ -35,10 +38,12 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
     DropTerminalComponent,
     DragdropPreviewComponent,
     BattleMapControlsComponent,
+    ConsoleComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    NgxsModule.forRoot([AppState]),
     BrowserAnimationsModule,
     DragDropModule,
     FontAwesomeModule,

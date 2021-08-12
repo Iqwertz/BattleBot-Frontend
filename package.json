@@ -24,6 +24,7 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
     "@fortawesome/free-regular-svg-icons": "^5.15.3",
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
+    "@ngxs/store": "^3.7.2",
     "lodash": "^4.17.21",
     "perlin-noise": "^0.0.1",
     "rxjs": "~6.6.0",

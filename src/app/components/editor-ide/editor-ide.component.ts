@@ -1,3 +1,4 @@
+import { TerminalsService } from './../../services/terminals.service';
 import { Instruction } from './../../services/bot-compiler.service';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import {
@@ -20,11 +21,6 @@ export interface Command {
   test?: LogicTest;
 }
 
-export interface Terminal {
-  commands: Command[];
-  allowLogic: boolean;
-}
-
 @Component({
   selector: 'app-editor-ide',
   templateUrl: './editor-ide.component.html',
@@ -33,7 +29,8 @@ export interface Terminal {
 export class EditorIdeComponent implements OnInit, AfterViewInit {
   constructor(
     private botCompiler: BotCompilerService,
-    private preCompiler: PrecompilerService
+    private preCompiler: PrecompilerService,
+    public terminalService: TerminalsService
   ) {}
 
   left: Command = {
@@ -75,35 +72,20 @@ export class EditorIdeComponent implements OnInit, AfterViewInit {
     this.end,
   ];
 
-  terminals: Map<BrainFunctions, Terminal> = new Map();
-
   @ViewChild('terminalList') terminalListRef?: CdkDropList;
 
   commandsConnectedLists: CdkDropList[] = [];
 
-  ngOnInit(): void {
-    this.terminals.set('default', {
-      commands: [],
-      allowLogic: false,
-    });
-
-    this.terminals.set('onWallDetected', {
-      commands: [],
-      allowLogic: true,
-    });
-
-    this.terminals.set('onTrackDetected', {
-      commands: [],
-      allowLogic: true,
-    });
-  }
+  ngOnInit(): void {}
 
   ngAfterViewInit(): void {
     this.commandsConnectedLists.push(this.terminalListRef!);
   }
 
   preCompileTerminals() {
-    let result = this.preCompiler.terminalMapToBrainData(this.terminals);
+    let result = this.preCompiler.terminalMapToBrainData(
+      this.terminalService.terminals
+    );
     console.log(result);
   }
 
