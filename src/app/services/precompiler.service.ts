@@ -22,7 +22,12 @@ export interface CalculatedIfCommands {
   providedIn: 'root',
 })
 export class PrecompilerService {
-  constructor(private botCompiler: BotCompilerService, private consoleService: ConsoleService) { }
+  constructor(
+    private botCompiler: BotCompilerService,
+    private consoleService: ConsoleService
+  ) {}
+
+  compileError = false;
 
   commandsToInstructionset(commands: Command[] | undefined): InstructionSet {
     let insSet: InstructionSet = { instructions: [] };
@@ -37,7 +42,7 @@ export class PrecompilerService {
       } else if (command.type == 'if') {
         if (!command.test) {
           console.log('error: Logic Command without test');
-          this.consoleService.print('Error: Logic Command without test')
+          this.consoleService.print('Error: Logic Command without test');
         } else {
           let calcCommands = this.getCommandsOfIf(commands.slice(i));
 
@@ -86,7 +91,7 @@ export class PrecompilerService {
   getCommandsOfIf(commands: Command[]): CalculatedIfCommands {
     if (!this.botCompiler.checkIfLogicInstruction(commands[0].type)) {
       console.log('invalid CommandSet');
-      this.consoleService.print('invalid CommandSet')
+      this.consoleService.print('invalid CommandSet');
       return {
         endIndex: -1,
         whenElse: [],
@@ -106,12 +111,17 @@ export class PrecompilerService {
       if (this.botCompiler.checkIfLogicInstruction(ins.type)) {
         indentCounter++;
       } else if (ins.type == 'else') {
-        indentCounter--;
-        if (indentCounter == 0) {
-          elseFound = i;
-          whenTrue = commands.slice(1, i);
+        if (elseFound == -1) {
+          indentCounter--;
+          if (indentCounter == 0) {
+            elseFound = i;
+            whenTrue = commands.slice(1, i);
+          }
+          indentCounter++;
+        } else {
+          this.consoleService.print('Error: Double else inside if loop');
+          this.compileError = true;
         }
-        indentCounter++;
       } else if (ins.type == 'end') {
         indentCounter--;
         if (indentCounter == 0) {
@@ -135,19 +145,31 @@ export class PrecompilerService {
     return results;
   }
 
-  terminalMapToBrainData(terminals: Map<BrainFunctions, Terminal>): BrainData {
-    this.consoleService.print('compiling default...')
+  terminalMapToBrainData(
+    terminals: Map<BrainFunctions, Terminal>
+  ): BrainData | undefined {
+    this.compileError = false;
+    this.consoleService.print('compiling default...');
     let def: InstructionSet = this.commandsToInstructionset(
       terminals.get('default')?.commands
     );
-    this.consoleService.print('compiling onWallDetected...')
+    if (this.checkError()) {
+      return;
+    }
+    this.consoleService.print('compiling onWallDetected...');
     let wallDetect: InstructionSet = this.commandsToInstructionset(
       terminals.get('onWallDetected')?.commands
     );
-    this.consoleService.print('compiling onTrackDetected...')
+    if (this.checkError()) {
+      return;
+    }
+    this.consoleService.print('compiling onTrackDetected...');
     let trackDetect: InstructionSet = this.commandsToInstructionset(
       terminals.get('onTrackDetected')?.commands
     );
+    if (this.checkError()) {
+      return;
+    }
 
     let brainData: BrainData = {
       vars: defaultBotVars,
@@ -156,7 +178,39 @@ export class PrecompilerService {
       onWallDetected: wallDetect,
     };
 
-    this.consoleService.print('Compiling successfull...')
+    this.consoleService.print('Compiling successfull...');
     return brainData;
+  }
+
+  private checkError(): boolean {
+    if (this.compileError) {
+      this.consoleService.print('Compiling faild!');
+      return true;
+    }
+    return false;
+  }
+
+  checkCommandSetValid(cmdSet: Command[]): boolean {
+    if (this.checkBrackets(cmdSet)) {
+      return true;
+    }
+    return false;
+  }
+
+  private checkBrackets(cmdSet: Command[]): boolean {
+    let indent = 0;
+    for (let i = 0; i < cmdSet.length; i++) {
+      let ins: Command = cmdSet[i];
+      if (this.botCompiler.checkIfLogicInstruction(ins.type)) {
+        indent++;
+      } else if (ins.type == 'end') {
+        indent--;
+      }
+    }
+    if (indent == 0) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

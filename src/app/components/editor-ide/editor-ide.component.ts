@@ -63,14 +63,7 @@ export class EditorIdeComponent implements OnInit, AfterViewInit {
     indent: 0,
   };
 
-  commands = [
-    this.left,
-    this.right,
-    this.forward,
-    this.if,
-    this.else,
-    this.end,
-  ];
+  commands = [this.left, this.right, this.forward, this.if, this.else];
 
   @ViewChild('terminalList') terminalListRef?: CdkDropList;
 
@@ -91,7 +84,6 @@ export class EditorIdeComponent implements OnInit, AfterViewInit {
 
   addDropField(ref: CdkDropList) {
     this.commandsConnectedLists.push(ref);
-    console.log(this.commandsConnectedLists);
   }
 
   removeDropField(ref: CdkDropList) {

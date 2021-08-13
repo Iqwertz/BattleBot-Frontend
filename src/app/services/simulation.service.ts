@@ -44,7 +44,7 @@ export class SimulationService {
     private botCompilerService: BotCompilerService,
     private battleMapBufferService: BattleMapBufferService,
     private consoleService: ConsoleService
-  ) { }
+  ) {}
 
   generateNewSimulation(size: number[], obstacleMapSettings?: any) {
     this.clear();
@@ -88,7 +88,7 @@ export class SimulationService {
    * @memberof SimulationService
    */
   start() {
-    this.consoleService.print('starting Simulation...')
+    this.consoleService.print('starting Simulation...');
     this.configureCompiler();
     this.simulation.statusVar.simulationStarted = true;
     this.simulation.statusVar.simulationPaused = false;
@@ -99,28 +99,28 @@ export class SimulationService {
     this.simulation.statusVar.simulationGenerated = false;
     this.simulation.statusVar.simulationStarted = false;
     this.simulation = cloneDeep(this.emptySimulation);
-    this.consoleService.print('cleared Simulation')
+    this.consoleService.print('cleared Simulation');
   }
 
   pause() {
     this.simulation.statusVar.simulationPaused = true;
-    this.consoleService.print('paused Simulation')
+    this.consoleService.print('paused Simulation');
   }
 
   resume() {
     this.simulation.statusVar.simulationPaused = false;
     this.simulateStep();
-    this.consoleService.print('resumed Simulation')
+    this.consoleService.print('resumed Simulation');
   }
 
   reset() {
-    this.consoleService.print('reset Simulation')
+    this.consoleService.print('reset Simulation');
     this.simulation.bots = new Map();
   }
 
   setSpeed(speed: number) {
     this.simulation.statusVar.simulationSpeed = speed;
-    this.consoleService.print('set Simulation speed to ' + speed)
+    this.consoleService.print('set Simulation speed to ' + speed);
   }
 
   /**
@@ -151,7 +151,7 @@ export class SimulationService {
    * @memberof SimulationService
    */
   generateObstacleMap(size: number[], settings?: any): boolean[][] {
-    this.consoleService.print('generating Obstacles...')
+    this.consoleService.print('generating Obstacles...');
     if (!settings) {
       settings = environment.obstacleNoiseSettings;
     }
@@ -237,7 +237,7 @@ export class SimulationService {
         bot.direction = movingDirection;
 
         switch (
-        movingDirection //change bot position according to the
+          movingDirection //change bot position according to the
         ) {
           case 'down':
             newBotPos[0]++;
@@ -252,7 +252,7 @@ export class SimulationService {
             newBotPos[1]++;
             break;
         }
-        if (!this.botCompilerService.checkPositionOutOfBounds(newBotPos) && !this.simulation.obstacleMap[newBotPos[0]][newBotPos[1]]) {
+        if (!this.checkPositionIsCrashed(newBotPos)) {
           //check if newPosition is out of bounds(crashed)
           bot.track.push(bot.position.slice(0));
 
@@ -279,6 +279,23 @@ export class SimulationService {
   }
 
   /**
+   *Checks if a given Position is Invalid (crashed)
+   *
+   * @param {number[]} pos
+   * @return {*}  {boolean}
+   * @memberof SimulationService
+   */
+  checkPositionIsCrashed(pos: number[]): boolean {
+    if (
+      !this.botCompilerService.checkPositionOutOfBounds(pos) &&
+      !this.simulation.obstacleMap[pos[0]][pos[1]]
+    ) {
+      return false;
+    }
+    return true;
+  }
+
+  /**
    *handle bot out of bounds
    *
    * @param {Bot} bot
@@ -286,7 +303,7 @@ export class SimulationService {
    */
   botOutOfBounds(bot: Bot) {
     console.log(`${bot.name} crashed into a wall`);
-    this.consoleService.print(`${bot.name} crashed into a wall`)
+    this.consoleService.print(`${bot.name} crashed into a wall`);
     bot.crashed = true;
   }
 
@@ -320,7 +337,7 @@ export class SimulationService {
             break;
           } else if (
             this.simulation.obstacleMap[checkSpotStart[0] + i][
-            checkSpotStart[1] + j
+              checkSpotStart[1] + j
             ]
           ) {
             obstacleNear = true;

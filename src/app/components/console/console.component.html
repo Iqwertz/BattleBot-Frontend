@@ -6,7 +6,7 @@
     {{ msg }}
     <div *ngIf="last" class="blinking-cursor"></div>
   </div>
-  <div class="compile-button" (click)="compile()">
+  <div class="compile-button" (click)="compile()" *ngIf="!compiledBot">
     Compile &nbsp;<fa-icon [icon]="faPlay"></fa-icon>
   </div>
 </div>

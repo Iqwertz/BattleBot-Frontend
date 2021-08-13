@@ -14,6 +14,10 @@ import { CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
 import { cloneDeep } from 'lodash';
 import { BotCompilerService } from '../../services/bot-compiler.service';
 import { CommandType } from '../editor-ide/editor-ide.component';
+import { Store } from '@ngxs/store';
+import { SetCompiledBot } from '../../store/app.action';
+import { ConsoleService } from '../../services/console.service';
+import { PrecompilerService } from '../../services/precompiler.service';
 
 @Component({
   selector: 'app-drop-terminal',
@@ -21,7 +25,12 @@ import { CommandType } from '../editor-ide/editor-ide.component';
   styleUrls: ['./drop-terminal.component.scss'],
 })
 export class DropTerminalComponent implements OnInit, AfterViewInit, OnDestroy {
-  constructor(private botCompiler: BotCompilerService) {}
+  constructor(
+    private botCompiler: BotCompilerService,
+    private store: Store,
+    private consoleService: ConsoleService,
+    private preCompilerService: PrecompilerService
+  ) {}
 
   deleteBetweenStatemen: boolean = true;
   indent: number = 40;
@@ -52,6 +61,14 @@ export class DropTerminalComponent implements OnInit, AfterViewInit, OnDestroy {
 
   drop(event: any) {
     if (event.previousContainer === event.container) {
+      let containerDataCopy = cloneDeep(event.container.data);
+      moveItemInArray(
+        containerDataCopy,
+        event.previousIndex,
+        event.currentIndex
+      );
+      this.preCompilerService.checkCommandSetValid(containerDataCopy);
+
       moveItemInArray(
         event.container.data,
         event.previousIndex,
@@ -69,6 +86,7 @@ export class DropTerminalComponent implements OnInit, AfterViewInit, OnDestroy {
         if (
           this.isLogicElement(event.previousContainer.data[event.previousIndex])
         ) {
+          this.consoleService.print('no Logic commands allowed!');
           return;
         }
       }
@@ -82,6 +100,7 @@ export class DropTerminalComponent implements OnInit, AfterViewInit, OnDestroy {
         event.container.data.splice(event.currentIndex + 1, 0, { type: 'end' });
       }
     }
+    this.store.dispatch(new SetCompiledBot(undefined));
     this.calcIndent();
   }
 
@@ -138,6 +157,10 @@ export class DropTerminalComponent implements OnInit, AfterViewInit, OnDestroy {
         this.terminalCommands[i].indent = currentIndent - this.indent;
       } else {
         this.terminalCommands[i].indent = currentIndent;
+      }
+      if (this.terminalCommands[i].indent < 0) {
+        this.terminalCommands.splice(i, 1);
+        this.consoleService.print('Error: invalid bracket structure');
       }
     }
 

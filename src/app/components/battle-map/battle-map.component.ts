@@ -54,19 +54,17 @@ export class BattleMapComponent implements OnInit {
   constructor(
     private battleMapBufferService: BattleMapBufferService,
     public simulationService: SimulationService,
-    private store: Store,
-  ) { }
+    private store: Store
+  ) {}
 
   ngOnInit(): void {
-
     this.placingBot$.subscribe((val: boolean) => {
       this.placingBot = val;
-    })
-
+    });
 
     this.compiledBot$.subscribe((bot: Bot) => {
       this.compiledBot = bot;
-    })
+    });
 
     this.simulationService.generateNewSimulation([50, 50]);
   }
@@ -98,8 +96,19 @@ export class BattleMapComponent implements OnInit {
     return new Array(0);
   }
 
+  /**
+   *Called when a tile is clicked, positons the compiled Bot on tile when it is valid
+   *
+   * @param {number} x
+   * @param {number} y
+   * @memberof BattleMapComponent
+   */
   tileSelected(x: number, y: number) {
-    if (this.placingBot && this.compiledBot) {
+    if (
+      this.placingBot &&
+      this.compiledBot &&
+      !this.simulationService.checkPositionIsCrashed([x, y])
+    ) {
       this.compiledBot.position = [x, y];
       this.simulationService.setBot(this.compiledBot);
       this.store.dispatch(new SetPlacingBot(false));
