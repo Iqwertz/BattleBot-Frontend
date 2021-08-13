@@ -51,6 +51,17 @@ export const environment = {
     31: '#C0392B', //spieler 15
     32: '#D98880', //spieler 15 spur
   },
+  firebase: {
+    apiKey: 'AIzaSyDXNRV9_r3zknpr248CjjpYlOjIMyHp_p0',
+    authDomain: 'battlebots-30657.firebaseapp.com',
+    databaseURL:
+      'https://battlebots-30657-default-rtdb.europe-west1.firebasedatabase.app',
+    projectId: 'battlebots-30657',
+    storageBucket: 'battlebots-30657.appspot.com',
+    messagingSenderId: '1055434284018',
+    appId: '1:1055434284018:web:f2c77a90810a177c8c296b',
+    measurementId: 'G-LMHVYRXG07',
+  },
 };
 
 /*

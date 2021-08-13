@@ -15,6 +15,7 @@ import { environment } from '../../../environments/environment';
 import { AppState } from '../../store/app.state';
 import { Select, Store } from '@ngxs/store';
 import { Bot } from '../battle-map/battle-map.component';
+import { cloneDeep } from 'lodash';
 
 @Component({
   selector: 'app-battle-map-controls',
@@ -63,6 +64,7 @@ export class BattleMapControlsComponent implements OnInit {
   }
 
   pause() {
+    console.log(cloneDeep(this.simulationService.simulation));
     this.simulationService.pause();
   }
 

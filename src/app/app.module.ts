@@ -27,6 +27,9 @@ import { LobbySelectComponent } from './components/lobby-select/lobby-select.com
 import { PrivateLobbyCodeComponent } from './components/private-lobby-code/private-lobby-code.component';
 import { PublicLobbysComponent } from './components/public-lobbys/public-lobbys.component';
 import { FormsModule } from '@angular/forms';
+import { AngularFireModule } from '@angular/fire';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -58,6 +61,8 @@ import { FormsModule } from '@angular/forms';
     MatTooltipModule,
     MatButtonToggleModule,
     FormsModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
