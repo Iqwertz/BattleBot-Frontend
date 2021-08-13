@@ -24,7 +24,11 @@ import { Bot } from '../battle-map/battle-map.component';
 export class BattleMapControlsComponent implements OnInit {
   @Select(AppState.compiledBot) compiledBot$: any;
 
-  constructor(public simulationService: SimulationService, private store: Store, private consoleService: ConsoleService) { }
+  constructor(
+    public simulationService: SimulationService,
+    private store: Store,
+    private consoleService: ConsoleService
+  ) {}
 
   compiledBotAvailable = false;
 
@@ -47,7 +51,7 @@ export class BattleMapControlsComponent implements OnInit {
 
   generate() {
     this.consoleService.clear();
-    this.simulationService.generateNewSimulation([50, 50]);
+    this.simulationService.generateNewSimulation([50, 50], false);
   }
 
   start() {
@@ -70,6 +74,7 @@ export class BattleMapControlsComponent implements OnInit {
     let bot = defaultBots[Math.floor(Math.random() * defaultBots.length)];
     let simBots = this.simulationService.simulation.bots;
     if (simBots.size >= environment.availableBotColors) {
+      this.consoleService.print('Error: Max Bots Reached');
       console.log('error: Max Bots Reached');
       return;
     }

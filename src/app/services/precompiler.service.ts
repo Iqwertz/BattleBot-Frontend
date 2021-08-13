@@ -111,16 +111,17 @@ export class PrecompilerService {
       if (this.botCompiler.checkIfLogicInstruction(ins.type)) {
         indentCounter++;
       } else if (ins.type == 'else') {
-        if (elseFound == -1) {
-          indentCounter--;
-          if (indentCounter == 0) {
+        indentCounter--;
+        if (indentCounter == 0) {
+          if (elseFound == -1) {
             elseFound = i;
             whenTrue = commands.slice(1, i);
+
+            indentCounter++;
+          } else {
+            this.consoleService.print('Error: Double else inside if loop');
+            this.compileError = true;
           }
-          indentCounter++;
-        } else {
-          this.consoleService.print('Error: Double else inside if loop');
-          this.compileError = true;
         }
       } else if (ins.type == 'end') {
         indentCounter--;

@@ -13,6 +13,7 @@ export interface SimulationData {
   bots: Map<number, Bot>;
   obstacleMap: boolean[][];
   size: number[];
+  clearOnStep: boolean;
   statusVar: SimulationStatusVar;
 }
 
@@ -31,6 +32,7 @@ export class SimulationService {
     bots: new Map(),
     obstacleMap: [],
     size: [0, 0],
+    clearOnStep: false,
     statusVar: {
       simulationGenerated: false,
       simulationSpeed: environment.simulationSpeed,
@@ -46,7 +48,11 @@ export class SimulationService {
     private consoleService: ConsoleService
   ) {}
 
-  generateNewSimulation(size: number[], obstacleMapSettings?: any) {
+  generateNewSimulation(
+    size: number[],
+    clearOnStep: boolean,
+    obstacleMapSettings?: any
+  ) {
     this.clear();
 
     this.simulation.obstacleMap = this.generateObstacleMap(
@@ -54,6 +60,7 @@ export class SimulationService {
       obstacleMapSettings
     );
     this.simulation.size = size;
+    this.simulation.clearOnStep = clearOnStep;
 
     this.configureBattleMap();
     this.configureCompiler();
@@ -116,6 +123,8 @@ export class SimulationService {
   reset() {
     this.consoleService.print('reset Simulation');
     this.simulation.bots = new Map();
+    this.battleMapBufferService.clearArrayBuffer(); //clear the map
+    this.renderOntoMap();
   }
 
   setSpeed(speed: number) {
@@ -181,7 +190,9 @@ export class SimulationService {
    * @memberof SimulationService
    */
   renderOntoMap() {
-    this.battleMapBufferService.clearArrayBuffer(); //clear the map
+    if (this.simulation.clearOnStep) {
+      this.battleMapBufferService.clearArrayBuffer(); //clear the map
+    }
 
     for (let i = 0; i < this.simulation.size[0]; i++) {
       //render obstacles

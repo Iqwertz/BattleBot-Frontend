@@ -66,7 +66,7 @@ export class BattleMapComponent implements OnInit {
       this.compiledBot = bot;
     });
 
-    this.simulationService.generateNewSimulation([50, 50]);
+    this.simulationService.generateNewSimulation([50, 50], false);
   }
 
   /**

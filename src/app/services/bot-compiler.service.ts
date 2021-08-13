@@ -101,6 +101,7 @@ export class BotCompilerService {
     bots: new Map(),
     obstacleMap: [],
     size: [0, 0],
+    clearOnStep: false,
     statusVar: {
       simulationGenerated: false,
       simulationSpeed: environment.simulationSpeed,
