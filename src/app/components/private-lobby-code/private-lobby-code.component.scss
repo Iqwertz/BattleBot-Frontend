@@ -1,0 +1,37 @@
+@import "./src/scss/variables";
+
+.input-container {
+  width: 75%;
+  position: relative;
+  .input-field-split {
+    padding-left: 2vw;
+    letter-spacing: 4.2vw;
+    border: 0;
+    background-color: $default-black;
+    width: 105%;
+    font-size: 4vw;
+    color: #fff;
+    font-family: "JetBrains Mono", monospace;
+  }
+
+  .input-field-split:focus {
+    outline: none;
+  }
+
+  .input-markers {
+    width: 100%;
+    position: relative;
+    bottom: 1vw;
+    height: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .marker {
+      width: 200px;
+      height: 100%;
+      background-color: #fff;
+      margin: 0 15px;
+    }
+  }
+}

@@ -1,0 +1,55 @@
+@import "./src/scss/variables";
+
+.lobby-select {
+  width: 100%;
+  height: 100%;
+  border-radius: 15px;
+  background-color: $default-black;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-flow: column;
+
+  .label {
+    font-family: "JetBrains Mono", monospace;
+    color: #fff;
+    width: 95%;
+    font-size: 1.5em;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  .top-line {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    height: 15%;
+    width: 90%;
+    position: relative;
+
+    .private-lobby-code-container {
+      height: calc(100% - 20px);
+      width: 70%;
+    }
+
+    .new-lobby-button {
+      width: 25%;
+      height: calc(100% - 40px);
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: rgb(255, 255, 255);
+      transition: all 100ms ease-in;
+      cursor: pointer;
+    }
+
+    .new-lobby-button:hover {
+      transform: scale(105%);
+    }
+  }
+
+  .public-lobbys-container {
+    height: 65%;
+    width: 95%;
+  }
+}

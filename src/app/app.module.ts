@@ -23,6 +23,10 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { ConsoleComponent } from './components/console/console.component';
 import { NgxsModule } from '@ngxs/store';
 import { AppState } from './store/app.state';
+import { LobbySelectComponent } from './components/lobby-select/lobby-select.component';
+import { PrivateLobbyCodeComponent } from './components/private-lobby-code/private-lobby-code.component';
+import { PublicLobbysComponent } from './components/public-lobbys/public-lobbys.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -39,6 +43,9 @@ import { AppState } from './store/app.state';
     DragdropPreviewComponent,
     BattleMapControlsComponent,
     ConsoleComponent,
+    LobbySelectComponent,
+    PrivateLobbyCodeComponent,
+    PublicLobbysComponent,
   ],
   imports: [
     BrowserModule,
@@ -50,6 +57,7 @@ import { AppState } from './store/app.state';
     MatSelectModule,
     MatTooltipModule,
     MatButtonToggleModule,
+    FormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

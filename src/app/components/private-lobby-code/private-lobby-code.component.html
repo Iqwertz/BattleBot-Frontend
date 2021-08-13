@@ -1,0 +1,19 @@
+<div class="private-lobby">
+  <div class="input-container">
+    <input
+      name="lobby-code"
+      [ngModel]="inputCode"
+      (ngModelChange)="inputCode = $event.toUpperCase()"
+      class="input-field-split"
+      type="text"
+      maxlength="5"
+    />
+    <div class="input-markers">
+      <div class="marker"></div>
+      <div class="marker"></div>
+      <div class="marker"></div>
+      <div class="marker"></div>
+      <div class="marker"></div>
+    </div>
+  </div>
+</div>
