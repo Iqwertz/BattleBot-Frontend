@@ -1,3 +1,4 @@
+import { ConsoleService } from './console.service';
 import { Injectable } from '@angular/core';
 import { BattleMapBufferService } from './battle-map-buffer.service';
 import { Bot } from '../components/battle-map/battle-map.component';
@@ -6,6 +7,10 @@ import { environment } from '../../environments/environment';
 
 //available Instructions, Instructions are relativew to the bots facing direction
 export type Instruction = 'forward' | 'left' | 'right';
+
+//other code Functions
+export const _CodeFunctionTypes = ['log'] as const;
+export type CodeFunctionType = typeof _CodeFunctionTypes[number];
 
 //available instruction Types
 export type LogicInstructionType = 'if';
@@ -43,10 +48,24 @@ export interface LogicInstruction {
   else?: InstructionSet;
 }
 
+//data of a console.log
+export interface logData {
+  message?: string;
+  variable?: BotVarRef;
+}
+
+//all types of codefunction data
+export type CodeFunctionData = logData;
+
+export interface CodeFunction {
+  type: CodeFunctionType;
+  data: CodeFunctionData;
+}
+
 //a set of instructions, can have logic instructions,
 export interface InstructionSet {
   progress?: number;
-  instructions: (Instruction | LogicInstruction)[];
+  instructions: (Instruction | LogicInstruction | CodeFunction)[];
 }
 
 //all variables of a bot that are available to the compiler
@@ -94,7 +113,7 @@ export const defaultBotVars: BotVars = {
   providedIn: 'root',
 })
 export class BotCompilerService {
-  constructor(private battleMapBufferService: BattleMapBufferService) {}
+  constructor(private battleMapBufferService: BattleMapBufferService, private consoleService: ConsoleService) { }
   battleMapSize: number[] = [];
 
   simulation: SimulationData = {
@@ -147,6 +166,20 @@ export class BotCompilerService {
   }
 
   /**
+   *checks if an Instruction is a Code Function
+   *
+   * @param {*} instruction
+   * @return {*}  {instruction is CodeFunction}
+   * @memberof BotCompilerService
+   */
+  checkIfCodeFunction(instruction: any): instruction is CodeFunction {
+    if (_CodeFunctionTypes.includes(instruction.type)) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
    *calculates the NextInstruction for a Bot and returns it
    *
    * @param {Bot} bot
@@ -167,7 +200,11 @@ export class BotCompilerService {
         }
         let ins = bot.brain.default.instructions[bot.brain.default.progress]; //get instruction
 
-        if (ins == 'forward') {
+        if (this.checkIfCodeFunction(ins)) {
+          if (ins.type == "log") {
+            this.logInstruction(ins, bot.brain.vars)
+          }
+        } else if (ins == 'forward') {
           //check if it is a step
           stepFound = true;
         } else if (this.checkIfDirectionInstruction(ins)) {
@@ -384,7 +421,10 @@ export class BotCompilerService {
           return calculatedInstructions; //stop calculation since a step was found
         }
         calculatedInstructions.push(instruction); //add instruction to the calculated Instructions
-      } else {
+      } else if (this.checkIfCodeFunction(instruction)) {
+        this.logInstruction(instruction, botVariablen);
+      }
+      else {
         //when logic instruction
         if (instruction.type == 'if') {
           // when it is an if check
@@ -442,6 +482,16 @@ export class BotCompilerService {
       }
     }
     return false;
+  }
+
+  logInstruction(ins: CodeFunction, botVariablen: BotVars) {
+    if (ins.type == "log") {
+      if (ins.data.message) {
+        this.consoleService.print("Bot: " + ins.data.message)
+      } else if (ins.data.variable) {
+        this.consoleService.print(ins.data.variable + ": " + this.getBotVarFromRef(botVariablen, ins.data.variable))
+      }
+    }
   }
 
   /**

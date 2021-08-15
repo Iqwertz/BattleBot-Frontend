@@ -38,6 +38,7 @@ export class DragdropLogicCommandComponent implements OnInit, AfterViewInit {
 
   @Input() set setCommand(cmd: Command) {
     this.command = cmd;
+    console.log(this.command);
     if (cmd.test) {
       this.logicTest = cmd.test;
     }
@@ -58,7 +59,7 @@ export class DragdropLogicCommandComponent implements OnInit, AfterViewInit {
   constructor(
     private botCompiler: BotCompilerService,
     private ref: ElementRef
-  ) {}
+  ) { }
 
   ngAfterViewInit(): void {
     // console.log(this.ref.nativeElement.getBoundingClientRect());

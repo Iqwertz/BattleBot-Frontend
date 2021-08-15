@@ -2,7 +2,6 @@ import { Command } from './../editor-ide/editor-ide.component';
 import {
   AfterViewInit,
   Component,
-  ElementRef,
   EventEmitter,
   Input,
   OnDestroy,
