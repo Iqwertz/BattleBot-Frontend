@@ -28,7 +28,7 @@ import { PrivateLobbyCodeComponent } from './components/private-lobby-code/priva
 import { PublicLobbysComponent } from './components/public-lobbys/public-lobbys.component';
 import { FormsModule } from '@angular/forms';
 import { AngularFireModule } from '@angular/fire';
-import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { environment } from '../environments/environment';
 
 @NgModule({
@@ -62,9 +62,9 @@ import { environment } from '../environments/environment';
     MatButtonToggleModule,
     FormsModule,
     AngularFireModule.initializeApp(environment.firebase),
-    AngularFirestoreModule,
+    AngularFireDatabaseModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

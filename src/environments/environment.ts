@@ -13,6 +13,12 @@ export const environment = {
     amplitude: 0.2,
     persistence: 0.1,
   },
+  defaultLobby: {
+    editorTime: 5,
+    private: false,
+    simulationTime: 2,
+    maxPlayer: 4,
+  },
   availableBotColors: 14,
   botByteRange: [5, 32],
   byteColorMap: {

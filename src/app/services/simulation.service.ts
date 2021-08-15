@@ -40,13 +40,13 @@ export class SimulationService {
       simulationPaused: false,
     },
   };
-  simulation: SimulationData = cloneDeep(this.emptySimulation); //Hier weiter mit simulationvar changed und subscribe in battlemap compoonent
+  simulation: SimulationData = cloneDeep(this.emptySimulation);
 
   constructor(
     private botCompilerService: BotCompilerService,
     private battleMapBufferService: BattleMapBufferService,
     private consoleService: ConsoleService
-  ) {}
+  ) { }
 
   generateNewSimulation(
     size: number[],
@@ -248,7 +248,7 @@ export class SimulationService {
         bot.direction = movingDirection;
 
         switch (
-          movingDirection //change bot position according to the
+        movingDirection //change bot position according to the
         ) {
           case 'down':
             newBotPos[0]++;
@@ -348,7 +348,7 @@ export class SimulationService {
             break;
           } else if (
             this.simulation.obstacleMap[checkSpotStart[0] + i][
-              checkSpotStart[1] + j
+            checkSpotStart[1] + j
             ]
           ) {
             obstacleNear = true;
