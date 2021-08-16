@@ -13,11 +13,12 @@
 
 import { State, Action, StateContext, Selector } from '@ngxs/store';
 import { Bot } from '../components/battle-map/battle-map.component';
-import { SetCompiledBot, SetPlacingBot } from './app.action';
+import { SetCompiledBot, SetPlacingBot, SetFirebaseUser } from './app.action';
 
 export interface AppStateModel {
   compiledBot: Bot | undefined;
   placingBot: boolean;
+  firebaseUser: any; //cant find the angularfire ts definition :(
 }
 
 @State<AppStateModel>({
@@ -25,6 +26,7 @@ export interface AppStateModel {
   defaults: {
     compiledBot: undefined,
     placingBot: false,
+    firebaseUser: undefined,
   },
 })
 export class AppState {
@@ -49,6 +51,21 @@ export class AppState {
   setPlacingBot(context: StateContext<AppStateModel>, action: SetPlacingBot) {
     context.patchState({
       placingBot: action.placingBot,
+    });
+  }
+
+  @Selector()
+  static firebaseUser(state: AppStateModel) {
+    return state.firebaseUser;
+  }
+
+  @Action(SetFirebaseUser)
+  setFirebaseUser(
+    context: StateContext<AppStateModel>,
+    action: SetFirebaseUser
+  ) {
+    context.patchState({
+      firebaseUser: action.firebaseUser,
     });
   }
 }

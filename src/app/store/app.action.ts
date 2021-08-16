@@ -8,3 +8,7 @@ export class SetPlacingBot {
   static type = 'SetPlacingBot';
   constructor(public placingBot: boolean) {}
 }
+export class SetFirebaseUser {
+  static type = 'SetFirebaseUser';
+  constructor(public firebaseUser: any) {}
+}

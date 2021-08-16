@@ -3,8 +3,13 @@ import { RouterModule, Routes } from '@angular/router';
 import { PlayComponent } from './sites/play/play.component';
 import { LandingComponent } from './sites/landing/landing.component';
 import { BotEditorComponent } from './sites/bot-editor/bot-editor.component';
+import { CreateLobbyComponent } from './sites/create-lobby/create-lobby.component';
 
 const routes: Routes = [
+  {
+    path: 'createLobby/:id',
+    component: CreateLobbyComponent,
+  },
   {
     path: 'editor',
     component: BotEditorComponent,
