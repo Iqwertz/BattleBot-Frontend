@@ -14,6 +14,9 @@ export class ConsoleService {
     this.print(' ');
   }
 
+  printDelay = 10;
+  currentPrintDelay = this.printDelay;
+
   private scrollToBottom = new Subject<any>();
   scrollToBottom$ = this.scrollToBottom.asObservable();
 
@@ -35,6 +38,11 @@ export class ConsoleService {
   }
 
   private printWithDelay() {
+    if (this.consoleDataTemp.length > 6) {
+      this.currentPrintDelay = 0;
+    } else {
+      this.currentPrintDelay = this.printDelay;
+    }
     if (this.consoleDataTemp.length > 0) {
       this.isPrinting = true;
       let char = this.consoleDataTemp[0].charAt(0);
@@ -48,7 +56,7 @@ export class ConsoleService {
       if (this.consoleDataTemp.length > 0) {
         setTimeout(() => {
           this.printWithDelay();
-        }, 10);
+        }, this.currentPrintDelay);
       } else {
         this.isPrinting = false;
       }

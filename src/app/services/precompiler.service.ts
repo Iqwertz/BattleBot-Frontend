@@ -50,7 +50,6 @@ export class PrecompilerService {
           this.consoleService.print('Error: Logic Command without test');
         } else {
           let calcCommands = this.getCommandsOfIf(commands.slice(i));
-
           if (calcCommands.endIndex != -1) {
             let whenTrue: InstructionSet = this.commandsToInstructionset(
               calcCommands.whenTrue
@@ -71,6 +70,8 @@ export class PrecompilerService {
             insSet.instructions.push(newIns);
 
             i += calcCommands.endIndex;
+          } else {
+            console.log('no end index');
           }
         }
       } else {
@@ -96,7 +97,7 @@ export class PrecompilerService {
   getCommandsOfIf(commands: Command[]): CalculatedIfCommands {
     if (!this.botCompiler.checkIfLogicInstruction(commands[0].type)) {
       console.log('invalid CommandSet');
-      this.consoleService.print('invalid CommandSet');
+      this.consoleService.print('Error: Invalid CommandSet');
       return {
         endIndex: -1,
         whenElse: [],
@@ -107,9 +108,11 @@ export class PrecompilerService {
     let whenTrue: Command[] = [];
     let whenElse: Command[] = [];
 
+    console.log(commands);
+
     let endIndex: number = -1;
-    let indentCounter = 0;
-    let elseFound = -1;
+    let indentCounter: number = 0;
+    let elseFound: number = -1;
     for (let i = 0; i < commands.length; i++) {
       let ins: Command = commands[i];
 
@@ -121,13 +124,12 @@ export class PrecompilerService {
           if (elseFound == -1) {
             elseFound = i;
             whenTrue = commands.slice(1, i);
-
-            indentCounter++;
           } else {
             this.consoleService.print('Error: Double else inside if loop');
             this.compileError = true;
           }
         }
+        indentCounter++;
       } else if (ins.type == 'end') {
         indentCounter--;
         if (indentCounter == 0) {
@@ -159,6 +161,9 @@ export class PrecompilerService {
     let def: InstructionSet = this.commandsToInstructionset(
       terminals.get('default')?.commands
     );
+    if (def.instructions.length == 0) {
+      def.instructions.push('forward');
+    }
     if (this.checkError()) {
       return;
     }
