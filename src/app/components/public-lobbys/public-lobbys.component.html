@@ -1,1 +1,5 @@
-<div class="public-lobbys"></div>
+<div class="public-lobbys">
+  <div class="lobby-entry-container terminal-scrollbar">
+    <div class="lobby-entry" *ngFor="let lobby of lobbys | keyvalue"></div>
+  </div>
+</div>

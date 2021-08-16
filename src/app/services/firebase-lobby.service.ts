@@ -1,8 +1,7 @@
 import { AngularFireDatabase } from '@angular/fire/database';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { toString } from 'lodash';
-import { Router, RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Store, Select } from '@ngxs/store';
 import { SetFirebaseUser } from '../store/app.action';
@@ -76,7 +75,7 @@ export class FirebaseLobbyService {
       });
   }
 
-  private jsonToMap(json: any): Map<string, any> {
+  jsonToMap(json: any): Map<string, any> {
     let map = new Map();
     for (let key in json) {
       map.set(key, json[key]);

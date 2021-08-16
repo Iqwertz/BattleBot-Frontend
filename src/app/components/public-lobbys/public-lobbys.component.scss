@@ -5,4 +5,28 @@
   height: 100%;
   border-radius: 15px;
   background-color: $terminal-color;
+  position: relative;
+
+  .lobby-entry-container {
+    width: 100%;
+    height: 100%;
+
+    overflow-y: scroll;
+    .lobby-entry {
+      width: 95%;
+      height: 90px;
+      margin: 15px 2.5%;
+      background-color: #8b0bf4;
+      border-radius: 15px;
+      flex-grow: 1;
+      cursor: pointer;
+      transition: all 200ms;
+    }
+
+    .lobby-entry:hover {
+      border-radius: 5px;
+      width: 96%;
+      margin: 15px 2%;
+    }
+  }
 }
