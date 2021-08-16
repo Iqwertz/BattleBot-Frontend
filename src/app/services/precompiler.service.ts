@@ -2,6 +2,7 @@ import { ConsoleService } from './console.service';
 import { Command } from './../components/editor-ide/editor-ide.component';
 import { Injectable } from '@angular/core';
 import { Terminal } from './terminals.service';
+import { CodeFunction } from './bot-compiler.service';
 import {
   BrainData,
   defaultBotVars,
@@ -39,6 +40,10 @@ export class PrecompilerService {
       if (this.botCompiler.checkIfDirectionInstruction(command.type)) {
         let newIns: Instruction = command.type;
         insSet.instructions.push(newIns);
+      } else if (this.botCompiler.checkIfCodeFunction(command)) {
+        if (command.type == 'log') {
+          insSet.instructions.push(command);
+        }
       } else if (command.type == 'if') {
         if (!command.test) {
           console.log('error: Logic Command without test');

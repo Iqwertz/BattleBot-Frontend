@@ -45,7 +45,6 @@ export const defaultBots: Bot[] = [
       onWallDetected: {
         progress: 0,
         instructions: [
-
           {
             test: {
               operator: '==',

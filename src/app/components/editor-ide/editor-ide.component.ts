@@ -11,14 +11,23 @@ import {
 } from '../../services/bot-compiler.service';
 import { CdkDropList } from '@angular/cdk/drag-drop';
 import { PrecompilerService } from '../../services/precompiler.service';
+import {
+  CodeFunctionType,
+  CodeFunctionData,
+} from '../../services/bot-compiler.service';
 
 export type FunctionTypes = 'end' | 'else';
-export type CommandType = Instruction | LogicInstructionType | FunctionTypes;
+export type CommandType =
+  | Instruction
+  | LogicInstructionType
+  | FunctionTypes
+  | CodeFunctionType;
 
 export interface Command {
   type: CommandType;
   indent: number;
   test?: LogicTest;
+  data?: CodeFunctionData;
 }
 
 @Component({
@@ -58,12 +67,19 @@ export class EditorIdeComponent implements OnInit, AfterViewInit {
     indent: 0,
   };
 
-  end: Command = {
-    type: 'end',
+  log: Command = {
+    type: 'log',
     indent: 0,
   };
 
-  commands = [this.left, this.right, this.forward, this.if, this.else];
+  commands = [
+    this.left,
+    this.right,
+    this.forward,
+    this.log,
+    this.if,
+    this.else,
+  ];
 
   @ViewChild('terminalList') terminalListRef?: CdkDropList;
 
@@ -97,5 +113,9 @@ export class EditorIdeComponent implements OnInit, AfterViewInit {
 
   isLogic(instruction: any) {
     return this.botCompiler.checkIfLogicInstruction(instruction.type);
+  }
+
+  isCodeFunction(instruction: any) {
+    return this.botCompiler.checkIfCodeFunction(instruction);
   }
 }

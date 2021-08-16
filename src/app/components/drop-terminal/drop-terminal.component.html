@@ -17,7 +17,7 @@
       (drag)="dragMoved($event)"
     >
       <app-dragdrop-command
-        *ngIf="!isLogic(item)"
+        *ngIf="!isLogic(item) && !isCodeFunction(item)"
         [isDeletable]="true"
         [command]="item"
         (onDelete)="deleteFromTerminal(i, true)"
@@ -31,6 +31,16 @@
         (onDelete)="deleteFromTerminal(i, true)"
         (logicTestData)="item.test = $event"
       ></app-dragdrop-logic-command>
+
+      <app-dragdrop-code-function
+        *ngIf="isCodeFunction(item)"
+        [isDeletable]="true"
+        [isPreview]="false"
+        [setCommand]="item"
+        (onDelete)="deleteFromTerminal(i, true)"
+        (commandData)="item.data = $event"
+      >
+      </app-dragdrop-code-function>
 
       <app-dragdrop-preview
         *cdkDragPreview

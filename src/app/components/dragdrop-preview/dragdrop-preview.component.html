@@ -4,7 +4,7 @@
   *ngFor="let item of previewCommands; let i = index"
 >
   <app-dragdrop-command
-    *ngIf="!isLogic(item)"
+    *ngIf="!isLogic(item) && !isCodeFunction(item)"
     [isDeletable]="true"
     [command]="item"
   ></app-dragdrop-command>
@@ -15,4 +15,12 @@
     [isPreview]="false"
     [setCommand]="item"
   ></app-dragdrop-logic-command>
+
+  <app-dragdrop-code-function
+    *ngIf="isCodeFunction(item)"
+    [isDeletable]="false"
+    [isPreview]="false"
+    [setCommand]="item"
+  >
+  </app-dragdrop-code-function>
 </div>

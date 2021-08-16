@@ -1,5 +1,5 @@
 import { ConsoleService } from './../../services/console.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import { BrainData } from '../../services/bot-compiler.service';
 import { PrecompilerService } from '../../services/precompiler.service';
@@ -30,9 +30,22 @@ export class ConsoleComponent implements OnInit {
     this.compiledBot$.subscribe((bot: Bot | undefined) => {
       this.compiledBot = bot;
     });
+
+    this.consoleService.scrollToBottom$.subscribe(() => {
+      this.scrollToBottom();
+    });
   }
 
   faPlay = faPlay;
+
+  @ViewChild('scrollRef') private scrollContainer!: ElementRef;
+
+  scrollToBottom(): void {
+    try {
+      this.scrollContainer.nativeElement.scrollTop =
+        this.scrollContainer.nativeElement.scrollHeight;
+    } catch (err) {}
+  }
 
   compile() {
     let brain: BrainData | undefined = this.preCompiler.terminalMapToBrainData(

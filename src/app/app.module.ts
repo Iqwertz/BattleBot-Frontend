@@ -26,10 +26,13 @@ import { AppState } from './store/app.state';
 import { LobbySelectComponent } from './components/lobby-select/lobby-select.component';
 import { PrivateLobbyCodeComponent } from './components/private-lobby-code/private-lobby-code.component';
 import { PublicLobbysComponent } from './components/public-lobbys/public-lobbys.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { environment } from '../environments/environment';
+import { DragdropCodeFunctionComponent } from './components/dragdrop-code-function/dragdrop-code-function.component';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
   declarations: [
@@ -49,6 +52,7 @@ import { environment } from '../environments/environment';
     LobbySelectComponent,
     PrivateLobbyCodeComponent,
     PublicLobbysComponent,
+    DragdropCodeFunctionComponent,
   ],
   imports: [
     BrowserModule,
@@ -63,8 +67,12 @@ import { environment } from '../environments/environment';
     FormsModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule,
+    MatInputModule,
+    MatAutocompleteModule,
+    FormsModule,
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

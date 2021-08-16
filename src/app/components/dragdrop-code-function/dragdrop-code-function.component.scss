@@ -1,0 +1,42 @@
+.log {
+  position: relative;
+  height: 50px;
+  background-color: rgb(132, 255, 194);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-flow: row;
+  font-size: 1em;
+  font-family: "JetBrains Mono", monospace;
+
+  &.isPreview {
+    width: 200px;
+  }
+
+  &.noPreview {
+    width: 300px;
+  }
+
+  .interactive {
+    display: flex;
+    flex-flow: row;
+
+    .log-input {
+      width: 150px;
+      font-size: 1em;
+      font-family: "JetBrains Mono", monospace;
+      background-color: rgba(255, 255, 255, 0);
+      border: none;
+      border-bottom: 1px solid #000;
+    }
+  }
+}
+
+.delete {
+  cursor: pointer;
+  color: red;
+  position: absolute;
+  top: 1px;
+  right: 4px;
+}

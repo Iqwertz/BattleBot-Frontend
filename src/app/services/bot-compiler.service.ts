@@ -50,8 +50,7 @@ export interface LogicInstruction {
 
 //data of a console.log
 export interface logData {
-  message?: string;
-  variable?: BotVarRef;
+  message: string | BotVarRef;
 }
 
 //all types of codefunction data
@@ -113,7 +112,10 @@ export const defaultBotVars: BotVars = {
   providedIn: 'root',
 })
 export class BotCompilerService {
-  constructor(private battleMapBufferService: BattleMapBufferService, private consoleService: ConsoleService) { }
+  constructor(
+    private battleMapBufferService: BattleMapBufferService,
+    private consoleService: ConsoleService
+  ) {}
   battleMapSize: number[] = [];
 
   simulation: SimulationData = {
@@ -201,8 +203,8 @@ export class BotCompilerService {
         let ins = bot.brain.default.instructions[bot.brain.default.progress]; //get instruction
 
         if (this.checkIfCodeFunction(ins)) {
-          if (ins.type == "log") {
-            this.logInstruction(ins, bot.brain.vars)
+          if (ins.type == 'log') {
+            this.logInstruction(ins, bot.brain.vars);
           }
         } else if (ins == 'forward') {
           //check if it is a step
@@ -423,8 +425,7 @@ export class BotCompilerService {
         calculatedInstructions.push(instruction); //add instruction to the calculated Instructions
       } else if (this.checkIfCodeFunction(instruction)) {
         this.logInstruction(instruction, botVariablen);
-      }
-      else {
+      } else {
         //when logic instruction
         if (instruction.type == 'if') {
           // when it is an if check
@@ -484,14 +485,39 @@ export class BotCompilerService {
     return false;
   }
 
+  /**
+   *logs an Instruction to the ingame console, If the value is a bot var ref it returns the value of the var
+   *
+   * @param {CodeFunction} ins
+   * @param {BotVars} botVariablen
+   * @memberof BotCompilerService
+   */
   logInstruction(ins: CodeFunction, botVariablen: BotVars) {
-    if (ins.type == "log") {
-      if (ins.data.message) {
-        this.consoleService.print("Bot: " + ins.data.message)
-      } else if (ins.data.variable) {
-        this.consoleService.print(ins.data.variable + ": " + this.getBotVarFromRef(botVariablen, ins.data.variable))
+    if (ins.type == 'log') {
+      if (!this.isBotVarRef(ins.data.message)) {
+        this.consoleService.print('Bot: ' + ins.data.message);
+      } else if (this.isBotVarRef(ins.data.message)) {
+        this.consoleService.print(
+          ins.data.message +
+            ': ' +
+            this.getBotVarFromRef(botVariablen, ins.data.message)
+        );
       }
     }
+  }
+
+  /**
+   *checks if a given value is a BotVariable Reference
+   *
+   * @param {*} bVar
+   * @return {*}  {bVar is BotVars}
+   * @memberof BotCompilerService
+   */
+  isBotVarRef(bVar: any): bVar is BotVars {
+    if (_BotVars.includes(bVar)) {
+      return true;
+    }
+    return false;
   }
 
   /**
@@ -502,7 +528,10 @@ export class BotCompilerService {
    * @return {*}  {string}
    * @memberof BotCompilerService
    */
-  getBotVarFromRef(bVar: BotVars, ref: BotVarRef): string {
+  getBotVarFromRef(bVar: BotVars, ref: string): string {
+    if (!this.isBotVarRef(ref)) {
+      return '';
+    }
     if (ref == 'radarForward') {
       return bVar.obstacleRadar.forward.toString();
     } else if (ref == 'radarLeft') {

@@ -1,0 +1,29 @@
+<div
+  *ngIf="command.type == 'log'"
+  [ngClass]="{ preview: isPreview, noPreview: !isPreview }"
+  class="log"
+>
+  <div *ngIf="isPreview">console.log(<i>var</i>);</div>
+  <div class="interactive" *ngIf="!isPreview">
+    console.log(
+    <form class="example-form">
+      <input
+        class="log-input"
+        type="text"
+        [formControl]="myControl"
+        [matAutocomplete]="auto"
+        (ngModelChange)="messageChanged($event)"
+        [ngModel]="command.data!.message"
+      />
+      <mat-autocomplete #auto="matAutocomplete">
+        <mat-option *ngFor="let option of botVarRefs" [value]="option">
+          {{ option }}
+        </mat-option>
+      </mat-autocomplete>
+    </form>
+    );
+  </div>
+  <div class="delete" *ngIf="isDeletable">
+    <fa-icon (click)="delete()" [icon]="faDelete"></fa-icon>
+  </div>
+</div>

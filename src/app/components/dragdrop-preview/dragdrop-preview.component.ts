@@ -19,4 +19,8 @@ export class DragdropPreviewComponent implements OnInit, AfterViewInit {
   isLogic(instruction: any) {
     return this.botCompiler.checkIfLogicInstruction(instruction.type);
   }
+
+  isCodeFunction(instruction: any) {
+    return this.botCompiler.checkIfCodeFunction(instruction);
+  }
 }

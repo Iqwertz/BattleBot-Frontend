@@ -29,7 +29,7 @@ export class DropTerminalComponent implements OnInit, AfterViewInit, OnDestroy {
     private store: Store,
     private consoleService: ConsoleService,
     private preCompilerService: PrecompilerService
-  ) { }
+  ) {}
 
   deleteBetweenStatemen: boolean = true;
   indent: number = 40;
@@ -48,7 +48,7 @@ export class DropTerminalComponent implements OnInit, AfterViewInit, OnDestroy {
 
   currentDragPreviewCommands: Command[] = [];
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   ngAfterViewInit(): void {
     this.addDropRef.emit(this.terminalRef);
@@ -217,5 +217,9 @@ export class DropTerminalComponent implements OnInit, AfterViewInit, OnDestroy {
 
   isLogic(instruction: any) {
     return this.botCompiler.checkIfLogicInstruction(instruction.type);
+  }
+
+  isCodeFunction(instruction: any) {
+    return this.botCompiler.checkIfCodeFunction(instruction);
   }
 }

@@ -27,7 +27,7 @@
   >
     <div class="draggable-item" *ngFor="let item of commands" cdkDrag>
       <app-dragdrop-command
-        *ngIf="!isLogic(item)"
+        *ngIf="!isLogic(item) && !isCodeFunction(item)"
         [isDeletable]="false"
         [command]="item"
       ></app-dragdrop-command>
@@ -38,6 +38,14 @@
         [isPreview]="true"
         [setCommand]="item"
       ></app-dragdrop-logic-command>
+
+      <app-dragdrop-code-function
+        *ngIf="isCodeFunction(item)"
+        [isDeletable]="false"
+        [isPreview]="true"
+        [setCommand]="item"
+      >
+      </app-dragdrop-code-function>
     </div>
   </div>
 </div>

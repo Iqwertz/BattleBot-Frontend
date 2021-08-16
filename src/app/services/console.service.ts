@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -12,6 +13,9 @@ export class ConsoleService {
     );
     this.print(' ');
   }
+
+  private scrollToBottom = new Subject<any>();
+  scrollToBottom$ = this.scrollToBottom.asObservable();
 
   consoleData: string[] = [''];
 
@@ -39,6 +43,7 @@ export class ConsoleService {
       if (this.consoleDataTemp[0].length == 0) {
         this.consoleDataTemp.shift();
         this.consoleData.push('');
+        this.scrollToBottom.next();
       }
       if (this.consoleDataTemp.length > 0) {
         setTimeout(() => {
