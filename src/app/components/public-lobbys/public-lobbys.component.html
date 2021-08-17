@@ -38,7 +38,7 @@
     <tr
       mat-row
       *matRowDef="let element; let row; columns: displayedColumns"
-      [routerLink]="['/createLobby/', element.settings.id]"
+      (click)="join(element.settings.id)"
     >
       >
     </tr>

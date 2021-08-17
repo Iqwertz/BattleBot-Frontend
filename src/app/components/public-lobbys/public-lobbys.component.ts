@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { MatSort } from '@angular/material/sort';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
 import {
   LobbyRef,
   FirebaseLobbyService,
@@ -25,7 +26,8 @@ export class PublicLobbysComponent implements OnInit {
   constructor(
     private db: AngularFireDatabase,
     private fireBaseLobbyService: FirebaseLobbyService,
-    private changeDetectorRefs: ChangeDetectorRef
+    private changeDetectorRefs: ChangeDetectorRef,
+    private router: Router
   ) {
     let lobbyFirebaseRef = db.object('lobbys/').valueChanges();
     lobbyFirebaseRef.subscribe((changes: any) => {
@@ -60,13 +62,16 @@ export class PublicLobbysComponent implements OnInit {
     let pubLobbys: LobbyRef[] = [];
 
     for (let l of lobbys) {
-      console.log(l);
       if (!l.settings.private) {
         pubLobbys.push(l);
       }
     }
 
     return pubLobbys;
+  }
+
+  join(id: string) {
+    this.router.navigate(['createLobby', id]);
   }
 
   getObjectLength(obj: any): number {
