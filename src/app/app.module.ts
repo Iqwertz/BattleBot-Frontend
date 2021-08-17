@@ -37,6 +37,8 @@ import { MatInputModule } from '@angular/material/input';
 import { CreateLobbyComponent } from './sites/create-lobby/create-lobby.component';
 import { PlayerListComponent } from './components/player-list/player-list.component';
 import { LobbySettingsComponent } from './components/lobby-settings/lobby-settings.component';
+import { MatTableModule } from '@angular/material/table';
+import { MatSortModule } from '@angular/material/sort';
 
 @NgModule({
   declarations: [
@@ -79,6 +81,8 @@ import { LobbySettingsComponent } from './components/lobby-settings/lobby-settin
     MatAutocompleteModule,
     FormsModule,
     ReactiveFormsModule,
+    MatTableModule,
+    MatSortModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

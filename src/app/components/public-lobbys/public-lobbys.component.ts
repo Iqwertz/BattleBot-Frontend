@@ -1,9 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/database';
+import { MatSort } from '@angular/material/sort';
+import { MatTable, MatTableDataSource } from '@angular/material/table';
 import {
   LobbyRef,
   FirebaseLobbyService,
 } from '../../services/firebase-lobby.service';
+
+export interface PeriodicElement {
+  name: string;
+  position: number;
+  weight: number;
+  symbol: string;
+}
 
 @Component({
   selector: 'app-public-lobbys',
@@ -11,18 +20,52 @@ import {
   styleUrls: ['./public-lobbys.component.scss'],
 })
 export class PublicLobbysComponent implements OnInit {
-  lobbys: Map<string, LobbyRef> = new Map();
+  lobbys: LobbyRef[] = [];
 
   constructor(
     private db: AngularFireDatabase,
-    private fireBaseLobbyService: FirebaseLobbyService
+    private fireBaseLobbyService: FirebaseLobbyService,
+    private changeDetectorRefs: ChangeDetectorRef
   ) {
     let lobbyFirebaseRef = db.object('lobbys').valueChanges();
     lobbyFirebaseRef.subscribe((changes: any) => {
-      this.lobbys = this.fireBaseLobbyService.jsonToMap(changes);
+      this.lobbys = this.filterPublic(this.changesToLobbyRefArray(changes));
       console.log(this.lobbys);
+      this.dataSource = new MatTableDataSource(this.lobbys);
+      this.dataSource.sort = this.sort;
     });
   }
 
+  displayedColumns: string[] = [
+    'id',
+    'players',
+    'mode',
+    'editorTime',
+    'simulationTime',
+  ];
+  dataSource = new MatTableDataSource(this.lobbys);
+
+  @ViewChild(MatSort, { static: false }) sort!: MatSort;
+
   ngOnInit(): void {}
+
+  private changesToLobbyRefArray(changes: any): LobbyRef[] {
+    let arr: LobbyRef[] = [];
+    for (let key in changes) {
+      arr.push(changes[key]);
+    }
+    return arr;
+  }
+
+  private filterPublic(lobbys: LobbyRef[]): LobbyRef[] {
+    let pubLobbys: LobbyRef[] = [];
+
+    for (let l of lobbys) {
+      if (!l.private) {
+        pubLobbys.push(l);
+      }
+    }
+
+    return pubLobbys;
+  }
 }

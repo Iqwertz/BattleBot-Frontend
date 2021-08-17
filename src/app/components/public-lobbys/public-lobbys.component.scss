@@ -6,6 +6,15 @@
   border-radius: 15px;
   background-color: $terminal-color;
   position: relative;
+  overflow-y: scroll;
+
+  table {
+    width: 100%;
+  }
+
+  th.mat-sort-header-sorted {
+    color: black;
+  }
 
   .lobby-entry-container {
     width: 100%;
