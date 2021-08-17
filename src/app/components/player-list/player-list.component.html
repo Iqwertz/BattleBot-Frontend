@@ -1,1 +1,22 @@
-<div class="player-list"></div>
+<div class="player-list">
+  <div class="titel">Player</div>
+  <div class="player-container" *ngIf="playerList.size > 0">
+    <div class="player">
+      <div class="icon">
+        <img
+          [src]="'assets/userIcons/' + playerList.get(adminUid)!.name + '.svg'"
+        />
+      </div>
+      {{ playerList.get(adminUid)!.name }}
+    </div>
+    <div class="spliter"></div>
+    <ng-container *ngFor="let player of playerList | keyvalue">
+      <div class="player" *ngIf="player.value.uId != adminUid">
+        <div class="icon">
+          <img [src]="'assets/userIcons/' + player.value.name + '.svg'" />
+        </div>
+        {{ player.value.name }}
+      </div>
+    </ng-container>
+  </div>
+</div>

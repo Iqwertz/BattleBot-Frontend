@@ -6,14 +6,26 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { Store, Select } from '@ngxs/store';
 import { SetFirebaseUser } from '../store/app.action';
 import { AppState } from '../store/app.state';
+import { GameModes } from './simulation.service';
 
-export interface LobbyRef {
+export interface Player {
+  uId: string;
+  name: string;
+}
+
+export interface LobbyRefSettings {
   editorTime: number;
   id: string;
   name: string;
   private: boolean;
   simulationTime: number;
   maxPlayer: number;
+  mode: GameModes;
+}
+
+export interface LobbyRef {
+  settings: LobbyRefSettings;
+  player: Map<string, Player>;
   adminUid: string;
 }
 
@@ -35,6 +47,7 @@ export class FirebaseLobbyService {
   ) {
     this.lobbyFirebaseRef = db.object('lobbys').valueChanges();
     this.lobbyFirebaseRef.subscribe((changes: any) => {
+      changes.player = this.formatPlayerToMap(changes.player);
       this.lobbys = this.jsonToMap(changes);
     });
 
@@ -51,21 +64,39 @@ export class FirebaseLobbyService {
     this.auth
       .signInAnonymously()
       .then(() => {
-        console.log(this.firebaseUser);
-
         let id = this.getNewSessionId(5);
 
-        let newLobby: LobbyRef = {
+        let player: Player = {
+          uId: this.firebaseUser.uid,
+          name: environment.roboNames[
+            Math.floor(Math.random() * environment.roboNames.length)
+          ],
+        };
+
+        let settings: LobbyRefSettings = {
           editorTime: environment.defaultLobby.editorTime,
           id: id,
           maxPlayer: environment.defaultLobby.maxPlayer,
           name: '',
           private: environment.defaultLobby.private,
           simulationTime: environment.defaultLobby.simulationTime,
+          mode: 'Color',
+        };
+
+        console.log(this.firebaseUser.uid);
+
+        let newLobby: LobbyRef = {
+          settings: settings,
           adminUid: this.firebaseUser.uid,
+          player: new Map(),
         };
 
         this.db.database.ref().child('/lobbys').child(id).update(newLobby);
+        this.db.database
+          .ref()
+          .child('/lobbys/' + id + '/player')
+          .child(player.uId)
+          .update(player);
 
         this.router.navigate(['createLobby', id]);
       })
@@ -73,6 +104,14 @@ export class FirebaseLobbyService {
         var errorCode = error.code;
         var errorMessage = error.message;
       });
+  }
+
+  formatPlayerToMap(obj: any): Map<string, Player> {
+    let map = new Map();
+    for (const key in obj) {
+      map.set(key, obj[key]);
+    }
+    return map;
   }
 
   jsonToMap(json: any): Map<string, any> {

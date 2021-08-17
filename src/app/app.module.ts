@@ -39,6 +39,7 @@ import { PlayerListComponent } from './components/player-list/player-list.compon
 import { LobbySettingsComponent } from './components/lobby-settings/lobby-settings.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
+import { MatRippleModule } from '@angular/material/core';
 
 @NgModule({
   declarations: [
@@ -83,6 +84,7 @@ import { MatSortModule } from '@angular/material/sort';
     ReactiveFormsModule,
     MatTableModule,
     MatSortModule,
+    MatRippleModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

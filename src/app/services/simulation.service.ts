@@ -8,6 +8,8 @@ import { BattleMapBufferService } from './battle-map-buffer.service';
 import { Subject } from 'rxjs';
 var perlin = require('perlin-noise');
 
+export type GameModes = 'Color';
+
 //simulation
 export interface SimulationData {
   bots: Map<number, Bot>;
@@ -46,7 +48,7 @@ export class SimulationService {
     private botCompilerService: BotCompilerService,
     private battleMapBufferService: BattleMapBufferService,
     private consoleService: ConsoleService
-  ) { }
+  ) {}
 
   generateNewSimulation(
     size: number[],
@@ -248,7 +250,7 @@ export class SimulationService {
         bot.direction = movingDirection;
 
         switch (
-        movingDirection //change bot position according to the
+          movingDirection //change bot position according to the
         ) {
           case 'down':
             newBotPos[0]++;
@@ -348,7 +350,7 @@ export class SimulationService {
             break;
           } else if (
             this.simulation.obstacleMap[checkSpotStart[0] + i][
-            checkSpotStart[1] + j
+              checkSpotStart[1] + j
             ]
           ) {
             obstacleNear = true;

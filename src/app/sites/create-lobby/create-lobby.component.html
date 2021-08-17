@@ -1,10 +1,13 @@
 <div class="create-lobby-container">
-  <div class="player-infos">
+  <div class="lobby-infos">
     <div class="lobby-code"></div>
-    <div class="player-list">
-      <div class="label">Player:</div>
-      <app-player-list> </app-player-list>
+    <div class="settings">
+      <app-lobby-settings></app-lobby-settings>
     </div>
   </div>
-  <div class="simulation-infos"><app-lobby-settings></app-lobby-settings></div>
+
+  <div class="player-list" *ngIf="lobby">
+    <app-player-list [player]="lobby.player" [admin]="lobby.adminUid">
+    </app-player-list>
+  </div>
 </div>

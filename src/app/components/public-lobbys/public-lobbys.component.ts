@@ -27,10 +27,9 @@ export class PublicLobbysComponent implements OnInit {
     private fireBaseLobbyService: FirebaseLobbyService,
     private changeDetectorRefs: ChangeDetectorRef
   ) {
-    let lobbyFirebaseRef = db.object('lobbys').valueChanges();
+    let lobbyFirebaseRef = db.object('lobbys/').valueChanges();
     lobbyFirebaseRef.subscribe((changes: any) => {
       this.lobbys = this.filterPublic(this.changesToLobbyRefArray(changes));
-      console.log(this.lobbys);
       this.dataSource = new MatTableDataSource(this.lobbys);
       this.dataSource.sort = this.sort;
     });
@@ -61,11 +60,16 @@ export class PublicLobbysComponent implements OnInit {
     let pubLobbys: LobbyRef[] = [];
 
     for (let l of lobbys) {
-      if (!l.private) {
+      console.log(l);
+      if (!l.settings.private) {
         pubLobbys.push(l);
       }
     }
 
     return pubLobbys;
+  }
+
+  getObjectLength(obj: any): number {
+    return Object.keys(obj).length;
   }
 }

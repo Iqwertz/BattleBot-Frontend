@@ -21,6 +21,24 @@ export const environment = {
   },
   availableBotColors: 14,
   botByteRange: [5, 32],
+  roboNames: [
+    'AVA',
+    'B-4',
+    'D.A.V.E',
+    'Dewey',
+    'Encoid',
+    'Flexo',
+    'Hermes',
+    'Huey',
+    'Orbotron',
+    'Proto',
+    'Qwerty',
+    'Scrappy',
+    'Socket',
+    'Sparky',
+    'Ubaroid',
+    'Ultron',
+  ],
   byteColorMap: {
     //spielerspur farbe muss immer um eines höher sein als spieler
     0: '#fff', //weiß

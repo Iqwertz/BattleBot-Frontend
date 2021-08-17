@@ -1,15 +1,16 @@
 @import "./src/scss/variables";
+
 .create-lobby-container {
   position: absolute;
   width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-evenly;
 
-  .player-infos {
-    width: 60%;
-    height: 95%;
+  .lobby-infos {
+    width: 65%;
+    height: 90%;
     background-color: $default-black;
     border-radius: 15px;
     position: relative;
@@ -23,24 +24,15 @@
       height: calc(100px);
       background-color: #fff;
     }
-    .player-list {
+    .settings {
       width: calc(100% - 80px);
       height: calc(100% - 200px);
       margin-bottom: 40px;
-
-      .label {
-        width: calc(100% - 80px);
-        text-align: left;
-        color: #fff;
-        font-size: 1.3em;
-        font-family: "JetBrains Mono", monospace;
-        margin: 5px;
-      }
     }
   }
 
-  .simulation-infos {
-    width: 35%;
-    height: 95%;
+  .player-list {
+    width: 20%;
+    height: 90%;
   }
 }

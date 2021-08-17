@@ -6,22 +6,14 @@ import { Observable } from 'rxjs';
 @Component({
   selector: 'app-lobby-select',
   templateUrl: './lobby-select.component.html',
-  styleUrls: ['./lobby-select.component.scss']
+  styleUrls: ['./lobby-select.component.scss'],
 })
 export class LobbySelectComponent implements OnInit {
-  item: Observable<any>;
-  constructor(db: AngularFireDatabase, private firebaseLobbyService: FirebaseLobbyService) {
-    this.item = db.object('lobbys').valueChanges();
-    this.item.subscribe((changes) => {
-      console.log(changes)
-    })
-  }
+  constructor(private firebaseLobbyService: FirebaseLobbyService) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   createNewLobby() {
     this.firebaseLobbyService.generateNewLobby();
   }
-
 }

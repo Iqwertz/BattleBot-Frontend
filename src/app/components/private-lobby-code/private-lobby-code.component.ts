@@ -8,6 +8,6 @@ import { Component, OnInit } from '@angular/core';
 export class PrivateLobbyCodeComponent implements OnInit {
   constructor() {}
 
-  inputCode: string = 'SSSSS';
+  inputCode: string = '';
   ngOnInit(): void {}
 }
