@@ -32,6 +32,7 @@ export interface LobbyRefSettings {
   speed: number;
   mapSize: number;
   obstacleSettings: ObstacleSettings;
+  obstacles: boolean;
 }
 
 export interface LobbyRef {
@@ -46,6 +47,9 @@ export interface LobbyRef {
 export class FirebaseLobbyService {
   lobbyFirebaseRef;
   lobbys: Map<string, LobbyRef> = new Map();
+
+  @Select(AppState.currentLobby) currentLobby$: any;
+  currentLobby: LobbyRef | undefined
 
   @Select(AppState.firebaseUser) firebaseUser$: any;
   firebaseUser: any;
@@ -64,9 +68,13 @@ export class FirebaseLobbyService {
       }
     });
 
+    this.currentLobby$.subscribe((newLobby: LobbyRef | undefined) => {
+      this.currentLobby = newLobby;
+    })
+
     auth.onAuthStateChanged((user) => {
       this.store.dispatch(new SetFirebaseUser(user));
-      if (!user) {
+      if (!user && this.currentLobby) {
         console.log('user logged out');
         router.navigate(['']);
       }
@@ -75,8 +83,6 @@ export class FirebaseLobbyService {
     this.firebaseUser$.subscribe((user: any) => {
       this.firebaseUser = user;
     });
-
-    //auth.signOut();
   }
 
   generateNewLobby() {
@@ -104,6 +110,7 @@ export class FirebaseLobbyService {
             mode: 'Color',
             mapSize: environment.defaultMapSize[0],
             obstacleSettings: environment.obstacleNoiseSettings,
+            obstacles: true,
             speed: 20,
           };
 

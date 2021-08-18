@@ -1,3 +1,4 @@
+import { SetCurrentLobby } from './../../store/app.action';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/database';
@@ -8,16 +9,11 @@ import {
 } from '../../services/firebase-lobby.service';
 import {
   ActivatedRoute,
-  Event,
-  NavigationEnd,
-  NavigationError,
-  NavigationStart,
   Router,
 } from '@angular/router';
-import { Select } from '@ngxs/store';
+import { Select, Store } from '@ngxs/store';
 import { AppState } from '../../store/app.state';
 import { environment } from '../../../environments/environment';
-import { Collection, update } from 'lodash';
 import { LobbyRefSettings } from '../../services/firebase-lobby.service';
 
 @Component({
@@ -38,12 +34,14 @@ export class CreateLobbyComponent implements OnInit, OnDestroy {
     private db: AngularFireDatabase,
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    fireBaseLobbyService: FirebaseLobbyService
+    fireBaseLobbyService: FirebaseLobbyService,
+    private store: Store
   ) {
     this.activatedRoute.paramMap.subscribe((params) => {
       //has to be spilt in small functions
       this.currentLobbyId = params.get('id');
       if (this.currentLobbyId) {
+        console.log(this.currentLobbyId)
         db.database
           .ref()
           .child('lobbys/' + this.currentLobbyId)
@@ -55,25 +53,36 @@ export class CreateLobbyComponent implements OnInit, OnDestroy {
                 this.auth
                   .signInAnonymously()
                   .then(() => {
-                    let player: Player = {
-                      uId: this.firebaseUser.uid,
-                      name: environment.roboNames[
-                        Math.floor(Math.random() * environment.roboNames.length)
-                      ],
-                    };
-                    this.db.database
-                      .ref()
-                      .child('/lobbys/' + this.currentLobbyId + '/player')
-                      .child(player.uId)
-                      .update(player);
+                    if (snap.val().settings.maxPlayer > this.getObjectLength(snap.val().player)) {
+                      console.log(snap.val().settings.maxPlayer);
+                      console.log(this.getObjectLength(snap.val().player))
+                      console.log(snap.val())
+                      let player: Player = {
+                        uId: this.firebaseUser.uid,
+                        name: environment.roboNames[
+                          Math.floor(Math.random() * environment.roboNames.length)
+                        ],
+                      };
+                      this.db.database
+                        .ref()
+                        .child('/lobbys/' + this.currentLobbyId + '/player')
+                        .child(player.uId)
+                        .update(player);
+                    } else {
+                      console.log('lobby is full')
+                      auth.signOut();
+                      this.router.navigate(['']);
+
+                    }
                   })
                   .catch((error) => {
                     var errorCode = error.code;
                     var errorMessage = error.message;
                   });
               } else if (!snap.exists()) {
-                auth.signOut();
                 console.log('This lobby doesn`t exist');
+                auth.signOut();
+
                 this.router.navigate(['']);
               }
             });
@@ -88,7 +97,7 @@ export class CreateLobbyComponent implements OnInit, OnDestroy {
         lobbyRef.subscribe((changes: any) => {
           if (changes) {
             this.lobby = changes;
-            console.log(this.lobby);
+            this.store.dispatch(new SetCurrentLobby(this.lobby))
             this.lobby!.player = fireBaseLobbyService.formatPlayerToMap(
               changes.player
             );
@@ -102,10 +111,9 @@ export class CreateLobbyComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   lobbySettingChanged(l: LobbyRefSettings) {
-    console.log(l);
     this.db.database
       .ref()
       .child('/lobbys/' + this.currentLobbyId + '/settings')
@@ -113,11 +121,13 @@ export class CreateLobbyComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    console.log("destroy");
     this.leaveLobby();
   }
 
   @HostListener('window:beforeunload', ['$event'])
   beforeUnloadHandler(event: any) {
+    console.log("unload")
     this.leaveLobby();
   }
 
@@ -158,6 +168,8 @@ export class CreateLobbyComponent implements OnInit, OnDestroy {
           .update({ adminUid: newAdmin.uId });
       }
     }
+
+
     this.db.database
       .ref()
       .child('/lobbys/' + this.currentLobbyId + '/player')
@@ -166,11 +178,21 @@ export class CreateLobbyComponent implements OnInit, OnDestroy {
       .then(() => {
         this.auth.signOut();
       });
+
+    this.store.dispatch(new SetCurrentLobby(undefined))
   }
 
   // returns random key from Set or Map
   getRandomKey(collection: any): string {
     let keys: string[] = Array.from(collection.keys());
     return keys[Math.floor(Math.random() * keys.length)];
+  }
+
+  getObjectLength(obj: any): number {
+    if (obj) {
+      return Object.keys(obj).length;
+    } else {
+      return -1;
+    }
   }
 }

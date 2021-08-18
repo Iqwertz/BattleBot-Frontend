@@ -1,12 +1,15 @@
 <div class="create-lobby-container">
   <div class="lobby-infos">
-    <div class="lobby-code">{{ lobby!.settings.id }}</div>
+    <div class="lobby-code" *ngIf="lobby">
+      {{ lobby.settings.id }}
+    </div>
     <div class="settings">
       <div class="container">
         <div class="app-lobby-settings" *ngIf="lobby && firebaseUser">
           <app-lobby-settings
             [isAdmin]="lobby.adminUid == firebaseUser.uid"
-            [lobbySettings]="lobby.settings"
+            [currentPlayer]="getObjectLength(lobby.player)"
+            [setLobbySettings]="lobby.settings"
             (lobbySettingChange)="lobbySettingChanged($event)"
           ></app-lobby-settings>
         </div>

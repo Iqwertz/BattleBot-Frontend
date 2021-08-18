@@ -49,17 +49,19 @@ export class SimulationService {
     private botCompilerService: BotCompilerService,
     private battleMapBufferService: BattleMapBufferService,
     private consoleService: ConsoleService
-  ) {}
+  ) { }
 
   generateNewSimulation(
     size: number[],
     clearOnStep: boolean,
+    obstacles: boolean,
     obstacleMapSettings?: any
   ) {
     this.clear();
 
     this.simulation.obstacleMap = this.generateObstacleMap(
       size,
+      obstacles,
       obstacleMapSettings
     );
     this.simulation.size = size;
@@ -190,11 +192,11 @@ export class SimulationService {
   /**
    *generates an obstacle map with perlin noise
    *
-   * @param {number[],settings?:any} size
+   * @param {number[],boolean,settings?:any} size
    * @return {*}  {boolean[][]} - the generated map
    * @memberof SimulationService
    */
-  generateObstacleMap(size: number[], settings?: any): boolean[][] {
+  generateObstacleMap(size: number[], obstacles: boolean, settings?: any): boolean[][] {
     this.consoleService.print('generating Obstacles...');
     if (!settings) {
       settings = environment.obstacleNoiseSettings;
@@ -207,7 +209,7 @@ export class SimulationService {
       let row: boolean[] = [];
       for (let j = 0; j < size[1]; j++) {
         let index = i * size[0] + j;
-        if (noiseMap[index] > environment.obstacleNoiseSettings.threshold) {
+        if (noiseMap[index] > settings.threshold && obstacles) {
           row.push(true);
         } else {
           row.push(false);
@@ -283,7 +285,7 @@ export class SimulationService {
         bot.direction = movingDirection;
 
         switch (
-          movingDirection //change bot position according to the
+        movingDirection //change bot position according to the
         ) {
           case 'down':
             newBotPos[0]++;
@@ -385,7 +387,7 @@ export class SimulationService {
             break;
           } else if (
             this.simulation.obstacleMap[checkSpotStart[0] + i][
-              checkSpotStart[1] + j
+            checkSpotStart[1] + j
             ]
           ) {
             obstacleNear = true;

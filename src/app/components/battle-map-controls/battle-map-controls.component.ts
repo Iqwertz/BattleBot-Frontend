@@ -29,7 +29,7 @@ export class BattleMapControlsComponent implements OnInit {
     public simulationService: SimulationService,
     private store: Store,
     private consoleService: ConsoleService
-  ) {}
+  ) { }
 
   compiledBotAvailable = false;
 
@@ -52,7 +52,7 @@ export class BattleMapControlsComponent implements OnInit {
 
   generate() {
     this.consoleService.clear();
-    this.simulationService.generateNewSimulation([50, 50], false);
+    this.simulationService.generateNewSimulation([50, 50], false, true);
   }
 
   start() {

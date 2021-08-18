@@ -17,16 +17,21 @@ export class LobbySettingsComponent implements OnInit {
 
   maxMapSize: number = environment.maxMapSize;
 
-  obstacles: boolean = true;
   obstacleMaxSettings: any = environment.obstacleMaxNoiseSettings;
 
   @Input('isAdmin') isAdmin = false;
 
-  @Input('lobbySettings') lobbySettings: LobbyRefSettings | undefined;
+  @Input('currentPlayer') currentPlayer = 1;
+
+  lobbySettings: LobbyRefSettings | undefined
+  @Input() set setLobbySettings(ls: LobbyRefSettings | undefined) {
+    this.lobbySettings = ls;
+    this.updateMap();
+  }
 
   @Output() lobbySettingChange = new EventEmitter<LobbyRefSettings>();
 
-  constructor(private simulationService: SimulationService) {}
+  constructor(private simulationService: SimulationService) { }
 
   ngOnInit(): void {
     this.updateMap();
@@ -36,8 +41,8 @@ export class LobbySettingsComponent implements OnInit {
     if (this.lobbySettings) {
       if (this.lobbySettings.maxPlayer > this.maxPlayer) {
         this.lobbySettings.maxPlayer = this.maxPlayer;
-      } else if (this.lobbySettings.maxPlayer < 2) {
-        this.lobbySettings.maxPlayer = 2;
+      } else if (this.lobbySettings.maxPlayer < this.currentPlayer) {
+        this.lobbySettings.maxPlayer = this.currentPlayer;
       }
       this.settingChanged();
     }
@@ -76,12 +81,13 @@ export class LobbySettingsComponent implements OnInit {
   updateMap() {
     if (this.lobbySettings) {
       console.log('update');
-      if (!this.obstacles) {
+      if (!this.lobbySettings.obstacles) {
         this.lobbySettings.obstacleSettings.threshold = 1;
       }
       this.simulationService.generateNewSimulation(
         [this.lobbySettings.mapSize, this.lobbySettings.mapSize],
         false,
+        this.lobbySettings.obstacles,
         this.lobbySettings.obstacleSettings
       );
 

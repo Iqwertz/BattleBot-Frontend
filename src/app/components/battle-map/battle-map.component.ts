@@ -55,7 +55,7 @@ export class BattleMapComponent implements OnInit {
     private battleMapBufferService: BattleMapBufferService,
     public simulationService: SimulationService,
     private store: Store
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.placingBot$.subscribe((val: boolean) => {
@@ -66,7 +66,7 @@ export class BattleMapComponent implements OnInit {
       this.compiledBot = bot;
     });
 
-    this.simulationService.generateNewSimulation([50, 50], false);
+    this.simulationService.generateNewSimulation([50, 50], false, true);
   }
 
   /**

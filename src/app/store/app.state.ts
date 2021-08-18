@@ -1,3 +1,4 @@
+import { LobbyRef } from './../services/firebase-lobby.service';
 //////Use
 /*
   @Select(AppState.userId)
@@ -13,12 +14,13 @@
 
 import { State, Action, StateContext, Selector } from '@ngxs/store';
 import { Bot } from '../components/battle-map/battle-map.component';
-import { SetCompiledBot, SetPlacingBot, SetFirebaseUser } from './app.action';
+import { SetCompiledBot, SetPlacingBot, SetFirebaseUser, SetCurrentLobby } from './app.action';
 
 export interface AppStateModel {
   compiledBot: Bot | undefined;
   placingBot: boolean;
   firebaseUser: any; //cant find the angularfire ts definition :(
+  currentLobby: LobbyRef | undefined;
 }
 
 @State<AppStateModel>({
@@ -27,6 +29,7 @@ export interface AppStateModel {
     compiledBot: undefined,
     placingBot: false,
     firebaseUser: undefined,
+    currentLobby: undefined
   },
 })
 export class AppState {
@@ -66,6 +69,21 @@ export class AppState {
   ) {
     context.patchState({
       firebaseUser: action.firebaseUser,
+    });
+  }
+
+  @Selector()
+  static currentLobby(state: AppStateModel) {
+    return state.currentLobby;
+  }
+
+  @Action(SetCurrentLobby)
+  setCurrentLobby(
+    context: StateContext<AppStateModel>,
+    action: SetCurrentLobby
+  ) {
+    context.patchState({
+      currentLobby: action.currentLobby,
     });
   }
 }

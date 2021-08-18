@@ -37,7 +37,7 @@ export class PublicLobbysComponent implements OnInit {
   ) {
     let lobbyFirebaseRef = db.object('lobbys/').valueChanges();
     lobbyFirebaseRef.subscribe((changes: any) => {
-      this.lobbys = this.filterPublic(this.changesToLobbyRefArray(changes));
+      this.lobbys = this.filterMaxPlayer(this.filterPublic(this.changesToLobbyRefArray(changes)));
       this.dataSource = new MatTableDataSource(this.lobbys);
       this.dataSource.sort = this.sort;
     });
@@ -46,6 +46,7 @@ export class PublicLobbysComponent implements OnInit {
   displayedColumns: string[] = [
     'id',
     'players',
+    'size',
     'mode',
     'editorTime',
     'simulationTime',
@@ -74,6 +75,21 @@ export class PublicLobbysComponent implements OnInit {
     for (let l of lobbys) {
       if (!l.settings.private) {
         pubLobbys.push(l);
+      }
+    }
+
+    return pubLobbys;
+  }
+
+  private filterMaxPlayer(lobbys: LobbyRef[]): LobbyRef[] {
+    let pubLobbys: LobbyRef[] = [];
+
+    for (let l of lobbys) {
+
+      if (l.player) {
+        if (l.settings.maxPlayer > this.getObjectLength(l.player)) {
+          pubLobbys.push(l);
+        }
       }
     }
 
