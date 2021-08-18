@@ -4,6 +4,7 @@ import { PlayComponent } from './sites/play/play.component';
 import { LandingComponent } from './sites/landing/landing.component';
 import { BotEditorComponent } from './sites/bot-editor/bot-editor.component';
 import { CreateLobbyComponent } from './sites/create-lobby/create-lobby.component';
+import { AngularFireAuthGuard, loggedIn } from '@angular/fire/auth-guard';
 
 const routes: Routes = [
   {
@@ -13,6 +14,8 @@ const routes: Routes = [
   {
     path: 'editor',
     component: BotEditorComponent,
+    canActivate: [AngularFireAuthGuard],
+    data: { authGuardPipe: loggedIn },
   },
   {
     path: 'play',

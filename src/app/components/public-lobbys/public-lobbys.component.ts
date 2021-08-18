@@ -3,6 +3,8 @@ import { AngularFireDatabase } from '@angular/fire/database';
 import { MatSort } from '@angular/material/sort';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { Select, State, Store } from '@ngxs/store';
+import { AppState } from '../../store/app.state';
 import {
   LobbyRef,
   FirebaseLobbyService,
@@ -23,11 +25,15 @@ export interface PeriodicElement {
 export class PublicLobbysComponent implements OnInit {
   lobbys: LobbyRef[] = [];
 
+  @Select(AppState.firebaseUser) firebaseUser$: any;
+  firebaseUser: any;
+
   constructor(
     private db: AngularFireDatabase,
     private fireBaseLobbyService: FirebaseLobbyService,
     private changeDetectorRefs: ChangeDetectorRef,
-    private router: Router
+    private router: Router,
+    private store: Store
   ) {
     let lobbyFirebaseRef = db.object('lobbys/').valueChanges();
     lobbyFirebaseRef.subscribe((changes: any) => {
@@ -48,7 +54,11 @@ export class PublicLobbysComponent implements OnInit {
 
   @ViewChild(MatSort, { static: false }) sort!: MatSort;
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.firebaseUser$.subscribe((user: any) => {
+      this.firebaseUser = user;
+    });
+  }
 
   private changesToLobbyRefArray(changes: any): LobbyRef[] {
     let arr: LobbyRef[] = [];
@@ -71,10 +81,18 @@ export class PublicLobbysComponent implements OnInit {
   }
 
   join(id: string) {
-    this.router.navigate(['createLobby', id]);
+    if (!this.firebaseUser) {
+      this.router.navigate(['createLobby', id]);
+    } else {
+      console.log('Error: already in game');
+    }
   }
 
   getObjectLength(obj: any): number {
-    return Object.keys(obj).length;
+    if (obj) {
+      return Object.keys(obj).length;
+    } else {
+      return -1;
+    }
   }
 }

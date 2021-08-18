@@ -6,9 +6,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
   styleUrls: ['./landing.component.scss'],
 })
 export class LandingComponent implements OnInit {
-  constructor(auth: AngularFireAuth) {
-    auth.signOut();
-  }
+  constructor() {}
 
   ngOnInit(): void {}
 }

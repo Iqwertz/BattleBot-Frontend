@@ -1,7 +1,7 @@
 import { FirebaseLobbyService } from './../../services/firebase-lobby.service';
 import { Component, OnInit } from '@angular/core';
-import { AngularFireDatabase } from '@angular/fire/database';
-import { Observable } from 'rxjs';
+import { Store, Select } from '@ngxs/store';
+import { AppState } from '../../store/app.state';
 
 @Component({
   selector: 'app-lobby-select',

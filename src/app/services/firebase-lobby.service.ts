@@ -53,6 +53,10 @@ export class FirebaseLobbyService {
 
     auth.onAuthStateChanged((user) => {
       this.store.dispatch(new SetFirebaseUser(user));
+      if (!user) {
+        console.log('user logged out');
+        router.navigate(['']);
+      }
     });
 
     this.firebaseUser$.subscribe((user: any) => {
@@ -61,49 +65,63 @@ export class FirebaseLobbyService {
   }
 
   generateNewLobby() {
-    this.auth
-      .signInAnonymously()
-      .then(() => {
-        let id = this.getNewSessionId(5);
+    console.log('newLobby');
+    if (!this.firebaseUser) {
+      this.auth
+        .signInAnonymously()
+        .then(() => {
+          let id = this.getNewSessionId(5);
 
-        let player: Player = {
-          uId: this.firebaseUser.uid,
-          name: environment.roboNames[
-            Math.floor(Math.random() * environment.roboNames.length)
-          ],
-        };
+          let player: Player = {
+            uId: this.firebaseUser.uid,
+            name: environment.roboNames[
+              Math.floor(Math.random() * environment.roboNames.length)
+            ],
+          };
 
-        let settings: LobbyRefSettings = {
-          editorTime: environment.defaultLobby.editorTime,
-          id: id,
-          maxPlayer: environment.defaultLobby.maxPlayer,
-          name: '',
-          private: environment.defaultLobby.private,
-          simulationTime: environment.defaultLobby.simulationTime,
-          mode: 'Color',
-        };
+          let settings: LobbyRefSettings = {
+            editorTime: environment.defaultLobby.editorTime,
+            id: id,
+            maxPlayer: environment.defaultLobby.maxPlayer,
+            name: '',
+            private: environment.defaultLobby.private,
+            simulationTime: environment.defaultLobby.simulationTime,
+            mode: 'Color',
+          };
 
-        console.log(this.firebaseUser.uid);
+          console.log(this.firebaseUser.uid);
 
-        let newLobby: LobbyRef = {
-          settings: settings,
-          adminUid: this.firebaseUser.uid,
-          player: new Map(),
-        };
+          let newLobby: LobbyRef = {
+            settings: settings,
+            adminUid: this.firebaseUser.uid,
+            player: new Map(),
+          };
 
-        this.db.database.ref().child('/lobbys').child(id).update(newLobby);
-        this.db.database
-          .ref()
-          .child('/lobbys/' + id + '/player')
-          .child(player.uId)
-          .update(player);
-
-        this.router.navigate(['createLobby', id]);
-      })
-      .catch((error) => {
-        var errorCode = error.code;
-        var errorMessage = error.message;
-      });
+          console.log('set lobbys');
+          this.db.database
+            .ref()
+            .child('/lobbys')
+            .child(id)
+            .update(newLobby)
+            .then(() => {
+              console.log('set player');
+              this.db.database
+                .ref()
+                .child('/lobbys/' + id + '/player')
+                .child(player.uId)
+                .update(player)
+                .then(() => {
+                  this.router.navigate(['createLobby', id]);
+                });
+            });
+        })
+        .catch((error) => {
+          var errorCode = error.code;
+          var errorMessage = error.message;
+        });
+    } else {
+      console.log('Error: already in a game');
+    }
   }
 
   formatPlayerToMap(obj: any): Map<string, Player> {

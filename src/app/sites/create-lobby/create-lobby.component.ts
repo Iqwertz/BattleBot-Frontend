@@ -17,13 +17,14 @@ import {
 import { Select } from '@ngxs/store';
 import { AppState } from '../../store/app.state';
 import { environment } from '../../../environments/environment';
+import { Collection, update } from 'lodash';
 
 @Component({
   selector: 'app-create-lobby',
   templateUrl: './create-lobby.component.html',
   styleUrls: ['./create-lobby.component.scss'],
 })
-export class CreateLobbyComponent implements OnInit {
+export class CreateLobbyComponent implements OnInit, OnDestroy {
   lobby: LobbyRef | undefined;
   currentLobbyId: string | null = null;
 
@@ -42,61 +43,64 @@ export class CreateLobbyComponent implements OnInit {
       //has to be spilt in small functions
       this.currentLobbyId = params.get('id');
       if (this.currentLobbyId) {
+        db.database
+          .ref()
+          .child('lobbys/' + this.currentLobbyId)
+          .get()
+          .then((snap) => {
+            auth.currentUser.then((user) => {
+              if (!user && snap) {
+                console.log('signing In');
+                this.auth
+                  .signInAnonymously()
+                  .then(() => {
+                    let player: Player = {
+                      uId: this.firebaseUser.uid,
+                      name: environment.roboNames[
+                        Math.floor(Math.random() * environment.roboNames.length)
+                      ],
+                    };
+                    this.db.database
+                      .ref()
+                      .child('/lobbys/' + this.currentLobbyId + '/player')
+                      .child(player.uId)
+                      .update(player);
+                  })
+                  .catch((error) => {
+                    var errorCode = error.code;
+                    var errorMessage = error.message;
+                  });
+              } else if (!snap) {
+                console.log('This lobby doesn`t exist');
+                this.router.navigate(['']);
+              }
+            });
+          });
+
         let lobbyRef = db
           .object('lobbys/' + this.currentLobbyId)
           .valueChanges();
         lobbyRef.subscribe((changes: any) => {
-          this.lobby = changes;
-          this.lobby!.player = fireBaseLobbyService.formatPlayerToMap(
-            changes.player
-          );
-        });
-
-        this.firebaseUser$.subscribe((user: any) => {
-          this.firebaseUser = user;
-          console.log(this.loggedIn);
-          if (!this.firebaseUser && !this.loggedIn) {
-            this.loggedIn = true;
-            this.auth
-              .signInAnonymously()
-              .then(() => {
-                let player: Player = {
-                  uId: this.firebaseUser.uid,
-                  name: environment.roboNames[
-                    Math.floor(Math.random() * environment.roboNames.length)
-                  ],
-                };
-                this.db.database
-                  .ref()
-                  .child('/lobbys/' + this.currentLobbyId + '/player')
-                  .child(player.uId)
-                  .update(player);
-              })
-              .catch((error) => {
-                var errorCode = error.code;
-                var errorMessage = error.message;
-              });
+          if (changes) {
+            this.lobby = changes;
+            this.lobby!.player = fireBaseLobbyService.formatPlayerToMap(
+              changes.player
+            );
           }
         });
       }
     });
+
+    this.firebaseUser$.subscribe((user: any) => {
+      this.firebaseUser = user;
+      //console.log(this.loggedIn);
+    });
   }
 
-  ngOnInit(): void {
-    this.router.events.subscribe((event: Event) => {
-      //router events
-      if (event instanceof NavigationStart) {
-        //do something on start activity
-      }
+  ngOnInit(): void {}
 
-      if (event instanceof NavigationError) {
-        console.error(event.error);
-      }
-
-      if (event instanceof NavigationEnd) {
-        this.leaveLobby();
-      }
-    });
+  ngOnDestroy(): void {
+    this.leaveLobby();
   }
 
   @HostListener('window:beforeunload', ['$event'])
@@ -105,12 +109,45 @@ export class CreateLobbyComponent implements OnInit {
   }
 
   leaveLobby() {
+    console.log('leaving');
+    if (this.lobby!.player.size <= 1) {
+      this.db.database
+        .ref()
+        .child('/lobbys')
+        .child(this.currentLobbyId!)
+        .remove();
+    } else if (this.lobby?.adminUid == this.firebaseUser.uid) {
+      let keyFound = false;
+      let randomPlayerKey: string = '';
+      while (!keyFound) {
+        randomPlayerKey = this.getRandomKey(this.lobby!.player);
+        if (randomPlayerKey != this.firebaseUser.uid) {
+          keyFound = true;
+        }
+      }
+
+      let newAdmin = this.lobby!.player.get(randomPlayerKey);
+
+      if (newAdmin) {
+        this.db.database
+          .ref()
+          .child('/lobbys/' + this.currentLobbyId)
+          .update({ adminUid: newAdmin.uId });
+      }
+    }
     this.db.database
       .ref()
       .child('/lobbys/' + this.currentLobbyId + '/player')
       .child(this.firebaseUser.uid)
-      .remove();
+      .remove()
+      .then(() => {
+        this.auth.signOut();
+      });
+  }
 
-    this.auth.signOut();
+  // returns random key from Set or Map
+  getRandomKey(collection: any): string {
+    let keys: string[] = Array.from(collection.keys());
+    return keys[Math.floor(Math.random() * keys.length)];
   }
 }

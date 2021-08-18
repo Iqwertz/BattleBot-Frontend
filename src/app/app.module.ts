@@ -22,6 +22,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { ConsoleComponent } from './components/console/console.component';
 import { NgxsModule } from '@ngxs/store';
+import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { AppState } from './store/app.state';
 import { LobbySelectComponent } from './components/lobby-select/lobby-select.component';
 import { PrivateLobbyCodeComponent } from './components/private-lobby-code/private-lobby-code.component';
@@ -30,6 +31,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AngularFireAuthModule } from '@angular/fire/auth';
+import { AngularFireAuthGuardModule } from '@angular/fire/auth-guard';
 import { environment } from '../environments/environment';
 import { DragdropCodeFunctionComponent } from './components/dragdrop-code-function/dragdrop-code-function.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -68,6 +70,7 @@ import { MatRippleModule } from '@angular/material/core';
     BrowserModule,
     AppRoutingModule,
     NgxsModule.forRoot([AppState]),
+    NgxsReduxDevtoolsPluginModule.forRoot(),
     BrowserAnimationsModule,
     DragDropModule,
     FontAwesomeModule,
@@ -78,6 +81,7 @@ import { MatRippleModule } from '@angular/material/core';
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule,
     AngularFireAuthModule,
+    AngularFireAuthGuardModule,
     MatInputModule,
     MatAutocompleteModule,
     FormsModule,

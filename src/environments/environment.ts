@@ -24,7 +24,7 @@ export const environment = {
   roboNames: [
     'AVA',
     'B-4',
-    'D.A.V.E',
+    'D.A.V.E.',
     'Dewey',
     'Encoid',
     'Flexo',
