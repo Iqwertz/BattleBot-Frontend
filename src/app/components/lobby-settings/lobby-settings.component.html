@@ -1,1 +1,168 @@
-<div class="lobby-settings"></div>
+<div class="lobby-settings terminal-scrollbar">
+  Settings:
+  <div class="input">
+    <div class="label">Name:</div>
+    <mat-form-field class="form-field" appearance="fill">
+      <mat-label>Simulation name</mat-label>
+      <input matInput type="text" [(ngModel)]="name" />
+    </mat-form-field>
+  </div>
+
+  <div class="input">
+    <div class="label">Private:</div>
+    <mat-checkbox class="checkbox" [(ngModel)]="isPrivate"></mat-checkbox>
+  </div>
+
+  <div class="input">
+    <div class="label">Player:</div>
+    <mat-form-field class="form-field" appearance="fill">
+      <mat-label>Player</mat-label>
+      <input
+        matInput
+        type="number"
+        min="2"
+        (change)="validatePlayer()"
+        [(ngModel)]="player"
+      />
+    </mat-form-field>
+  </div>
+
+  <div class="input">
+    <div class="label">Mode:</div>
+    <mat-form-field class="form-field" appearance="fill">
+      <mat-label>Gamemode</mat-label>
+      <mat-select [(value)]="selectedMode">
+        <mat-option *ngFor="let mode of modes" [value]="mode">
+          {{ mode }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="input">
+    <div class="label">Building time:</div>
+    <mat-form-field class="form-field" appearance="fill">
+      <mat-label>time (min)</mat-label>
+      <input
+        matInput
+        type="number"
+        min="2"
+        (change)="validateTime()"
+        [(ngModel)]="editingTime"
+      />
+    </mat-form-field>
+  </div>
+
+  <div class="input">
+    <div class="label">Simulation time:</div>
+    <mat-form-field class="form-field" appearance="fill">
+      <mat-label>time (min)</mat-label>
+      <input
+        matInput
+        type="number"
+        min="2"
+        (change)="validateTime()"
+        [(ngModel)]="simulationTime"
+      />
+    </mat-form-field>
+  </div>
+
+  <div class="input">
+    <div class="label">Simulation speed:</div>
+    <mat-slider
+      class="slider"
+      [max]="100"
+      [min]="1"
+      [step]="1"
+      [thumbLabel]="true"
+      [(ngModel)]="speed"
+      aria-labelledby="simulation speed"
+      (change)="updateMap()"
+    >
+    </mat-slider>
+  </div>
+
+  Map settings:
+  <div class="input">
+    <div class="label">Map size:</div>
+    <mat-form-field class="form-field" appearance="fill">
+      <mat-label>Map size (px)</mat-label>
+      <input
+        matInput
+        type="number"
+        min="5"
+        (change)="validateMap()"
+        [(ngModel)]="map"
+      />
+    </mat-form-field>
+  </div>
+
+  <div class="input">
+    <div class="label">Obstacles:</div>
+    <mat-checkbox
+      (change)="updateMap()"
+      class="checkbox"
+      [(ngModel)]="obstacles"
+    ></mat-checkbox>
+  </div>
+
+  <div class="input indent" *ngIf="obstacles">
+    <div class="label">Threshold:</div>
+    <mat-slider
+      class="slider"
+      [max]="obstacleMaxSettings.threshold"
+      [min]="0"
+      [step]="0.01"
+      [thumbLabel]="true"
+      [(ngModel)]="obstacleSettings.threshold"
+      aria-labelledby="threshold"
+      (change)="updateMap()"
+    >
+    </mat-slider>
+  </div>
+
+  <div class="input indent" *ngIf="obstacles">
+    <div class="label">octaveCount:</div>
+    <mat-slider
+      class="slider"
+      [max]="obstacleMaxSettings.octaveCount"
+      [min]="0"
+      [step]="1"
+      [thumbLabel]="true"
+      [(ngModel)]="obstacleSettings.octaveCount"
+      aria-labelledby="octaveCount"
+      (change)="updateMap()"
+    >
+    </mat-slider>
+  </div>
+
+  <div class="input indent" *ngIf="obstacles">
+    <div class="label">Amplitude:</div>
+    <mat-slider
+      class="slider"
+      [max]="obstacleMaxSettings.amplitude"
+      [min]="0"
+      [step]="0.01"
+      [thumbLabel]="true"
+      [(ngModel)]="obstacleSettings.amplitude"
+      aria-labelledby="Amplitude"
+      (change)="updateMap()"
+    >
+    </mat-slider>
+  </div>
+
+  <div class="input indent" *ngIf="obstacles">
+    <div class="label">Persistence:</div>
+    <mat-slider
+      class="slider"
+      [max]="obstacleMaxSettings.persistence"
+      [min]="0"
+      [step]="0.01"
+      [thumbLabel]="true"
+      [(ngModel)]="obstacleSettings.persistence"
+      aria-labelledby="persistence"
+      (change)="updateMap()"
+    >
+    </mat-slider>
+  </div>
+</div>

@@ -1,8 +1,15 @@
 <div class="create-lobby-container">
   <div class="lobby-infos">
-    <div class="lobby-code"></div>
+    <div class="lobby-code">{{ lobby!.settings.id }}</div>
     <div class="settings">
-      <app-lobby-settings></app-lobby-settings>
+      <div class="container">
+        <div class="app-lobby-settings">
+          <app-lobby-settings></app-lobby-settings>
+        </div>
+        <div class="map">
+          <app-battle-map></app-battle-map>
+        </div>
+      </div>
     </div>
   </div>
 

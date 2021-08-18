@@ -7,11 +7,21 @@ export const environment = {
   simulationSpeed: 100,
   defaultMapSize: [20, 20],
   defaultTrackLength: 10,
+  maxPlayer: 10,
+  maxTime: 80,
+  maxMapSize: 150,
+  speedRange: [20, 1500],
   obstacleNoiseSettings: {
     threshold: 0.65,
     octaveCount: 4,
     amplitude: 0.2,
     persistence: 0.1,
+  },
+  obstacleMaxNoiseSettings: {
+    threshold: 1,
+    octaveCount: 10,
+    amplitude: 1,
+    persistence: 1,
   },
   defaultLobby: {
     editorTime: 5,

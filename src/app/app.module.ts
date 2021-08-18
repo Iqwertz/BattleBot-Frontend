@@ -42,6 +42,9 @@ import { LobbySettingsComponent } from './components/lobby-settings/lobby-settin
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatRippleModule } from '@angular/material/core';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSliderModule } from '@angular/material/slider';
 
 @NgModule({
   declarations: [
@@ -89,6 +92,9 @@ import { MatRippleModule } from '@angular/material/core';
     MatTableModule,
     MatSortModule,
     MatRippleModule,
+    MatIconModule,
+    MatCheckboxModule,
+    MatSliderModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

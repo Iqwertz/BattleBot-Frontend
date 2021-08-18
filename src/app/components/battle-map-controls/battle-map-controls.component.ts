@@ -73,42 +73,10 @@ export class BattleMapControlsComponent implements OnInit {
   }
 
   randomBot() {
-    let bot = defaultBots[Math.floor(Math.random() * defaultBots.length)];
-    let simBots = this.simulationService.simulation.bots;
-    if (simBots.size >= environment.availableBotColors) {
-      this.consoleService.print('Error: Max Bots Reached');
-      console.log('error: Max Bots Reached');
-      return;
-    }
-
-    let colorFound = false;
-    let botColor = 5;
-
-    while (!colorFound) {
-      botColor = this.getRandomInt(
-        environment.botByteRange[0],
-        environment.botByteRange[1]
-      );
-      if (botColor % 2 == 0) {
-        botColor++;
-      }
-      if (!simBots.has(botColor)) {
-        colorFound = true;
-      }
-    }
-
-    bot.color = botColor;
-    bot.trackColor = botColor + 1;
-    this.simulationService.setBot(bot);
+    this.simulationService.setRandomBot();
   }
 
   setBot() {
     this.store.dispatch(new SetPlacingBot(true));
-  }
-
-  private getRandomInt(min: number, max: number): number {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min)) + min;
   }
 }

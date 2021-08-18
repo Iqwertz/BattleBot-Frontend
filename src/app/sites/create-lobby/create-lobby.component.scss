@@ -21,13 +21,43 @@
 
     .lobby-code {
       width: calc(100% - 40px);
-      height: calc(100px);
-      background-color: #fff;
+      height: calc(8vw);
+      font-size: 6vw;
+      color: #fff;
+      font-family: "JetBrains Mono", monospace;
+      padding-left: 2vw;
+      letter-spacing: 4.2vw;
+      border-bottom: 2px solid #fff;
     }
     .settings {
       width: calc(100% - 80px);
       height: calc(100% - 200px);
       margin-bottom: 40px;
+      color: #fff;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 1.5em;
+      position: relative;
+
+      .container {
+        height: 100%;
+        width: 100%;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+
+        .app-lobby-settings {
+          margin-top: 15px;
+          height: 95%;
+          width: 70%;
+        }
+
+        .map {
+          height: 15vw;
+          width: 15vw;
+          background-color: #fff;
+        }
+      }
     }
   }
 

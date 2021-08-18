@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environment';
 import { BotCompilerService, Direction } from './bot-compiler.service';
 import { BattleMapBufferService } from './battle-map-buffer.service';
 import { Subject } from 'rxjs';
+import { defaultBots } from '../components/battle-map/battle-map-bots';
 var perlin = require('perlin-noise');
 
 export type GameModes = 'Color';
@@ -130,8 +131,40 @@ export class SimulationService {
   }
 
   setSpeed(speed: number) {
-    this.simulation.statusVar.simulationSpeed = speed;
-    this.consoleService.print('set Simulation speed to ' + speed);
+    let msSpeed = (environment.speedRange[1] * speed) / 100; //This isnt using the lower range of the defined speed but it doesnt really matter
+    this.simulation.statusVar.simulationSpeed = msSpeed;
+    this.consoleService.print('set Simulation speed to ' + speed + '%');
+    console.log('set Simulation speed to ' + msSpeed);
+  }
+
+  setRandomBot() {
+    let bot = defaultBots[Math.floor(Math.random() * defaultBots.length)];
+    let simBots = this.simulation.bots;
+    if (simBots.size >= environment.availableBotColors) {
+      this.consoleService.print('Error: Max Bots Reached');
+      console.log('error: Max Bots Reached');
+      return;
+    }
+
+    let colorFound = false;
+    let botColor = 5;
+
+    while (!colorFound) {
+      botColor = this.getRandomInt(
+        environment.botByteRange[0],
+        environment.botByteRange[1]
+      );
+      if (botColor % 2 == 0) {
+        botColor++;
+      }
+      if (!simBots.has(botColor)) {
+        colorFound = true;
+      }
+    }
+
+    bot.color = botColor;
+    bot.trackColor = botColor + 1;
+    this.setBot(bot);
   }
 
   /**
@@ -286,7 +319,9 @@ export class SimulationService {
       this.simulation.statusVar.simulationStarted
     ) {
       setTimeout(() => {
-        this.simulateStep();
+        requestAnimationFrame(() => {
+          this.simulateStep();
+        });
       }, this.simulation.statusVar.simulationSpeed); //set timeout for next step
     }
   }
@@ -366,5 +401,11 @@ export class SimulationService {
         foundValid = true;
       }
     }
+  }
+
+  private getRandomInt(min: number, max: number): number {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min)) + min;
   }
 }
