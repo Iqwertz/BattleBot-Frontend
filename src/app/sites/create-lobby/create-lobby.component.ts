@@ -37,7 +37,7 @@ export class CreateLobbyComponent implements OnInit, OnDestroy {
     private db: AngularFireDatabase,
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private fireBaseLobbyService: FirebaseLobbyService
+    fireBaseLobbyService: FirebaseLobbyService
   ) {
     this.activatedRoute.paramMap.subscribe((params) => {
       //has to be spilt in small functions
@@ -49,7 +49,7 @@ export class CreateLobbyComponent implements OnInit, OnDestroy {
           .get()
           .then((snap) => {
             auth.currentUser.then((user) => {
-              if (!user && snap) {
+              if (!user && snap.exists()) {
                 console.log('signing In');
                 this.auth
                   .signInAnonymously()
@@ -70,11 +70,15 @@ export class CreateLobbyComponent implements OnInit, OnDestroy {
                     var errorCode = error.code;
                     var errorMessage = error.message;
                   });
-              } else if (!snap) {
+              } else if (!snap.exists()) {
+                auth.signOut();
                 console.log('This lobby doesn`t exist');
                 this.router.navigate(['']);
               }
             });
+          })
+          .catch((er) => {
+            console.log(er);
           });
 
         let lobbyRef = db
@@ -110,12 +114,22 @@ export class CreateLobbyComponent implements OnInit, OnDestroy {
 
   leaveLobby() {
     console.log('leaving');
-    if (this.lobby!.player.size <= 1) {
+
+    if (!this.lobby) {
+      console.log('no lobby');
+      this.auth.signOut();
+      return;
+    }
+
+    if (this.lobby.player.size <= 1) {
       this.db.database
         .ref()
         .child('/lobbys')
         .child(this.currentLobbyId!)
-        .remove();
+        .remove()
+        .catch((er) => {
+          console.log(er);
+        });
     } else if (this.lobby?.adminUid == this.firebaseUser.uid) {
       let keyFound = false;
       let randomPlayerKey: string = '';

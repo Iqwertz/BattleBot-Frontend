@@ -62,6 +62,8 @@ export class FirebaseLobbyService {
     this.firebaseUser$.subscribe((user: any) => {
       this.firebaseUser = user;
     });
+
+    //auth.signOut();
   }
 
   generateNewLobby() {
