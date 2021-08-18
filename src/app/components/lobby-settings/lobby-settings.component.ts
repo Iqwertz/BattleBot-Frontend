@@ -31,6 +31,8 @@ export class LobbySettingsComponent implements OnInit {
   obstacleSettings: any = environment.obstacleNoiseSettings;
   obstacleMaxSettings: any = environment.obstacleMaxNoiseSettings;
 
+  isAdmin = false;
+
   constructor(private simulationService: SimulationService) {}
 
   ngOnInit(): void {

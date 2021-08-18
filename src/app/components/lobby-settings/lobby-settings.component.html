@@ -4,13 +4,17 @@
     <div class="label">Name:</div>
     <mat-form-field class="form-field" appearance="fill">
       <mat-label>Simulation name</mat-label>
-      <input matInput type="text" [(ngModel)]="name" />
+      <input [disabled]="!isAdmin" matInput type="text" [(ngModel)]="name" />
     </mat-form-field>
   </div>
 
   <div class="input">
     <div class="label">Private:</div>
-    <mat-checkbox class="checkbox" [(ngModel)]="isPrivate"></mat-checkbox>
+    <mat-checkbox
+      class="checkbox"
+      [disabled]="!isAdmin"
+      [(ngModel)]="isPrivate"
+    ></mat-checkbox>
   </div>
 
   <div class="input">
@@ -23,6 +27,7 @@
         min="2"
         (change)="validatePlayer()"
         [(ngModel)]="player"
+        [disabled]="!isAdmin"
       />
     </mat-form-field>
   </div>
@@ -31,7 +36,7 @@
     <div class="label">Mode:</div>
     <mat-form-field class="form-field" appearance="fill">
       <mat-label>Gamemode</mat-label>
-      <mat-select [(value)]="selectedMode">
+      <mat-select [disabled]="!isAdmin" [(value)]="selectedMode">
         <mat-option *ngFor="let mode of modes" [value]="mode">
           {{ mode }}
         </mat-option>
@@ -49,6 +54,7 @@
         min="2"
         (change)="validateTime()"
         [(ngModel)]="editingTime"
+        [disabled]="!isAdmin"
       />
     </mat-form-field>
   </div>
@@ -63,6 +69,7 @@
         min="2"
         (change)="validateTime()"
         [(ngModel)]="simulationTime"
+        [disabled]="!isAdmin"
       />
     </mat-form-field>
   </div>
@@ -78,6 +85,7 @@
       [(ngModel)]="speed"
       aria-labelledby="simulation speed"
       (change)="updateMap()"
+      [disabled]="!isAdmin"
     >
     </mat-slider>
   </div>
@@ -93,6 +101,7 @@
         min="5"
         (change)="validateMap()"
         [(ngModel)]="map"
+        [disabled]="!isAdmin"
       />
     </mat-form-field>
   </div>
@@ -103,6 +112,7 @@
       (change)="updateMap()"
       class="checkbox"
       [(ngModel)]="obstacles"
+      [disabled]="!isAdmin"
     ></mat-checkbox>
   </div>
 
@@ -117,6 +127,7 @@
       [(ngModel)]="obstacleSettings.threshold"
       aria-labelledby="threshold"
       (change)="updateMap()"
+      [disabled]="!isAdmin"
     >
     </mat-slider>
   </div>
@@ -132,6 +143,7 @@
       [(ngModel)]="obstacleSettings.octaveCount"
       aria-labelledby="octaveCount"
       (change)="updateMap()"
+      [disabled]="!isAdmin"
     >
     </mat-slider>
   </div>
@@ -147,6 +159,7 @@
       [(ngModel)]="obstacleSettings.amplitude"
       aria-labelledby="Amplitude"
       (change)="updateMap()"
+      [disabled]="!isAdmin"
     >
     </mat-slider>
   </div>
@@ -162,6 +175,7 @@
       [(ngModel)]="obstacleSettings.persistence"
       aria-labelledby="persistence"
       (change)="updateMap()"
+      [disabled]="!isAdmin"
     >
     </mat-slider>
   </div>
