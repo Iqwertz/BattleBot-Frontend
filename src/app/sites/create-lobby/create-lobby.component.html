@@ -3,8 +3,12 @@
     <div class="lobby-code">{{ lobby!.settings.id }}</div>
     <div class="settings">
       <div class="container">
-        <div class="app-lobby-settings">
-          <app-lobby-settings></app-lobby-settings>
+        <div class="app-lobby-settings" *ngIf="lobby && firebaseUser">
+          <app-lobby-settings
+            [isAdmin]="lobby.adminUid == firebaseUser.uid"
+            [lobbySettings]="lobby.settings"
+            (lobbySettingChange)="lobbySettingChanged($event)"
+          ></app-lobby-settings>
         </div>
         <div class="map">
           <app-battle-map></app-battle-map>

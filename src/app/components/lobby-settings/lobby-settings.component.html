@@ -1,10 +1,16 @@
-<div class="lobby-settings terminal-scrollbar">
+<div class="lobby-settings terminal-scrollbar" *ngIf="lobbySettings">
   Settings:
   <div class="input">
     <div class="label">Name:</div>
     <mat-form-field class="form-field" appearance="fill">
       <mat-label>Simulation name</mat-label>
-      <input [disabled]="!isAdmin" matInput type="text" [(ngModel)]="name" />
+      <input
+        [disabled]="!isAdmin"
+        matInput
+        type="text"
+        [(ngModel)]="lobbySettings.name"
+        (change)="settingChanged()"
+      />
     </mat-form-field>
   </div>
 
@@ -13,7 +19,8 @@
     <mat-checkbox
       class="checkbox"
       [disabled]="!isAdmin"
-      [(ngModel)]="isPrivate"
+      [(ngModel)]="lobbySettings.private"
+      (change)="settingChanged()"
     ></mat-checkbox>
   </div>
 
@@ -26,7 +33,7 @@
         type="number"
         min="2"
         (change)="validatePlayer()"
-        [(ngModel)]="player"
+        [(ngModel)]="lobbySettings.maxPlayer"
         [disabled]="!isAdmin"
       />
     </mat-form-field>
@@ -36,7 +43,11 @@
     <div class="label">Mode:</div>
     <mat-form-field class="form-field" appearance="fill">
       <mat-label>Gamemode</mat-label>
-      <mat-select [disabled]="!isAdmin" [(value)]="selectedMode">
+      <mat-select
+        [disabled]="!isAdmin"
+        [(value)]="lobbySettings.mode"
+        (change)="settingChanged()"
+      >
         <mat-option *ngFor="let mode of modes" [value]="mode">
           {{ mode }}
         </mat-option>
@@ -53,7 +64,7 @@
         type="number"
         min="2"
         (change)="validateTime()"
-        [(ngModel)]="editingTime"
+        [(ngModel)]="lobbySettings.editorTime"
         [disabled]="!isAdmin"
       />
     </mat-form-field>
@@ -68,7 +79,7 @@
         type="number"
         min="2"
         (change)="validateTime()"
-        [(ngModel)]="simulationTime"
+        [(ngModel)]="lobbySettings.simulationTime"
         [disabled]="!isAdmin"
       />
     </mat-form-field>
@@ -82,7 +93,7 @@
       [min]="1"
       [step]="1"
       [thumbLabel]="true"
-      [(ngModel)]="speed"
+      [(ngModel)]="lobbySettings.speed"
       aria-labelledby="simulation speed"
       (change)="updateMap()"
       [disabled]="!isAdmin"
@@ -100,7 +111,7 @@
         type="number"
         min="5"
         (change)="validateMap()"
-        [(ngModel)]="map"
+        [(ngModel)]="lobbySettings.mapSize"
         [disabled]="!isAdmin"
       />
     </mat-form-field>
@@ -124,7 +135,7 @@
       [min]="0"
       [step]="0.01"
       [thumbLabel]="true"
-      [(ngModel)]="obstacleSettings.threshold"
+      [(ngModel)]="lobbySettings.obstacleSettings.threshold"
       aria-labelledby="threshold"
       (change)="updateMap()"
       [disabled]="!isAdmin"
@@ -140,7 +151,7 @@
       [min]="0"
       [step]="1"
       [thumbLabel]="true"
-      [(ngModel)]="obstacleSettings.octaveCount"
+      [(ngModel)]="lobbySettings.obstacleSettings.octaveCount"
       aria-labelledby="octaveCount"
       (change)="updateMap()"
       [disabled]="!isAdmin"
@@ -156,7 +167,7 @@
       [min]="0"
       [step]="0.01"
       [thumbLabel]="true"
-      [(ngModel)]="obstacleSettings.amplitude"
+      [(ngModel)]="lobbySettings.obstacleSettings.amplitude"
       aria-labelledby="Amplitude"
       (change)="updateMap()"
       [disabled]="!isAdmin"
@@ -172,7 +183,7 @@
       [min]="0"
       [step]="0.01"
       [thumbLabel]="true"
-      [(ngModel)]="obstacleSettings.persistence"
+      [(ngModel)]="lobbySettings.obstacleSettings.persistence"
       aria-labelledby="persistence"
       (change)="updateMap()"
       [disabled]="!isAdmin"

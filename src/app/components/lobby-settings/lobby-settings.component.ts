@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { SimulationService } from '../../services/simulation.service';
+import { LobbyRefSettings } from '../../services/firebase-lobby.service';
 
 @Component({
   selector: 'app-lobby-settings',
@@ -8,30 +9,22 @@ import { SimulationService } from '../../services/simulation.service';
   styleUrls: ['./lobby-settings.component.scss'],
 })
 export class LobbySettingsComponent implements OnInit {
-  name: string = '';
-  player: number = 2;
   maxPlayer: number = environment.maxPlayer;
-  isPrivate: boolean = false;
-
-  simulationTime: number = 5;
-  editingTime: number = 10;
 
   maxTime: number = environment.maxTime;
 
   modes: string[] = ['Color'];
-  selectedMode: string = this.modes[0];
 
-  speed: number = 1;
-
-  map: number = environment.defaultMapSize[0];
   maxMapSize: number = environment.maxMapSize;
 
   obstacles: boolean = true;
-
-  obstacleSettings: any = environment.obstacleNoiseSettings;
   obstacleMaxSettings: any = environment.obstacleMaxNoiseSettings;
 
-  isAdmin = false;
+  @Input('isAdmin') isAdmin = false;
+
+  @Input('lobbySettings') lobbySettings: LobbyRefSettings | undefined;
+
+  @Output() lobbySettingChange = new EventEmitter<LobbyRefSettings>();
 
   constructor(private simulationService: SimulationService) {}
 
@@ -40,52 +33,71 @@ export class LobbySettingsComponent implements OnInit {
   }
 
   validatePlayer() {
-    if (this.player > this.maxPlayer) {
-      this.player = this.maxPlayer;
-    } else if (this.player < 2) {
-      this.player = 2;
+    if (this.lobbySettings) {
+      if (this.lobbySettings.maxPlayer > this.maxPlayer) {
+        this.lobbySettings.maxPlayer = this.maxPlayer;
+      } else if (this.lobbySettings.maxPlayer < 2) {
+        this.lobbySettings.maxPlayer = 2;
+      }
+      this.settingChanged();
     }
   }
 
   validateTime() {
-    if (this.simulationTime > this.maxTime) {
-      this.simulationTime = this.maxTime;
-    } else if (this.simulationTime < 1) {
-      this.simulationTime = 1;
-    }
+    if (this.lobbySettings) {
+      if (this.lobbySettings.simulationTime > this.maxTime) {
+        this.lobbySettings.simulationTime = this.maxTime;
+      } else if (this.lobbySettings.simulationTime < 1) {
+        this.lobbySettings.simulationTime = 1;
+      }
 
-    if (this.editingTime > this.maxTime) {
-      this.editingTime = this.maxTime;
-    } else if (this.editingTime < 1) {
-      this.editingTime = 1;
+      if (this.lobbySettings.editorTime > this.maxTime) {
+        this.lobbySettings.editorTime = this.maxTime;
+      } else if (this.lobbySettings.editorTime < 1) {
+        this.lobbySettings.editorTime = 1;
+      }
+      this.settingChanged();
     }
   }
 
   validateMap() {
-    if (this.map > this.maxMapSize) {
-      this.map = this.maxMapSize;
-    } else if (this.map < 1) {
-      this.map = 1;
-    }
+    if (this.lobbySettings) {
+      if (this.lobbySettings.mapSize > this.maxMapSize) {
+        this.lobbySettings.mapSize = this.maxMapSize;
+      } else if (this.lobbySettings.mapSize < 1) {
+        this.lobbySettings.mapSize = 1;
+      }
 
-    this.updateMap();
+      this.updateMap();
+      this.settingChanged();
+    }
   }
 
   updateMap() {
-    console.log('update');
-    if (!this.obstacles) {
-      this.obstacleSettings.threshold = 1;
+    if (this.lobbySettings) {
+      console.log('update');
+      if (!this.obstacles) {
+        this.lobbySettings.obstacleSettings.threshold = 1;
+      }
+      this.simulationService.generateNewSimulation(
+        [this.lobbySettings.mapSize, this.lobbySettings.mapSize],
+        false,
+        this.lobbySettings.obstacleSettings
+      );
+
+      this.simulationService.setSpeed(this.lobbySettings.speed);
+
+      // this.simulationService.setRandomBot();
+
+      // this.simulationService.start();
+
+      this.settingChanged();
     }
-    this.simulationService.generateNewSimulation(
-      [this.map, this.map],
-      false,
-      this.obstacleSettings
-    );
+  }
 
-    this.simulationService.setSpeed(this.speed);
-
-    this.simulationService.setRandomBot();
-
-    this.simulationService.start();
+  settingChanged() {
+    if (this.lobbySettings) {
+      this.lobbySettingChange.emit(this.lobbySettings);
+    }
   }
 }

@@ -7,10 +7,18 @@ import { Store, Select } from '@ngxs/store';
 import { SetFirebaseUser } from '../store/app.action';
 import { AppState } from '../store/app.state';
 import { GameModes } from './simulation.service';
+import { NumberSymbol } from '@angular/common';
 
 export interface Player {
   uId: string;
   name: string;
+}
+
+export interface ObstacleSettings {
+  threshold: number;
+  octaveCount: number;
+  amplitude: number;
+  persistence: number;
 }
 
 export interface LobbyRefSettings {
@@ -21,6 +29,9 @@ export interface LobbyRefSettings {
   simulationTime: number;
   maxPlayer: number;
   mode: GameModes;
+  speed: number;
+  mapSize: number;
+  obstacleSettings: ObstacleSettings;
 }
 
 export interface LobbyRef {
@@ -47,8 +58,10 @@ export class FirebaseLobbyService {
   ) {
     this.lobbyFirebaseRef = db.object('lobbys').valueChanges();
     this.lobbyFirebaseRef.subscribe((changes: any) => {
-      changes.player = this.formatPlayerToMap(changes.player);
-      this.lobbys = this.jsonToMap(changes);
+      if (changes) {
+        changes.player = this.formatPlayerToMap(changes.player);
+        this.lobbys = this.jsonToMap(changes);
+      }
     });
 
     auth.onAuthStateChanged((user) => {
@@ -89,6 +102,9 @@ export class FirebaseLobbyService {
             private: environment.defaultLobby.private,
             simulationTime: environment.defaultLobby.simulationTime,
             mode: 'Color',
+            mapSize: environment.defaultMapSize[0],
+            obstacleSettings: environment.obstacleNoiseSettings,
+            speed: 20,
           };
 
           console.log(this.firebaseUser.uid);
@@ -98,6 +114,8 @@ export class FirebaseLobbyService {
             adminUid: this.firebaseUser.uid,
             player: new Map(),
           };
+
+          console.log(newLobby);
 
           console.log('set lobbys');
           this.db.database

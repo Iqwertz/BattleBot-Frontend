@@ -18,6 +18,7 @@ import { Select } from '@ngxs/store';
 import { AppState } from '../../store/app.state';
 import { environment } from '../../../environments/environment';
 import { Collection, update } from 'lodash';
+import { LobbyRefSettings } from '../../services/firebase-lobby.service';
 
 @Component({
   selector: 'app-create-lobby',
@@ -25,19 +26,7 @@ import { Collection, update } from 'lodash';
   styleUrls: ['./create-lobby.component.scss'],
 })
 export class CreateLobbyComponent implements OnInit, OnDestroy {
-  lobby: LobbyRef | undefined = {
-    settings: {
-      editorTime: environment.defaultLobby.editorTime,
-      id: 'ASDSF',
-      maxPlayer: environment.defaultLobby.maxPlayer,
-      name: '',
-      private: environment.defaultLobby.private,
-      simulationTime: environment.defaultLobby.simulationTime,
-      mode: 'Color',
-    },
-    adminUid: 'test',
-    player: new Map(),
-  };
+  lobby: LobbyRef | undefined;
   currentLobbyId: string | null = null;
 
   @Select(AppState.firebaseUser) firebaseUser$: any;
@@ -48,15 +37,10 @@ export class CreateLobbyComponent implements OnInit, OnDestroy {
     public auth: AngularFireAuth,
     private db: AngularFireDatabase,
     private activatedRoute: ActivatedRoute,
-    private router: Router //fireBaseLobbyService: FirebaseLobbyService
+    private router: Router,
+    fireBaseLobbyService: FirebaseLobbyService
   ) {
-    this.lobby!.player.set('test', {
-      uId: 'test',
-      name: environment.roboNames[
-        Math.floor(Math.random() * environment.roboNames.length)
-      ],
-    });
-    /*  this.activatedRoute.paramMap.subscribe((params) => {
+    this.activatedRoute.paramMap.subscribe((params) => {
       //has to be spilt in small functions
       this.currentLobbyId = params.get('id');
       if (this.currentLobbyId) {
@@ -104,6 +88,7 @@ export class CreateLobbyComponent implements OnInit, OnDestroy {
         lobbyRef.subscribe((changes: any) => {
           if (changes) {
             this.lobby = changes;
+            console.log(this.lobby);
             this.lobby!.player = fireBaseLobbyService.formatPlayerToMap(
               changes.player
             );
@@ -114,11 +99,18 @@ export class CreateLobbyComponent implements OnInit, OnDestroy {
 
     this.firebaseUser$.subscribe((user: any) => {
       this.firebaseUser = user;
-      //console.log(this.loggedIn);
-    }); */
+    });
   }
 
   ngOnInit(): void {}
+
+  lobbySettingChanged(l: LobbyRefSettings) {
+    console.log(l);
+    this.db.database
+      .ref()
+      .child('/lobbys/' + this.currentLobbyId + '/settings')
+      .update(l);
+  }
 
   ngOnDestroy(): void {
     this.leaveLobby();
@@ -130,7 +122,7 @@ export class CreateLobbyComponent implements OnInit, OnDestroy {
   }
 
   leaveLobby() {
-    /*  console.log('leaving');
+    console.log('leaving');
 
     if (!this.lobby) {
       console.log('no lobby');
@@ -173,7 +165,7 @@ export class CreateLobbyComponent implements OnInit, OnDestroy {
       .remove()
       .then(() => {
         this.auth.signOut();
-      }); */
+      });
   }
 
   // returns random key from Set or Map

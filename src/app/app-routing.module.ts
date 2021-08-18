@@ -15,7 +15,7 @@ const routes: Routes = [
     path: 'editor',
     component: BotEditorComponent,
     canActivate: [AngularFireAuthGuard],
-    //data: { authGuardPipe: loggedIn },
+    data: { authGuardPipe: loggedIn },
   },
   {
     path: 'play',
