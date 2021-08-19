@@ -1,11 +1,18 @@
 <div class="create-lobby-container">
-  <div class="lobby-infos">
-    <div class="lobby-code" *ngIf="lobby">
+  <div class="lobby-infos" *ngIf="lobby">
+    <div
+      class="start-game"
+      *ngIf="lobby.adminUid == firebaseUser.uid && checkPlayerReady()"
+      (click)="startGame()"
+    >
+      Start
+    </div>
+    <div class="lobby-code">
       {{ lobby.settings.id }}
     </div>
     <div class="settings">
       <div class="container">
-        <div class="app-lobby-settings" *ngIf="lobby && firebaseUser">
+        <div class="app-lobby-settings" *ngIf="firebaseUser">
           <app-lobby-settings
             [isAdmin]="lobby.adminUid == firebaseUser.uid"
             [currentPlayer]="getObjectLength(lobby.player)"

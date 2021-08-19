@@ -10,12 +10,12 @@ import {
   faRedo,
   faRobot,
 } from '@fortawesome/free-solid-svg-icons';
-import { defaultBots } from '../battle-map/battle-map-bots';
-import { environment } from '../../../environments/environment';
 import { AppState } from '../../store/app.state';
 import { Select, Store } from '@ngxs/store';
 import { Bot } from '../battle-map/battle-map.component';
 import { cloneDeep } from 'lodash';
+import { LobbyRef } from '../../services/firebase-lobby.service';
+import { CursorError } from '@angular/compiler/src/ml_parser/lexer';
 
 @Component({
   selector: 'app-battle-map-controls',
@@ -25,11 +25,19 @@ import { cloneDeep } from 'lodash';
 export class BattleMapControlsComponent implements OnInit {
   @Select(AppState.compiledBot) compiledBot$: any;
 
+  @Select(AppState.currentLobby) currentLobby$: any;
+  currentLobby: LobbyRef | undefined;
+
   constructor(
     public simulationService: SimulationService,
     private store: Store,
     private consoleService: ConsoleService
-  ) { }
+  ) {
+    this.currentLobby$.subscribe((newLobby: LobbyRef | undefined) => {
+      this.currentLobby = newLobby;
+      this.generate();
+    });
+  }
 
   compiledBotAvailable = false;
 
@@ -51,8 +59,24 @@ export class BattleMapControlsComponent implements OnInit {
   faMicrochip = faMicrochip;
 
   generate() {
-    this.consoleService.clear();
-    this.simulationService.generateNewSimulation([50, 50], false, true);
+    if (this.currentLobby) {
+      this.consoleService.clear();
+
+      let clearOnStep = true;
+
+      if (this.currentLobby.settings.mode == 'Color') {
+        clearOnStep = false;
+      }
+      this.simulationService.generateNewSimulation(
+        [
+          this.currentLobby.settings.mapSize,
+          this.currentLobby.settings.mapSize,
+        ],
+        clearOnStep,
+        this.currentLobby.settings.obstacles,
+        this.currentLobby.settings.obstacleSettings
+      );
+    }
   }
 
   start() {

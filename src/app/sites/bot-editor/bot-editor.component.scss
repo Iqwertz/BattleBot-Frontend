@@ -29,6 +29,16 @@
       background-color: $default-black;
       position: relative;
 
+      .timer {
+        position: absolute;
+        top: 15px;
+        right: 100px;
+        color: #fff;
+        z-index: 10;
+        font-size: 1em;
+        font-family: "JetBrains Mono", monospace;
+      }
+
       .label {
         position: absolute;
         top: 15px;

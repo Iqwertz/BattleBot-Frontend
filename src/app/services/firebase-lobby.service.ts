@@ -33,6 +33,8 @@ export interface LobbyRefSettings {
   mapSize: number;
   obstacleSettings: ObstacleSettings;
   obstacles: boolean;
+  gameStarted: boolean;
+  editorEndTimeStamp: Date;
 }
 
 export interface LobbyRef {
@@ -85,6 +87,18 @@ export class FirebaseLobbyService {
     });
   }
 
+  updatePlayer(player: Player | undefined) {
+    if (this.currentLobby && player) {
+      this.db.database
+        .ref()
+        .child('/lobbys/' + this.currentLobby.settings.id + '/player')
+        .child(player.uId)
+        .update(player);
+    } else {
+      console.log('Error: cant update Player (no lobby / player)');
+    }
+  }
+
   generateNewLobby() {
     console.log('newLobby');
     if (!this.firebaseUser) {
@@ -113,6 +127,8 @@ export class FirebaseLobbyService {
             obstacleSettings: environment.obstacleNoiseSettings,
             obstacles: true,
             speed: 20,
+            gameStarted: false,
+            editorEndTimeStamp: new Date(),
           };
 
           console.log(this.firebaseUser.uid);

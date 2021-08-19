@@ -54,4 +54,13 @@
       </div>
     </ng-container>
   </div>
+
+  <div class="player-ready">
+    Ready: &nbsp;
+    <mat-checkbox
+      class="checkbox"
+      [(ngModel)]="playerList.get(firebaseUser.uid)!.isReady"
+      (change)="readyChanged()"
+    ></mat-checkbox>
+  </div>
 </div>

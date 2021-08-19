@@ -22,6 +22,8 @@ export class CreateLobbyComponent implements OnInit, OnDestroy {
   lobby: LobbyRef | undefined;
   currentLobbyId: string | null = null;
 
+  gameStarted = false;
+
   @Select(AppState.firebaseUser) firebaseUser$: any;
   firebaseUser: any;
   loggedIn: boolean = false;
@@ -103,6 +105,10 @@ export class CreateLobbyComponent implements OnInit, OnDestroy {
             this.lobby!.player = fireBaseLobbyService.formatPlayerToMap(
               changes.player
             );
+            if (this.lobby!.settings.gameStarted == true) {
+              this.gameStarted = true;
+              this.router.navigate(['editor']);
+            }
           }
         });
       }
@@ -122,9 +128,36 @@ export class CreateLobbyComponent implements OnInit, OnDestroy {
       .update(l);
   }
 
+  startGame() {
+    if (this.lobby) {
+      this.lobby.settings.gameStarted = true;
+      this.lobby.settings.editorEndTimeStamp = new Date(
+        new Date().getTime() + this.lobby.settings.editorTime * 60000
+      );
+      this.lobbySettingChanged(this.lobby.settings);
+    }
+  }
+
+  checkPlayerReady(): boolean {
+    if (this.lobby) {
+      let isNotReady = false;
+      Array.from(this.lobby.player.values()).map((value) => {
+        if (!value.isReady) {
+          isNotReady = true;
+        }
+      });
+
+      return !isNotReady;
+    } else {
+      return false;
+    }
+  }
+
   ngOnDestroy(): void {
     console.log('destroy');
-    this.leaveLobby();
+    if (!this.gameStarted) {
+      this.leaveLobby();
+    }
   }
 
   @HostListener('window:beforeunload', ['$event'])

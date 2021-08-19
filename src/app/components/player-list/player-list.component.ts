@@ -1,6 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
-import { Player } from '../../services/firebase-lobby.service';
+import {
+  Player,
+  FirebaseLobbyService,
+} from '../../services/firebase-lobby.service';
 import { Select } from '@ngxs/store';
 import { AppState } from '../../store/app.state';
 
@@ -19,7 +22,7 @@ export class PlayerListComponent implements OnInit {
   @Select(AppState.firebaseUser) firebaseUser$: any;
   firebaseUser: any;
 
-  constructor() {}
+  constructor(private firebaseLobbyService: FirebaseLobbyService) {}
 
   ngOnInit(): void {
     this.firebaseUser$.subscribe((user: any) => {
@@ -29,5 +32,11 @@ export class PlayerListComponent implements OnInit {
 
   kickPlayer(id: string) {
     console.log(id);
+  }
+
+  readyChanged() {
+    this.firebaseLobbyService.updatePlayer(
+      this.playerList.get(this.firebaseUser.uid)
+    );
   }
 }

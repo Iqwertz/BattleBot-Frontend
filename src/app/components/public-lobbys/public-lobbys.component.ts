@@ -37,7 +37,9 @@ export class PublicLobbysComponent implements OnInit {
   ) {
     let lobbyFirebaseRef = db.object('lobbys/').valueChanges();
     lobbyFirebaseRef.subscribe((changes: any) => {
-      this.lobbys = this.filterMaxPlayer(this.filterPublic(this.changesToLobbyRefArray(changes)));
+      this.lobbys = this.filterMaxPlayer(
+        this.filterPublic(this.changesToLobbyRefArray(changes))
+      );
       this.dataSource = new MatTableDataSource(this.lobbys);
       this.dataSource.sort = this.sort;
     });
@@ -73,7 +75,7 @@ export class PublicLobbysComponent implements OnInit {
     let pubLobbys: LobbyRef[] = [];
 
     for (let l of lobbys) {
-      if (!l.settings.private) {
+      if (!l.settings.private && !l.settings.gameStarted) {
         pubLobbys.push(l);
       }
     }
@@ -85,7 +87,6 @@ export class PublicLobbysComponent implements OnInit {
     let pubLobbys: LobbyRef[] = [];
 
     for (let l of lobbys) {
-
       if (l.player) {
         if (l.settings.maxPlayer > this.getObjectLength(l.player)) {
           pubLobbys.push(l);
