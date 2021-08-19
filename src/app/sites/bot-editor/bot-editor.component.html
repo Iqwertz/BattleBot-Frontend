@@ -19,7 +19,7 @@
           ></mat-button-toggle>
         </mat-button-toggle-group>
       </div>
-      <div class="timer">03:24</div>
+      <div class="timer">{{ timeLeft }}</div>
       <div *ngIf="infoToggle.value == 'Info'" class="simulation-info">info</div>
       <div *ngIf="infoToggle.value == 'Console'" class="terminal">
         <app-console></app-console>

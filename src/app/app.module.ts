@@ -45,6 +45,7 @@ import { MatRippleModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSliderModule } from '@angular/material/slider';
+import { SimulationStatsComponent } from './components/simulation-stats/simulation-stats.component';
 
 @NgModule({
   declarations: [
@@ -68,6 +69,7 @@ import { MatSliderModule } from '@angular/material/slider';
     CreateLobbyComponent,
     PlayerListComponent,
     LobbySettingsComponent,
+    SimulationStatsComponent,
   ],
   imports: [
     BrowserModule,

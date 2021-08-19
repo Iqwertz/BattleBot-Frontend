@@ -62,7 +62,7 @@
       <input
         matInput
         type="number"
-        min="2"
+        min="1"
         (change)="validateTime()"
         [(ngModel)]="lobbySettings.editorTime"
         [disabled]="!isAdmin"
@@ -77,7 +77,7 @@
       <input
         matInput
         type="number"
-        min="2"
+        min="1"
         (change)="validateTime()"
         [(ngModel)]="lobbySettings.simulationTime"
         [disabled]="!isAdmin"

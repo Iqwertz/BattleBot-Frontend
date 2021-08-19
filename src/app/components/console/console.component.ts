@@ -34,6 +34,8 @@ export class ConsoleComponent implements OnInit {
     this.consoleService.scrollToBottom$.subscribe(() => {
       this.scrollToBottom();
     });
+
+    this.compile();
   }
 
   faPlay = faPlay;

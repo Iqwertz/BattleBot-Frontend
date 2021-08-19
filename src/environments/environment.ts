@@ -29,7 +29,7 @@ export const environment = {
     simulationTime: 2,
     maxPlayer: 4,
   },
-  availableBotColors: 14,
+  availableBotColors: 15,
   botByteRange: [5, 32],
   roboNames: [
     'AVA',
@@ -84,6 +84,8 @@ export const environment = {
     30: '#E59866', //spieler 14 spur
     31: '#C0392B', //spieler 15
     32: '#D98880', //spieler 15 spur
+    33: '#fff12c', //spieler 16
+    34: '#fff67f', //spieler 16 spur
   },
   firebase: {
     apiKey: 'AIzaSyDXNRV9_r3zknpr248CjjpYlOjIMyHp_p0',

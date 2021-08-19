@@ -53,16 +53,22 @@ export class SimulationService {
   generateNewSimulation(
     size: number[],
     clearOnStep: boolean,
-    obstacles: boolean,
-    obstacleMapSettings?: any
+    obstacles?: boolean,
+    obstacleMapSettings?: any,
+    obstacleMap?: boolean[][]
   ) {
     this.clear();
 
-    this.simulation.obstacleMap = this.generateObstacleMap(
-      size,
-      obstacles,
-      obstacleMapSettings
-    );
+    if (obstacleMap) {
+      this.simulation.obstacleMap = obstacleMap;
+    } else {
+      let o = obstacles || true;
+      this.simulation.obstacleMap = this.generateObstacleMap(
+        size,
+        o,
+        obstacleMapSettings
+      );
+    }
     this.simulation.size = size;
     this.simulation.clearOnStep = clearOnStep;
 
@@ -109,6 +115,7 @@ export class SimulationService {
   clear() {
     this.simulation.statusVar.simulationGenerated = false;
     this.simulation.statusVar.simulationStarted = false;
+    this.simulation.bots = new Map();
     this.simulation = cloneDeep(this.emptySimulation);
     this.consoleService.print('cleared Simulation');
   }

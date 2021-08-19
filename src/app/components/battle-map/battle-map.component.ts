@@ -7,6 +7,8 @@ import { defaultBots } from './battle-map-bots';
 import { BattleMapBufferService } from '../../services/battle-map-buffer.service';
 import { BrainData, Direction } from '../../services/bot-compiler.service';
 import { SimulationService } from '../../services/simulation.service';
+import { LobbyRef } from '../../services/firebase-lobby.service';
+import { AngularFireDatabase } from '@angular/fire/database';
 
 //configuration of a bot
 export interface Bot {
@@ -51,9 +53,19 @@ export class BattleMapComponent implements OnInit {
   @Select(AppState.compiledBot) compiledBot$: any;
   compiledBot: Bot | undefined;
 
+  @Select(AppState.editing) editing$: any;
+  editing: boolean = false;
+
+  @Select(AppState.currentLobby) currentLobby$: any;
+  currentLobby: LobbyRef | undefined;
+
+  @Select(AppState.firebaseUser) firebaseUser$: any;
+  firebaseUser: any;
+
   constructor(
     private battleMapBufferService: BattleMapBufferService,
     public simulationService: SimulationService,
+    private db: AngularFireDatabase,
     private store: Store
   ) {}
 
@@ -64,6 +76,18 @@ export class BattleMapComponent implements OnInit {
 
     this.compiledBot$.subscribe((bot: Bot) => {
       this.compiledBot = bot;
+    });
+
+    this.editing$.subscribe((edit: boolean) => {
+      this.editing = edit;
+    });
+
+    this.currentLobby$.subscribe((newLobby: LobbyRef | undefined) => {
+      this.currentLobby = newLobby;
+    });
+
+    this.firebaseUser$.subscribe((user: any) => {
+      this.firebaseUser = user;
     });
 
     //this.simulationService.generateNewSimulation([50, 50], false, true);
@@ -107,10 +131,30 @@ export class BattleMapComponent implements OnInit {
     if (
       this.placingBot &&
       this.compiledBot &&
+      this.editing &&
       !this.simulationService.checkPositionIsCrashed([x, y])
     ) {
       this.compiledBot.position = [x, y];
       this.simulationService.setBot(this.compiledBot);
+      this.store.dispatch(new SetPlacingBot(false));
+    }
+
+    if (
+      this.placingBot &&
+      !this.editing &&
+      !this.simulationService.checkPositionIsCrashed([x, y])
+    ) {
+      this.db.database
+        .ref()
+        .child(
+          '/games/' +
+            this.currentLobby?.settings.id +
+            '/playerBots/' +
+            this.firebaseUser.uid
+        )
+        .child('position')
+        .update([x, y]);
+
       this.store.dispatch(new SetPlacingBot(false));
     }
   }

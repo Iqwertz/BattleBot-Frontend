@@ -11,4 +11,35 @@
     height: 90vh;
     position: absolute;
   }
+
+  .start-simulation {
+    position: absolute;
+    top: 50%;
+    right: 50px;
+    width: 200px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+    background-image: linear-gradient(
+      to top right,
+      rgb(99, 255, 169),
+      rgb(90, 243, 177),
+      rgb(81, 230, 185),
+      rgb(72, 218, 192),
+      rgb(63, 206, 200),
+      rgb(54, 193, 208),
+      rgb(45, 181, 216),
+      rgb(36, 168, 224),
+      rgb(27, 156, 232),
+      rgb(18, 144, 239),
+      rgb(9, 131, 247),
+      rgb(0, 119, 255)
+    );
+    font-size: 2em;
+    font-family: "JetBrains Mono", monospace;
+    color: #fff;
+    cursor: pointer;
+  }
 }

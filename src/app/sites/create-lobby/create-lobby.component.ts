@@ -56,9 +56,11 @@ export class CreateLobbyComponent implements OnInit, OnDestroy {
                       snap.val().settings.maxPlayer >
                       this.getObjectLength(snap.val().player)
                     ) {
-                      console.log(snap.val().settings.maxPlayer);
-                      console.log(this.getObjectLength(snap.val().player));
-                      console.log(snap.val());
+                      let roboName = fireBaseLobbyService.generateUniqueRobot();
+
+                      let colorId =
+                        environment.roboNames.indexOf(roboName) * 2 + 3;
+
                       let player: Player = {
                         uId: this.firebaseUser.uid,
                         name: environment.roboNames[
@@ -67,6 +69,7 @@ export class CreateLobbyComponent implements OnInit, OnDestroy {
                           )
                         ],
                         isReady: false,
+                        colorId: colorId,
                       };
                       this.db.database
                         .ref()

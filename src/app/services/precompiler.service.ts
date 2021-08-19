@@ -2,7 +2,6 @@ import { ConsoleService } from './console.service';
 import { Command } from './../components/editor-ide/editor-ide.component';
 import { Injectable } from '@angular/core';
 import { Terminal } from './terminals.service';
-import { CodeFunction } from './bot-compiler.service';
 import {
   BrainData,
   defaultBotVars,
@@ -29,6 +28,8 @@ export class PrecompilerService {
   ) {}
 
   compileError = false;
+
+  lastSuccesfullCompile: string = '';
 
   commandsToInstructionset(commands: Command[] | undefined): InstructionSet {
     let insSet: InstructionSet = { instructions: [] };
@@ -189,7 +190,9 @@ export class PrecompilerService {
       onWallDetected: wallDetect,
     };
 
-    this.consoleService.print('Compiling successfull...');
+    this.lastSuccesfullCompile = JSON.stringify(brainData);
+
+    this.consoleService.print('Compiled successfull...');
     return brainData;
   }
 

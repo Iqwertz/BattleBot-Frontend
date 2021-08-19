@@ -12,6 +12,7 @@ export interface Player {
   uId: string;
   name: string;
   isReady: boolean;
+  colorId: number;
 }
 
 export interface ObstacleSettings {
@@ -41,6 +42,17 @@ export interface LobbyRef {
   settings: LobbyRefSettings;
   player: Map<string, Player>;
   adminUid: string;
+}
+
+export interface GameEntry {
+  playerBots: Map<string, GameBotEntry>;
+  obstacleMap: boolean[][];
+}
+
+export interface GameBotEntry {
+  position: [0, 0];
+  botBrainData: string;
+  uId: string;
 }
 
 @Injectable({
@@ -107,12 +119,18 @@ export class FirebaseLobbyService {
         .then(() => {
           let id = this.getNewSessionId(5);
 
+          let roboName =
+            environment.roboNames[
+              Math.floor(Math.random() * environment.roboNames.length)
+            ];
+
+          let colorId = environment.roboNames.indexOf(roboName) * 2 + 3;
+
           let player: Player = {
             uId: this.firebaseUser.uid,
-            name: environment.roboNames[
-              Math.floor(Math.random() * environment.roboNames.length)
-            ],
+            name: roboName,
             isReady: false,
+            colorId: colorId,
           };
 
           let settings: LobbyRefSettings = {
@@ -166,6 +184,29 @@ export class FirebaseLobbyService {
     } else {
       console.log('Error: already in a game');
     }
+  }
+
+  generateUniqueRobot(): string {
+    if (this.currentLobby) {
+      let nameFound: boolean = false;
+      let roboName = '';
+      while (!nameFound) {
+        roboName =
+          environment.roboNames[
+            Math.floor(Math.random() * environment.roboNames.length)
+          ];
+        nameFound = true;
+        this.currentLobby.player.forEach((value: Player) => {
+          if (value.name == roboName) {
+            nameFound = false;
+          }
+        });
+      }
+
+      return roboName;
+    }
+
+    return '';
   }
 
   formatPlayerToMap(obj: any): Map<string, Player> {
