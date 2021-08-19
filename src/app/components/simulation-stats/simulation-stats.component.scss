@@ -25,4 +25,35 @@
     height: 2px;
     background-color: #fff;
   }
+
+  .scroll {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: flex-start;
+    overflow-y: scroll;
+    width: 100%;
+    margin-bottom: 40px;
+
+    .titel {
+      color: #fff;
+      font-size: 2em;
+      margin: 20px 0 10px 0;
+      font-family: "JetBrains Mono", monospace;
+    }
+
+    .stat {
+      color: #fff;
+      font-size: 1.2em;
+      margin-top: 20px;
+      font-family: "JetBrains Mono", monospace;
+    }
+
+    .value {
+      color: #fff;
+      font-size: 1.4em;
+      margin: 0;
+      font-family: "JetBrains Mono", monospace;
+    }
+  }
 }

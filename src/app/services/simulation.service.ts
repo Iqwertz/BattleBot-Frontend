@@ -1,3 +1,4 @@
+import { SimulationStatsService } from './simulation-stats.service';
 import { ConsoleService } from './console.service';
 import { Injectable } from '@angular/core';
 import { Bot } from '../components/battle-map/battle-map.component';
@@ -47,8 +48,9 @@ export class SimulationService {
   constructor(
     private botCompilerService: BotCompilerService,
     private battleMapBufferService: BattleMapBufferService,
-    private consoleService: ConsoleService
-  ) {}
+    private consoleService: ConsoleService,
+    private simulationStatsService: SimulationStatsService
+  ) { }
 
   generateNewSimulation(
     size: number[],
@@ -261,6 +263,8 @@ export class SimulationService {
       }
       this.battleMapBufferService.setToBattleMapBuffer(bot.position, bot.color); //render bot
     });
+
+    this.simulationStatsService.updateStats();
   }
 
   /**
@@ -295,7 +299,7 @@ export class SimulationService {
         bot.direction = movingDirection;
 
         switch (
-          movingDirection //change bot position according to the
+        movingDirection //change bot position according to the
         ) {
           case 'down':
             newBotPos[0]++;
@@ -397,7 +401,7 @@ export class SimulationService {
             break;
           } else if (
             this.simulation.obstacleMap[checkSpotStart[0] + i][
-              checkSpotStart[1] + j
+            checkSpotStart[1] + j
             ]
           ) {
             obstacleNear = true;

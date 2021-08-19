@@ -1,3 +1,6 @@
+import { environment } from './../../../environments/environment';
+import { SimulationService } from './../../services/simulation.service';
+import { SimulationStatsService } from './../../services/simulation-stats.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,7 +10,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SimulationStatsComponent implements OnInit {
 
-  constructor() { }
+  byteColorMap = new Map(Object.entries(environment.byteColorMap));
+
+  constructor(public simulationStatsService: SimulationStatsService, public simulationService: SimulationService) { }
 
   ngOnInit(): void {
   }

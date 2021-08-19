@@ -1,4 +1,58 @@
 <div class="simulation-stats">
   <div class="timer">23:00</div>
   <div class="splitter"></div>
+  <div class="scroll terminal-scrollbar">
+    <div class="titel">Statistics</div>
+
+    <div class="stat">Tiles on Map:</div>
+    <div class="value">
+      <i>{{ simulationStatsService.simulationStatistics.wholeArea }}</i>
+    </div>
+
+    <div class="stat">Obstacle tiles:</div>
+    <div class="value">
+      <i
+        >{{ simulationStatsService.simulationStatistics.obstacleCoverdArea }} |
+        {{
+          simulationStatsService.simulationStatistics.obstacleCoverdAreaPercent
+        }}%</i
+      >
+    </div>
+
+    <div class="stat">Empty tiles:</div>
+    <div class="value">
+      <i
+        >{{ simulationStatsService.simulationStatistics.emptyArea }} |
+        {{ simulationStatsService.simulationStatistics.emptyAreaPercent }}%</i
+      >
+    </div>
+
+    <div class="stat">Player tiles:</div>
+    <div class="value">
+      <i
+        >{{ simulationStatsService.simulationStatistics.playerCoverdArea }} |
+        {{
+          simulationStatsService.simulationStatistics.playerCoverdAreaPercent
+        }}%</i
+      >
+    </div>
+
+    <div class="titel">Player</div>
+
+    <ng-container
+      *ngFor="
+        let player of simulationStatsService.simulationStatistics.playerColors
+      "
+    >
+      <div
+        class="stat"
+        [style.color]="byteColorMap.get(player.color.toString())"
+      >
+        {{ simulationService.simulation.bots.get(player.color)!.name }}
+      </div>
+      <div class="value">
+        <i>{{ player.coverdArea }} | {{ player.coverdAreaPercent }}%</i>
+      </div>
+    </ng-container>
+  </div>
 </div>
