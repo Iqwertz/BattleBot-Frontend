@@ -7,10 +7,7 @@ import {
   Player,
   FirebaseLobbyService,
 } from '../../services/firebase-lobby.service';
-import {
-  ActivatedRoute,
-  Router,
-} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Select, Store } from '@ngxs/store';
 import { AppState } from '../../store/app.state';
 import { environment } from '../../../environments/environment';
@@ -41,7 +38,7 @@ export class CreateLobbyComponent implements OnInit, OnDestroy {
       //has to be spilt in small functions
       this.currentLobbyId = params.get('id');
       if (this.currentLobbyId) {
-        console.log(this.currentLobbyId)
+        console.log(this.currentLobbyId);
         db.database
           .ref()
           .child('lobbys/' + this.currentLobbyId)
@@ -53,15 +50,21 @@ export class CreateLobbyComponent implements OnInit, OnDestroy {
                 this.auth
                   .signInAnonymously()
                   .then(() => {
-                    if (snap.val().settings.maxPlayer > this.getObjectLength(snap.val().player)) {
+                    if (
+                      snap.val().settings.maxPlayer >
+                      this.getObjectLength(snap.val().player)
+                    ) {
                       console.log(snap.val().settings.maxPlayer);
-                      console.log(this.getObjectLength(snap.val().player))
-                      console.log(snap.val())
+                      console.log(this.getObjectLength(snap.val().player));
+                      console.log(snap.val());
                       let player: Player = {
                         uId: this.firebaseUser.uid,
                         name: environment.roboNames[
-                          Math.floor(Math.random() * environment.roboNames.length)
+                          Math.floor(
+                            Math.random() * environment.roboNames.length
+                          )
                         ],
+                        isReady: false,
                       };
                       this.db.database
                         .ref()
@@ -69,10 +72,9 @@ export class CreateLobbyComponent implements OnInit, OnDestroy {
                         .child(player.uId)
                         .update(player);
                     } else {
-                      console.log('lobby is full')
+                      console.log('lobby is full');
                       auth.signOut();
                       this.router.navigate(['']);
-
                     }
                   })
                   .catch((error) => {
@@ -97,7 +99,7 @@ export class CreateLobbyComponent implements OnInit, OnDestroy {
         lobbyRef.subscribe((changes: any) => {
           if (changes) {
             this.lobby = changes;
-            this.store.dispatch(new SetCurrentLobby(this.lobby))
+            this.store.dispatch(new SetCurrentLobby(this.lobby));
             this.lobby!.player = fireBaseLobbyService.formatPlayerToMap(
               changes.player
             );
@@ -111,7 +113,7 @@ export class CreateLobbyComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   lobbySettingChanged(l: LobbyRefSettings) {
     this.db.database
@@ -121,13 +123,13 @@ export class CreateLobbyComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    console.log("destroy");
+    console.log('destroy');
     this.leaveLobby();
   }
 
   @HostListener('window:beforeunload', ['$event'])
   beforeUnloadHandler(event: any) {
-    console.log("unload")
+    console.log('unload');
     this.leaveLobby();
   }
 
@@ -169,7 +171,6 @@ export class CreateLobbyComponent implements OnInit, OnDestroy {
       }
     }
 
-
     this.db.database
       .ref()
       .child('/lobbys/' + this.currentLobbyId + '/player')
@@ -179,7 +180,7 @@ export class CreateLobbyComponent implements OnInit, OnDestroy {
         this.auth.signOut();
       });
 
-    this.store.dispatch(new SetCurrentLobby(undefined))
+    this.store.dispatch(new SetCurrentLobby(undefined));
   }
 
   // returns random key from Set or Map

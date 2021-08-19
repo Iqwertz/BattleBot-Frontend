@@ -42,6 +42,10 @@
       align-items: center;
       justify-content: center;
 
+      &.self {
+        border: 4px solid rgb(0, 247, 255);
+      }
+
       .icon {
         position: absolute;
         top: 0;
@@ -60,6 +64,53 @@
           position: relative;
           right: 1px; //ugly fix for a weird bug :)
         }
+      }
+
+      .is-ready {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.4em;
+
+        .check {
+          color: rgb(87, 255, 53);
+        }
+
+        .times {
+          color: rgb(255, 49, 49);
+        }
+      }
+
+      .kick-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.4em;
+        color: rgb(255, 49, 49);
+        transition: all 100ms ease-in;
+        border-radius: 60px;
+
+        fa-icon {
+          cursor: pointer;
+        }
+      }
+    }
+
+    .player:hover {
+      .kick-overlay {
+        display: flex;
+        background-color: rgba(0, 0, 0, 0.5);
       }
     }
 

@@ -7,11 +7,11 @@ import { Store, Select } from '@ngxs/store';
 import { SetFirebaseUser } from '../store/app.action';
 import { AppState } from '../store/app.state';
 import { GameModes } from './simulation.service';
-import { NumberSymbol } from '@angular/common';
 
 export interface Player {
   uId: string;
   name: string;
+  isReady: boolean;
 }
 
 export interface ObstacleSettings {
@@ -49,7 +49,7 @@ export class FirebaseLobbyService {
   lobbys: Map<string, LobbyRef> = new Map();
 
   @Select(AppState.currentLobby) currentLobby$: any;
-  currentLobby: LobbyRef | undefined
+  currentLobby: LobbyRef | undefined;
 
   @Select(AppState.firebaseUser) firebaseUser$: any;
   firebaseUser: any;
@@ -70,7 +70,7 @@ export class FirebaseLobbyService {
 
     this.currentLobby$.subscribe((newLobby: LobbyRef | undefined) => {
       this.currentLobby = newLobby;
-    })
+    });
 
     auth.onAuthStateChanged((user) => {
       this.store.dispatch(new SetFirebaseUser(user));
@@ -98,6 +98,7 @@ export class FirebaseLobbyService {
             name: environment.roboNames[
               Math.floor(Math.random() * environment.roboNames.length)
             ],
+            isReady: false,
           };
 
           let settings: LobbyRefSettings = {
