@@ -112,6 +112,15 @@ export class CreateLobbyComponent implements OnInit, OnDestroy {
               this.gameStarted = true;
               this.router.navigate(['editor']);
             }
+
+            console.log(this.lobby);
+            console.log(this.firebaseUser);
+            if (this.lobby && this.firebaseUser) {
+              if (!this.lobby.player.has(this.firebaseUser.uid)) {
+                console.log('You got kicked!');
+                router.navigate(['']);
+              }
+            }
           }
         });
       }

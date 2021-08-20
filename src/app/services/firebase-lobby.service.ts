@@ -112,6 +112,24 @@ export class FirebaseLobbyService {
     }
   }
 
+  kickPlayer(id: string) {
+    if (this.currentLobby) {
+      this.db.database
+        .ref()
+        .child('/lobbys/' + this.currentLobby.settings.id + '/player')
+        .child(id)
+        .set(null)
+        .then(() => {
+          console.log('kicked Player');
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    } else {
+      console.log('Error: cant kick Player (no lobby)');
+    }
+  }
+
   generateNewLobby() {
     console.log('newLobby');
     if (!this.firebaseUser) {

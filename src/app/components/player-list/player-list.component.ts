@@ -34,7 +34,7 @@ export class PlayerListComponent implements OnInit {
   }
 
   kickPlayer(id: string) {
-    console.log(id);
+    this.firebaseLobbyService.kickPlayer(id);
   }
 
   readyChanged() {
