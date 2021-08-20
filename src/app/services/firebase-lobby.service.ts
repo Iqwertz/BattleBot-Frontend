@@ -36,6 +36,7 @@ export interface LobbyRefSettings {
   obstacles: boolean;
   gameStarted: boolean;
   editorEndTimeStamp: Date;
+  simulationSteps: number;
 }
 
 export interface LobbyRef {
@@ -147,6 +148,7 @@ export class FirebaseLobbyService {
             speed: 20,
             gameStarted: false,
             editorEndTimeStamp: new Date(),
+            simulationSteps: 0,
           };
 
           console.log(this.firebaseUser.uid);
@@ -175,11 +177,15 @@ export class FirebaseLobbyService {
                 .then(() => {
                   this.router.navigate(['createLobby', id]);
                 });
+            })
+            .catch((e) => {
+              console.log(e);
             });
         })
         .catch((error) => {
           var errorCode = error.code;
           var errorMessage = error.message;
+          console.log(error);
         });
     } else {
       console.log('Error: already in a game');

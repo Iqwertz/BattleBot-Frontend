@@ -4,6 +4,9 @@
     <div
       class="player"
       [ngClass]="{ self: playerList.get(adminUid)!.uId == firebaseUser.uid }"
+      [style.background-color]="
+        byteColorMap.get((playerList.get(adminUid)!.colorId + 1).toString())
+      "
     >
       <div class="icon">
         <img
@@ -31,6 +34,9 @@
       <div
         class="player"
         [ngClass]="{ self: player.value.uId == firebaseUser.uid }"
+        [style.background-color]="
+          byteColorMap.get((player.value.colorId + 1).toString())
+        "
         *ngIf="player.value.uId != adminUid"
       >
         <div class="icon">

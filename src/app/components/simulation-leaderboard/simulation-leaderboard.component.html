@@ -1,0 +1,109 @@
+<div class="simulation-leaderboard">
+  <div class="titel">Leaderboard</div>
+  <div class="splitter"></div>
+  <div
+    class="rank-container"
+    *ngIf="simulationStatsService.simulationStatistics.playerColors[0]"
+  >
+    <div
+      class="player first"
+      [style.background-color]="
+        byteColorMap.get(
+          simulationStatsService.simulationStatistics.playerColors[0].color.toString()
+        )
+      "
+    >
+      <div class="icon robo">
+        <img
+          [src]="
+            'assets/userIcons/' +
+            simulationService.simulation.bots.get(
+              simulationStatsService.simulationStatistics.playerColors[0].color
+            )!.name +
+            '.svg'
+          "
+        />
+      </div>
+      {{
+        simulationService.simulation.bots.get(
+          simulationStatsService.simulationStatistics.playerColors[0].color
+        )!.name
+      }}
+      <div class="icon rank">
+        <img [src]="'assets/trophy.svg'" />
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="rank-container"
+    *ngIf="simulationStatsService.simulationStatistics.playerColors[1]"
+  >
+    <div
+      class="player second"
+      [style.background-color]="
+        byteColorMap.get(
+          simulationStatsService.simulationStatistics.playerColors[1].color.toString()
+        )
+      "
+    >
+      <div class="icon robo">
+        <img
+          [src]="
+            'assets/userIcons/' +
+            simulationService.simulation.bots.get(
+              simulationStatsService.simulationStatistics.playerColors[1].color
+            )!.name +
+            '.svg'
+          "
+        />
+      </div>
+      {{
+        simulationService.simulation.bots.get(
+          simulationStatsService.simulationStatistics.playerColors[1].color
+        )!.name
+      }}
+      <div class="icon rank">
+        <img [src]="'assets/trophy - second.svg'" />
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="rank-container"
+    *ngIf="simulationStatsService.simulationStatistics.playerColors[2]"
+  >
+    <div
+      class="player third"
+      [style.background-color]="
+        byteColorMap.get(
+          simulationStatsService.simulationStatistics.playerColors[2].color.toString()
+        )
+      "
+    >
+      <div class="icon robo">
+        <img
+          [src]="
+            'assets/userIcons/' +
+            simulationService.simulation.bots.get(
+              simulationStatsService.simulationStatistics.playerColors[2].color
+            )!.name +
+            '.svg'
+          "
+        />
+      </div>
+      {{
+        simulationService.simulation.bots.get(
+          simulationStatsService.simulationStatistics.playerColors[2].color
+        )!.name
+      }}
+      <div class="icon rank">
+        <img [src]="'assets/trophy - third.svg'" />
+      </div>
+    </div>
+  </div>
+
+  <div class="restart-button" (click)="restart()" *ngIf="enableRestart">
+    Restart
+  </div>
+</div>

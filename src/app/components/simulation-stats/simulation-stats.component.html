@@ -1,5 +1,5 @@
 <div class="simulation-stats">
-  <div class="timer">23:00</div>
+  <div class="timer">{{ progress }}</div>
   <div class="splitter"></div>
   <div class="scroll terminal-scrollbar">
     <div class="titel">Statistics</div>
@@ -41,7 +41,8 @@
 
     <ng-container
       *ngFor="
-        let player of simulationStatsService.simulationStatistics.playerColors
+        let player of simulationStatsService.simulationStatistics.playerColors;
+        let i = index
       "
     >
       <div

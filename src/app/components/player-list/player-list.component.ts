@@ -6,6 +6,7 @@ import {
 } from '../../services/firebase-lobby.service';
 import { Select } from '@ngxs/store';
 import { AppState } from '../../store/app.state';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-player-list',
@@ -13,6 +14,8 @@ import { AppState } from '../../store/app.state';
   styleUrls: ['./player-list.component.scss'],
 })
 export class PlayerListComponent implements OnInit {
+  byteColorMap = new Map(Object.entries(environment.byteColorMap));
+
   @Input('player') playerList: Map<string, Player> = new Map();
   @Input('admin') adminUid: string = '';
 

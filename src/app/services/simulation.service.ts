@@ -1,6 +1,6 @@
 import { SimulationStatsService } from './simulation-stats.service';
 import { ConsoleService } from './console.service';
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { Bot } from '../components/battle-map/battle-map.component';
 import { cloneDeep } from 'lodash';
 import { environment } from 'src/environments/environment';
@@ -25,6 +25,7 @@ export interface SimulationStatusVar {
   simulationGenerated: boolean;
   simulationStarted: boolean;
   simulationPaused: boolean;
+  simulatedSteps: number;
 }
 
 @Injectable({
@@ -41,8 +42,12 @@ export class SimulationService {
       simulationSpeed: environment.simulationSpeed,
       simulationStarted: false,
       simulationPaused: false,
+      simulatedSteps: 0,
     },
   };
+
+  stepCalculated = new EventEmitter();
+
   simulation: SimulationData = cloneDeep(this.emptySimulation);
 
   constructor(
@@ -50,7 +55,7 @@ export class SimulationService {
     private battleMapBufferService: BattleMapBufferService,
     private consoleService: ConsoleService,
     private simulationStatsService: SimulationStatsService
-  ) { }
+  ) {}
 
   generateNewSimulation(
     size: number[],
@@ -299,7 +304,7 @@ export class SimulationService {
         bot.direction = movingDirection;
 
         switch (
-        movingDirection //change bot position according to the
+          movingDirection //change bot position according to the
         ) {
           case 'down':
             newBotPos[0]++;
@@ -328,7 +333,9 @@ export class SimulationService {
       }
     });
 
+    this.simulation.statusVar.simulatedSteps++;
     this.renderOntoMap(); //render new map
+    this.stepCalculated.emit();
 
     if (
       !this.simulation.statusVar.simulationPaused &&
@@ -401,7 +408,7 @@ export class SimulationService {
             break;
           } else if (
             this.simulation.obstacleMap[checkSpotStart[0] + i][
-            checkSpotStart[1] + j
+              checkSpotStart[1] + j
             ]
           ) {
             obstacleNear = true;

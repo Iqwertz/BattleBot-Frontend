@@ -35,7 +35,7 @@
       background-color: rgb(172, 172, 172);
       margin: 5px 0;
       font-size: 1.4em;
-      color: #fff;
+      color: rgb(255, 255, 255);
       font-family: "JetBrains Mono", monospace;
       position: relative;
       display: flex;
@@ -79,10 +79,12 @@
 
         .check {
           color: rgb(87, 255, 53);
+          filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 1));
         }
 
         .times {
           color: rgb(255, 49, 49);
+          filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 1));
         }
       }
 

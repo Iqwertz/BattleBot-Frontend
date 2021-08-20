@@ -1,6 +1,7 @@
 import { BattleMapBufferService } from './battle-map-buffer.service';
 import { SimulationService } from './simulation.service';
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
+import { round } from 'lodash';
 
 export interface SimulationStatistic {
   wholeArea: number;
@@ -20,10 +21,9 @@ export interface PlayerColorStat {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SimulationStatsService {
-
   simulationStatistics: SimulationStatistic = {
     emptyArea: 0,
     emptyAreaPercent: 0,
@@ -32,13 +32,14 @@ export class SimulationStatsService {
     playerCoverdArea: 0,
     playerCoverdAreaPercent: 0,
     wholeArea: 0,
-    playerColors: []
-  }
+    playerColors: [],
+  };
 
-  constructor(private battleMapBufferService: BattleMapBufferService) { }
+  winEvent = new EventEmitter();
+
+  constructor(private battleMapBufferService: BattleMapBufferService) {}
 
   updateStats() {
-
     this.simulationStatistics = {
       emptyArea: 0,
       emptyAreaPercent: 0,
@@ -47,8 +48,8 @@ export class SimulationStatsService {
       playerCoverdArea: 0,
       playerCoverdAreaPercent: 0,
       wholeArea: 0,
-      playerColors: []
-    }
+      playerColors: [],
+    };
 
     let buffer = this.battleMapBufferService.battleMapBuffer;
     let size = this.battleMapBufferService.battleMapBuffer.length;
@@ -75,7 +76,11 @@ export class SimulationStatsService {
         }
 
         if (!foundColor) {
-          this.simulationStatistics.playerColors.push({ color: pColor, coverdArea: 1, coverdAreaPercent: 0 })
+          this.simulationStatistics.playerColors.push({
+            color: pColor,
+            coverdArea: 1,
+            coverdAreaPercent: 0,
+          });
         }
 
         this.simulationStatistics.playerCoverdArea++;
@@ -84,18 +89,34 @@ export class SimulationStatsService {
 
     this.calculatePercent();
 
-    this.simulationStatistics.playerColors = this.simulationStatistics.playerColors.sort((a, b) => b.coverdArea - a.coverdArea)
+    this.simulationStatistics.playerColors =
+      this.simulationStatistics.playerColors.sort(
+        (a, b) => b.coverdArea - a.coverdArea
+      );
   }
 
   private calculatePercent() {
-    let area = this.simulationStatistics.wholeArea
+    let area = this.simulationStatistics.wholeArea;
 
-    this.simulationStatistics.emptyAreaPercent = this.simulationStatistics.emptyArea * 100 / area;
-    this.simulationStatistics.obstacleCoverdAreaPercent = this.simulationStatistics.obstacleCoverdArea * 100 / area;
-    this.simulationStatistics.playerCoverdAreaPercent = this.simulationStatistics.playerCoverdArea * 100 / area;
+    this.simulationStatistics.emptyAreaPercent = round(
+      (this.simulationStatistics.emptyArea * 100) / area,
+      2
+    );
+    this.simulationStatistics.obstacleCoverdAreaPercent = round(
+      (this.simulationStatistics.obstacleCoverdArea * 100) / area,
+      2
+    );
+    this.simulationStatistics.playerCoverdAreaPercent = round(
+      (this.simulationStatistics.playerCoverdArea * 100) / area,
+      2
+    );
 
     for (let p of this.simulationStatistics.playerColors) {
-      p.coverdAreaPercent = p.coverdArea * 100 / area;
+      p.coverdAreaPercent = round((p.coverdArea * 100) / area, 2);
     }
+  }
+
+  setWinner() {
+    this.winEvent.emit();
   }
 }

@@ -60,8 +60,6 @@ export class BotEditorComponent implements OnInit {
 
       this.timeLeft = minutes + ':' + seconds;
 
-      console.log(diff);
-
       if (diff < 0) {
         clearInterval(this.calcInterval);
         this.submitBot();
