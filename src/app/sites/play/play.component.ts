@@ -33,8 +33,6 @@ export class PlayComponent implements OnInit {
 
   allBotsPlaced: boolean = false;
 
-  simulationEndTimeStamp = new Date(new Date().getTime() + 3 * 60000);
-
   constructor(
     private simulationService: SimulationService,
     private db: AngularFireDatabase,

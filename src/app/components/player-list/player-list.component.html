@@ -1,6 +1,6 @@
 <div class="player-list">
   <div class="titel">Player</div>
-  <div class="player-container" *ngIf="playerList.size > 0">
+  <div class="player-container" *ngIf="playerList.size > 0 && firebaseUser">
     <div
       class="player"
       [ngClass]="{ self: playerList.get(adminUid)!.uId == firebaseUser.uid }"
@@ -60,8 +60,10 @@
       </div>
     </ng-container>
   </div>
-
-  <div class="player-ready">
+  <div
+    class="player-ready"
+    *ngIf="firebaseUser && playerList.get(firebaseUser.uid)"
+  >
     Ready: &nbsp;
     <mat-checkbox
       class="checkbox"

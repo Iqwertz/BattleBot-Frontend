@@ -101,6 +101,7 @@ export class FirebaseLobbyService {
   }
 
   updatePlayer(player: Player | undefined) {
+    console.log(player)
     if (this.currentLobby && player) {
       this.db.database
         .ref()
@@ -140,7 +141,7 @@ export class FirebaseLobbyService {
 
           let roboName =
             environment.roboNames[
-              Math.floor(Math.random() * environment.roboNames.length)
+            Math.floor(Math.random() * environment.roboNames.length)
             ];
 
           let colorId = environment.roboNames.indexOf(roboName) * 2 + 3;
@@ -217,7 +218,7 @@ export class FirebaseLobbyService {
       while (!nameFound) {
         roboName =
           environment.roboNames[
-            Math.floor(Math.random() * environment.roboNames.length)
+          Math.floor(Math.random() * environment.roboNames.length)
           ];
         nameFound = true;
         this.currentLobby.player.forEach((value: Player) => {
