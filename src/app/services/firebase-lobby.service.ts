@@ -87,14 +87,6 @@ export class FirebaseLobbyService {
       this.currentLobby = newLobby;
     });
 
-    auth.onAuthStateChanged((user) => {
-      this.store.dispatch(new SetFirebaseUser(user));
-      if (!user && this.currentLobby) {
-        console.log('user logged out');
-        router.navigate(['']);
-      }
-    });
-
     this.firebaseUser$.subscribe((user: any) => {
       this.firebaseUser = user;
     });
@@ -207,7 +199,7 @@ export class FirebaseLobbyService {
           console.log(error);
         });
     } else {
-      console.log('Error: already in a game');
+      console.log('Error: already in a game!');
     }
   }
 

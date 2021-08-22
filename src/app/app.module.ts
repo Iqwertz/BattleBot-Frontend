@@ -47,6 +47,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSliderModule } from '@angular/material/slider';
 import { SimulationStatsComponent } from './components/simulation-stats/simulation-stats.component';
 import { SimulationLeaderboardComponent } from './components/simulation-leaderboard/simulation-leaderboard.component';
+import { GameComponent } from './sites/game/game.component';
 
 @NgModule({
   declarations: [
@@ -72,6 +73,7 @@ import { SimulationLeaderboardComponent } from './components/simulation-leaderbo
     LobbySettingsComponent,
     SimulationStatsComponent,
     SimulationLeaderboardComponent,
+    GameComponent,
   ],
   imports: [
     BrowserModule,
