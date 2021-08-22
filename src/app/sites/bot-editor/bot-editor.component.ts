@@ -57,8 +57,6 @@ export class BotEditorComponent implements OnInit {
         new Date(this.currentLobby.settings.editorEndTimeStamp).getTime() -
         new Date().getTime();
 
-      console.log(diff);
-
       let minutes = Math.floor((diff % 3.6e5) / 6e4);
       let seconds = Math.floor((diff % 6e4) / 1000);
 
