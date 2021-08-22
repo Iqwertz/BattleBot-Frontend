@@ -34,6 +34,7 @@ export class LobbySettingsComponent implements OnInit {
   constructor(private simulationService: SimulationService) { }
 
   ngOnInit(): void {
+    console.log("settings init")
     this.updateMap();
   }
 
@@ -44,7 +45,6 @@ export class LobbySettingsComponent implements OnInit {
       } else if (this.lobbySettings.maxPlayer < this.currentPlayer) {
         this.lobbySettings.maxPlayer = this.currentPlayer;
       }
-      this.settingChanged();
     }
   }
 
@@ -61,7 +61,6 @@ export class LobbySettingsComponent implements OnInit {
       } else if (this.lobbySettings.editorTime < 1) {
         this.lobbySettings.editorTime = 1;
       }
-      this.settingChanged();
     }
   }
 
@@ -74,7 +73,6 @@ export class LobbySettingsComponent implements OnInit {
       }
 
       this.updateMap();
-      this.settingChanged();
     }
   }
 
@@ -96,8 +94,6 @@ export class LobbySettingsComponent implements OnInit {
       // this.simulationService.setRandomBot();
 
       // this.simulationService.start();
-
-      this.settingChanged();
     }
   }
 

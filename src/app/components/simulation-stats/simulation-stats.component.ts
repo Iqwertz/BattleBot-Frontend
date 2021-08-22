@@ -23,12 +23,11 @@ export class SimulationStatsComponent implements OnInit {
   constructor(
     public simulationStatsService: SimulationStatsService,
     public simulationService: SimulationService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.currentLobby$.subscribe((newLobby: LobbyRef | undefined) => {
       this.currentLobby = newLobby;
-      console.log(this.currentLobby!.settings.simulationSteps);
     });
 
     this.simulationService.stepCalculated.subscribe(() => {
@@ -37,17 +36,16 @@ export class SimulationStatsComponent implements OnInit {
   }
 
   calcProgress() {
-    let steps = this.simulationService.simulation.statusVar.simulatedSteps;
-    let maxSteps = this.currentLobby!.settings.simulationSteps;
-    if (this.currentLobby && maxSteps > 0) {
-      console.log(steps);
-      console.log(maxSteps);
+    if (this.currentLobby) {
+      let steps = this.simulationService.simulation.statusVar.simulatedSteps;
+      let maxSteps = this.currentLobby.settings.simulationSteps;
+      if (this.currentLobby && maxSteps > 0) {
+        this.progress = round((steps * 100) / maxSteps, 0) + '%';
 
-      this.progress = round((steps * 100) / maxSteps, 0) + '%';
-
-      if (steps >= maxSteps) {
-        this.simulationService.pause();
-        this.simulationStatsService.setWinner();
+        if (steps >= maxSteps) {
+          this.simulationService.pause();
+          this.simulationStatsService.setWinner();
+        }
       }
     }
   }

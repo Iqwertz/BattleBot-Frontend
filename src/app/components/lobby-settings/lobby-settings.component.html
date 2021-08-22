@@ -32,7 +32,7 @@
         matInput
         type="number"
         min="2"
-        (change)="validatePlayer()"
+        (change)="validatePlayer(); settingChanged()"
         [(ngModel)]="lobbySettings.maxPlayer"
         [disabled]="!isAdmin"
       />
@@ -63,7 +63,7 @@
         matInput
         type="number"
         min="1"
-        (change)="validateTime()"
+        (change)="validateTime(); settingChanged()"
         [(ngModel)]="lobbySettings.editorTime"
         [disabled]="!isAdmin"
       />
@@ -78,7 +78,7 @@
         matInput
         type="number"
         min="1"
-        (change)="validateTime()"
+        (change)="validateTime(); settingChanged()"
         [(ngModel)]="lobbySettings.simulationTime"
         [disabled]="!isAdmin"
       />
@@ -95,7 +95,7 @@
       [thumbLabel]="true"
       [(ngModel)]="lobbySettings.speed"
       aria-labelledby="simulation speed"
-      (change)="updateMap()"
+      (change)="updateMap(); settingChanged()"
       [disabled]="!isAdmin"
     >
     </mat-slider>
@@ -110,7 +110,7 @@
         matInput
         type="number"
         min="5"
-        (change)="validateMap()"
+        (change)="validateMap(); settingChanged()"
         [(ngModel)]="lobbySettings.mapSize"
         [disabled]="!isAdmin"
       />
@@ -120,7 +120,7 @@
   <div class="input">
     <div class="label">Obstacles:</div>
     <mat-checkbox
-      (change)="updateMap()"
+      (change)="updateMap(); settingChanged()"
       class="checkbox"
       [(ngModel)]="lobbySettings.obstacles"
       [disabled]="!isAdmin"
@@ -137,7 +137,7 @@
       [thumbLabel]="true"
       [(ngModel)]="lobbySettings.obstacleSettings.threshold"
       aria-labelledby="threshold"
-      (change)="updateMap()"
+      (change)="updateMap(); settingChanged()"
       [disabled]="!isAdmin"
     >
     </mat-slider>
@@ -153,7 +153,7 @@
       [thumbLabel]="true"
       [(ngModel)]="lobbySettings.obstacleSettings.octaveCount"
       aria-labelledby="octaveCount"
-      (change)="updateMap()"
+      (change)="updateMap(); settingChanged()"
       [disabled]="!isAdmin"
     >
     </mat-slider>
@@ -169,7 +169,7 @@
       [thumbLabel]="true"
       [(ngModel)]="lobbySettings.obstacleSettings.amplitude"
       aria-labelledby="Amplitude"
-      (change)="updateMap()"
+      (change)="updateMap(); settingChanged()"
       [disabled]="!isAdmin"
     >
     </mat-slider>
@@ -185,7 +185,7 @@
       [thumbLabel]="true"
       [(ngModel)]="lobbySettings.obstacleSettings.persistence"
       aria-labelledby="persistence"
-      (change)="updateMap()"
+      (change)="updateMap(); settingChanged()"
       [disabled]="!isAdmin"
     >
     </mat-slider>

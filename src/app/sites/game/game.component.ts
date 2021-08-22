@@ -7,9 +7,8 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 })
 export class GameComponent implements OnInit {
 
-  constructor(private firebaseService: FirebaseService) { }
+  constructor(public firebaseService: FirebaseService) { }
 
   ngOnInit(): void {
-    // this.firebaseService.checkAuth();
   }
 }

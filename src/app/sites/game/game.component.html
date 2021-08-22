@@ -1,1 +1,12 @@
-<p>game works!</p>
+<div *ngIf="firebaseService.gameState">
+  <div *ngIf="firebaseService.gameState == 'lobby'">
+    <app-create-lobby> </app-create-lobby>
+  </div>
+  <div *ngIf="firebaseService.gameState == 'editor'">
+    <app-bot-editor></app-bot-editor>
+  </div>
+
+  <div *ngIf="firebaseService.gameState == 'play'">
+    <app-play></app-play>
+  </div>
+</div>

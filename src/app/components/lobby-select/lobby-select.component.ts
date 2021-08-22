@@ -92,7 +92,9 @@ export class LobbySelectComponent implements OnInit {
         obstacles: true,
         speed: 20,
         gameStarted: false,
-        editorEndTimeStamp: new Date(),
+        editorEndTimeStamp: new Date(
+          new Date().getTime() + (48 * 60 * 60 * 1000)
+        ),
         simulationSteps: 0,
       };
 
@@ -102,6 +104,7 @@ export class LobbySelectComponent implements OnInit {
         settings: settings,
         adminUid: this.firebaseUser.uid,
         player: new Map(),
+        gameState: 'lobby'
       };
 
       console.log(newLobby);

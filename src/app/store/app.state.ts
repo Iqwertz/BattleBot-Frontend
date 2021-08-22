@@ -1,3 +1,4 @@
+import { User } from './../services/firebase.service';
 import { LobbyRef } from './../services/firebase-lobby.service';
 //////Use
 /*
