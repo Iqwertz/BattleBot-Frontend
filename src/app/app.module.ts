@@ -48,6 +48,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { SimulationStatsComponent } from './components/simulation-stats/simulation-stats.component';
 import { SimulationLeaderboardComponent } from './components/simulation-leaderboard/simulation-leaderboard.component';
 import { GameComponent } from './sites/game/game.component';
+import { LogoutComponent } from './components/logout/logout.component';
 
 @NgModule({
   declarations: [
@@ -74,6 +75,7 @@ import { GameComponent } from './sites/game/game.component';
     SimulationStatsComponent,
     SimulationLeaderboardComponent,
     GameComponent,
+    LogoutComponent,
   ],
   imports: [
     BrowserModule,

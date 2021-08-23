@@ -55,7 +55,7 @@ export class SimulationService {
     private battleMapBufferService: BattleMapBufferService,
     private consoleService: ConsoleService,
     private simulationStatsService: SimulationStatsService
-  ) { }
+  ) {}
 
   generateNewSimulation(
     size: number[],
@@ -146,7 +146,8 @@ export class SimulationService {
   }
 
   setSpeed(speed: number) {
-    let msSpeed = (environment.speedRange[1] * speed) / 100; //This isnt using the lower range of the defined speed but it doesnt really matter
+    let diff = environment.speedRange[1] - environment.speedRange[0];
+    let msSpeed = environment.speedRange[0] + (diff * speed) / 100;
     this.simulation.statusVar.simulationSpeed = msSpeed;
     this.consoleService.print('set Simulation speed to ' + speed + '%');
   }
@@ -303,7 +304,7 @@ export class SimulationService {
         bot.direction = movingDirection;
 
         switch (
-        movingDirection //change bot position according to the
+          movingDirection //change bot position according to the
         ) {
           case 'down':
             newBotPos[0]++;
@@ -407,7 +408,7 @@ export class SimulationService {
             break;
           } else if (
             this.simulation.obstacleMap[checkSpotStart[0] + i][
-            checkSpotStart[1] + j
+              checkSpotStart[1] + j
             ]
           ) {
             obstacleNear = true;

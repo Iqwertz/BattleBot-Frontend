@@ -40,7 +40,7 @@ export interface LobbyRefSettings {
   simulationSteps: number;
 }
 
-export type GameState = 'lobby' | 'editor' | 'play'
+export type GameState = 'lobby' | 'editor' | 'play';
 
 export interface LobbyRef {
   settings: LobbyRefSettings;
@@ -98,7 +98,7 @@ export class FirebaseLobbyService {
   }
 
   updatePlayer(player: Player | undefined) {
-    console.log(player)
+    console.log(player);
     if (this.currentLobby && player) {
       this.db.database
         .ref()
@@ -118,7 +118,14 @@ export class FirebaseLobbyService {
         .child(id)
         .set(null)
         .then(() => {
-          console.log('kicked Player');
+          this.db.database
+            .ref()
+            .child('/user/')
+            .child(id)
+            .set(null)
+            .then(() => {
+              console.log('kicked Player');
+            });
         })
         .catch((e) => {
           console.log(e);
@@ -131,12 +138,17 @@ export class FirebaseLobbyService {
   joinLobby(id: string) {
     this.firebaseService.getLobby(id).then((lobbySnap) => {
       if (lobbySnap.exists()) {
-        if (this.firebaseService.formatPlayerToMap(lobbySnap.val().player).size < lobbySnap.val().settings.maxPlayer) {
+        if (
+          this.firebaseService.formatPlayerToMap(lobbySnap.val().player).size <
+          lobbySnap.val().settings.maxPlayer
+        ) {
           this.auth.signInAnonymously().then(() => {
             if (this.firebaseUser) {
               this.firebaseService.setNewUser(id);
 
-              let roboName = this.generateUniqueRobot(this.firebaseService.formatPlayerToMap(lobbySnap.val().player));
+              let roboName = this.generateUniqueRobot(
+                this.firebaseService.formatPlayerToMap(lobbySnap.val().player)
+              );
               let colorId = environment.roboNames.indexOf(roboName) * 2 + 3;
 
               let player: Player = {
@@ -158,26 +170,25 @@ export class FirebaseLobbyService {
                   this.router.navigate(['game']);
                 });
             } else {
-              console.log("Error: Sign In failed")
+              console.log('Error: Sign In failed');
             }
-          })
-
+          });
         } else {
-          console.log("Error: Lobby full")
+          console.log('Error: Lobby full');
         }
       }
-    })
+    });
   }
 
   generateUniqueRobot(player: Map<string, Player>): string {
-    console.log(this.currentLobby)
+    console.log(this.currentLobby);
 
     let nameFound: boolean = false;
     let roboName = '';
     while (!nameFound) {
       roboName =
         environment.roboNames[
-        Math.floor(Math.random() * environment.roboNames.length)
+          Math.floor(Math.random() * environment.roboNames.length)
         ];
       nameFound = true;
       player.forEach((value: Player) => {

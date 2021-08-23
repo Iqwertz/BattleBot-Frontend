@@ -7,6 +7,12 @@
   >
     <div
       class="player first"
+      [ngClass]="{
+        self:
+          simulationService.simulation.bots.get(
+            simulationStatsService.simulationStatistics.playerColors[0].color
+          )!.name == currentLobby!.player.get(firebaseUser.uid)!.name
+      }"
       [style.background-color]="
         byteColorMap.get(
           simulationStatsService.simulationStatistics.playerColors[0].color.toString()
@@ -41,6 +47,12 @@
   >
     <div
       class="player second"
+      [ngClass]="{
+        self:
+          simulationService.simulation.bots.get(
+            simulationStatsService.simulationStatistics.playerColors[1].color
+          )!.name == currentLobby!.player.get(firebaseUser.uid)!.name
+      }"
       [style.background-color]="
         byteColorMap.get(
           simulationStatsService.simulationStatistics.playerColors[1].color.toString()
@@ -75,6 +87,12 @@
   >
     <div
       class="player third"
+      [ngClass]="{
+        self:
+          simulationService.simulation.bots.get(
+            simulationStatsService.simulationStatistics.playerColors[2].color
+          )!.name == currentLobby!.player.get(firebaseUser.uid)!.name
+      }"
       [style.background-color]="
         byteColorMap.get(
           simulationStatsService.simulationStatistics.playerColors[2].color.toString()

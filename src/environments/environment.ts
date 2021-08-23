@@ -10,7 +10,7 @@ export const environment = {
   maxPlayer: 10,
   maxTime: 80,
   maxMapSize: 150,
-  speedRange: [20, 1500],
+  speedRange: [100, 1500],
   obstacleNoiseSettings: {
     threshold: 0.65,
     octaveCount: 4,

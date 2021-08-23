@@ -1,0 +1,29 @@
+.logout {
+  position: absolute;
+  z-index: 10;
+  top: 10px;
+  left: 10px;
+  width: 10vh;
+  height: 10vh;
+  border-radius: 100%;
+  background-color: rgba(0, 0, 0, 0.39);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 200ms ease-in;
+
+  fa-icon {
+    color: rgba(255, 255, 255, 0.452);
+    font-size: 2em;
+    transform: rotateY(180deg);
+    transition: all 100ms ease-in;
+  }
+}
+
+.logout:hover {
+  background-color: rgba(0, 0, 0, 1);
+  fa-icon {
+    color: #fff;
+  }
+}

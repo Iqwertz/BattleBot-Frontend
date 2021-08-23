@@ -23,7 +23,7 @@ export class LobbySettingsComponent implements OnInit {
 
   @Input('currentPlayer') currentPlayer = 1;
 
-  lobbySettings: LobbyRefSettings | undefined
+  lobbySettings: LobbyRefSettings | undefined;
   @Input() set setLobbySettings(ls: LobbyRefSettings | undefined) {
     this.lobbySettings = ls;
     this.updateMap();
@@ -31,10 +31,10 @@ export class LobbySettingsComponent implements OnInit {
 
   @Output() lobbySettingChange = new EventEmitter<LobbyRefSettings>();
 
-  constructor(private simulationService: SimulationService) { }
+  constructor(private simulationService: SimulationService) {}
 
   ngOnInit(): void {
-    console.log("settings init")
+    console.log('settings init');
     this.updateMap();
   }
 

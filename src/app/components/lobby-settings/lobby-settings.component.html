@@ -95,7 +95,7 @@
       [thumbLabel]="true"
       [(ngModel)]="lobbySettings.speed"
       aria-labelledby="simulation speed"
-      (change)="updateMap(); settingChanged()"
+      (change)="settingChanged()"
       [disabled]="!isAdmin"
     >
     </mat-slider>

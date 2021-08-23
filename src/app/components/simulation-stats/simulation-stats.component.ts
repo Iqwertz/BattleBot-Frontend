@@ -23,7 +23,7 @@ export class SimulationStatsComponent implements OnInit {
   constructor(
     public simulationStatsService: SimulationStatsService,
     public simulationService: SimulationService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.currentLobby$.subscribe((newLobby: LobbyRef | undefined) => {
