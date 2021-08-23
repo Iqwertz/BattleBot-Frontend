@@ -15,6 +15,7 @@ import { AngularFireDatabase } from '@angular/fire/database';
 import { Injectable } from '@angular/core';
 import { remove } from 'lodash';
 import { Subscription } from 'rxjs';
+import { AlertService } from './alert.service';
 
 export interface User {
   uid: string;
@@ -45,7 +46,8 @@ export class FirebaseService {
     private db: AngularFireDatabase,
     private router: Router,
     private store: Store,
-    private simulationService: SimulationService
+    private simulationService: SimulationService,
+    private alert: AlertService
   ) {
     this.firebaseUser$.subscribe((fuser: any) => {
       this.firebaseUser = fuser;
@@ -155,7 +157,6 @@ export class FirebaseService {
   }
 
   updateGameState(state: GameState) {
-    console.log('gamestateupdate:' + state);
     if (this.currentLobby) {
       this.db.database
         .ref()
@@ -338,7 +339,6 @@ export class FirebaseService {
   }
 
   setGameState() {
-    console.log('setting Gamestate');
     this.getUser(this.firebaseUser.uid).then((userSnap) => {
       if (userSnap.exists()) {
         this.getLobby(userSnap.val().lobbyId).then((lobbySnap) => {
@@ -374,6 +374,7 @@ export class FirebaseService {
 
   setNewLobby(lobby: LobbyRef, admin: Player) {
     console.log('set lobby');
+    this.alert.notification('Generated new lobby');
     this.db.database
       .ref()
       .child('/lobbys')

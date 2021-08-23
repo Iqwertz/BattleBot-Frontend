@@ -1,4 +1,3 @@
-
 import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { MatSort } from '@angular/material/sort';
@@ -6,6 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { Select, Store } from '@ngxs/store';
 import { AppState } from '../../store/app.state';
+import { AlertService } from '../../services/alert.service';
 import {
   LobbyRef,
   FirebaseLobbyService,
@@ -31,10 +31,7 @@ export class PublicLobbysComponent implements OnInit {
 
   constructor(
     private db: AngularFireDatabase,
-    private fireBaseLobbyService: FirebaseLobbyService,
-    private changeDetectorRefs: ChangeDetectorRef,
-    private router: Router,
-    private store: Store,
+    private fireBaseLobbyService: FirebaseLobbyService
   ) {
     let lobbyFirebaseRef = db.object('lobbys/').valueChanges();
     lobbyFirebaseRef.subscribe((changes: any) => {

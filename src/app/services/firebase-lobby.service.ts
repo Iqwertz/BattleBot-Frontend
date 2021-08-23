@@ -8,6 +8,7 @@ import { Store, Select } from '@ngxs/store';
 import { SetFirebaseUser } from '../store/app.action';
 import { AppState } from '../store/app.state';
 import { GameModes } from './simulation.service';
+import { AlertService } from './alert.service';
 
 export interface Player {
   uId: string;
@@ -78,7 +79,8 @@ export class FirebaseLobbyService {
     private db: AngularFireDatabase,
     private router: Router,
     private store: Store,
-    private firebaseService: FirebaseService
+    private firebaseService: FirebaseService,
+    private alert: AlertService
   ) {
     this.lobbyFirebaseRef = db.object('lobbys').valueChanges();
     this.lobbyFirebaseRef.subscribe((changes: any) => {
@@ -125,6 +127,7 @@ export class FirebaseLobbyService {
             .set(null)
             .then(() => {
               console.log('kicked Player');
+              this.alert.notification('kicked Player');
             });
         })
         .catch((e) => {
@@ -136,6 +139,7 @@ export class FirebaseLobbyService {
   }
 
   joinLobby(id: string) {
+    this.alert.notification('joining lobby');
     this.firebaseService.getLobby(id).then((lobbySnap) => {
       if (lobbySnap.exists()) {
         if (
@@ -171,10 +175,12 @@ export class FirebaseLobbyService {
                 });
             } else {
               console.log('Error: Sign In failed');
+              this.alert.error('Error: Sign In failed');
             }
           });
         } else {
           console.log('Error: Lobby full');
+          this.alert.error('Error: Lobby full');
         }
       }
     });

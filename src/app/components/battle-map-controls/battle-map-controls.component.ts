@@ -88,7 +88,6 @@ export class BattleMapControlsComponent implements OnInit {
   }
 
   pause() {
-    console.log(cloneDeep(this.simulationService.simulation));
     this.simulationService.pause();
   }
 

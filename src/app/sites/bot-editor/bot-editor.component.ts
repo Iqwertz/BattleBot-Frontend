@@ -9,6 +9,7 @@ import { AngularFireDatabase } from '@angular/fire/database';
 import { Router } from '@angular/router';
 import { SimulationService } from '../../services/simulation.service';
 import { SetEditing } from '../../store/app.action';
+import { AlertService } from '../../services/alert.service';
 
 @Component({
   selector: 'app-bot-editor',
@@ -34,7 +35,8 @@ export class BotEditorComponent implements OnInit {
     private db: AngularFireDatabase,
     private router: Router,
     private store: Store,
-    private firebaseService: FirebaseService
+    private firebaseService: FirebaseService,
+    private alert: AlertService
   ) {
     this.calcInterval = setInterval(() => {
       this.calcTimeLeft();
@@ -71,6 +73,8 @@ export class BotEditorComponent implements OnInit {
 
   submitBot() {
     console.log('submitting bot');
+    this.alert.notification('submitting bot');
+
     let brain: string = this.preCompilerService.lastSuccesfullCompile;
 
     if (this.currentLobby) {

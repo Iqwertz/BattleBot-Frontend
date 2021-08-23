@@ -49,6 +49,7 @@ import { SimulationStatsComponent } from './components/simulation-stats/simulati
 import { SimulationLeaderboardComponent } from './components/simulation-leaderboard/simulation-leaderboard.component';
 import { GameComponent } from './sites/game/game.component';
 import { LogoutComponent } from './components/logout/logout.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -103,6 +104,7 @@ import { LogoutComponent } from './components/logout/logout.component';
     MatIconModule,
     MatCheckboxModule,
     MatSliderModule,
+    MatSnackBarModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
