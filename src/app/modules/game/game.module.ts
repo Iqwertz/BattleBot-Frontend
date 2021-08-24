@@ -44,6 +44,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsModule } from '@ngxs/store';
 import { environment } from 'src/environments/environment';
+import { ConfettiComponent } from '../../components/confetti/confetti.component';
+import { BattleMapWinOverlayComponent } from '../../components/battle-map-win-overlay/battle-map-win-overlay.component';
 
 @NgModule({
   declarations: [
@@ -67,6 +69,8 @@ import { environment } from 'src/environments/environment';
     GameComponent,
     LogoutComponent,
     EditorInfoComponent,
+    ConfettiComponent,
+    BattleMapWinOverlayComponent,
   ],
   imports: [
     CommonModule,

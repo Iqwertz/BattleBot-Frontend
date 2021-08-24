@@ -226,6 +226,18 @@ export class FirebaseService {
     this.gameState = undefined;
   }
 
+  resetBotPositions() {
+    this.currentLobby?.player.forEach((val: Player, key: string) => {
+      this.db.database
+        .ref()
+        .child(
+          '/games/' + this.currentLobby?.settings.id + '/playerBots/' + key
+        )
+        .child('position')
+        .set([0, 0]);
+    });
+  }
+
   removeUser() {
     if (this.firebaseUser) {
       this.removeUserFromGame(this.firebaseUser.uid);

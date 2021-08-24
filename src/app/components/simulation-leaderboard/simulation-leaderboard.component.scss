@@ -13,23 +13,6 @@
   align-items: center;
   justify-content: flex-start;
 
-  .restart-button {
-    position: absolute;
-    width: 70%;
-    height: 80px;
-    color: #000;
-    margin: 20px 0;
-    font-size: 1.5em;
-    font-family: "JetBrains Mono", monospace;
-    bottom: 30px;
-    background-color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 80px;
-    cursor: pointer;
-  }
-
   .titel {
     color: #fff;
     font-size: 3em;

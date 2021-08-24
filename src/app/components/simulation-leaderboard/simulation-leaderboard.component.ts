@@ -6,6 +6,7 @@ import { Select, Store } from '@ngxs/store';
 import { AppState } from '../../store/app.state';
 import { LobbyRef } from '../../services/firebase-lobby.service';
 import { AngularFireDatabase } from '@angular/fire/database';
+import { ConfettiService } from '../../services/confetti.service';
 
 @Component({
   selector: 'app-simulation-leaderboard',
@@ -14,7 +15,7 @@ import { AngularFireDatabase } from '@angular/fire/database';
 })
 export class SimulationLeaderboardComponent implements OnInit {
   byteColorMap = new Map(Object.entries(environment.byteColorMap));
-  enableRestart: boolean = false;
+  enableRestart: boolean = true;
 
   @Select(AppState.currentLobby) currentLobby$: any;
   currentLobby: LobbyRef | undefined;
@@ -25,13 +26,11 @@ export class SimulationLeaderboardComponent implements OnInit {
   constructor(
     public simulationStatsService: SimulationStatsService,
     public simulationService: SimulationService,
-    private store: Store,
-    private db: AngularFireDatabase
+    private confettiService: ConfettiService
   ) {}
 
   ngOnInit(): void {
     this.simulationStatsService.winEvent.subscribe(() => {
-      console.log('winner Found');
       this.enableRestart = true;
     });
 
@@ -44,8 +43,8 @@ export class SimulationLeaderboardComponent implements OnInit {
   }
 
   restart() {
-    this.enableRestart = false;
-
+    //this.enableRestart = false;
+    this.confettiService.setConfetti();
     /*     if (this.currentLobby) {
       if (this.firebaseUser.uid == this.currentLobby.adminUid) {
         this.db.database

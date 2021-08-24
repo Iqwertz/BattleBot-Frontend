@@ -25,9 +25,9 @@ export const environment = {
     persistence: 1,
   },
   defaultLobby: {
-    editorTime: 5,
+    editorTime: 0.1,
     private: false,
-    simulationTime: 2,
+    simulationTime: 0.2,
     maxPlayer: 4,
   },
   availableBotColors: 15,

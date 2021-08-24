@@ -33,8 +33,6 @@ export class PlayComponent implements OnInit {
 
   placedBots: string[] = [];
 
-  allBotsPlaced: boolean = false;
-
   constructor(
     private simulationService: SimulationService,
     private db: AngularFireDatabase,
@@ -52,7 +50,6 @@ export class PlayComponent implements OnInit {
     simulationService.setRandomBot();
     simulationService.setRandomBot();
     simulationService.start(); */
-
 
     this.currentLobby$.subscribe((newLobby: LobbyRef | undefined) => {
       this.currentLobby = newLobby;
@@ -74,22 +71,21 @@ export class PlayComponent implements OnInit {
 
               this.store.dispatch(new SetPlacingBot(true));
 
-
-              db.object('games/' + this.currentLobby.settings.id + '/playerBots/')
+              db.object(
+                'games/' + this.currentLobby.settings.id + '/playerBots/'
+              )
                 .valueChanges()
                 .subscribe((changes: any) => {
-                  console.log(changes)
+                  console.log(changes);
                   if (changes) {
                     for (const [key, value] of Object.entries(changes)) {
                       let v: any = value;
                       let k: any = key;
 
-                      let player: Player | undefined = this.currentLobby!.player.get(
-                        v.uId
-                      );
-
+                      let player: Player | undefined =
+                        this.currentLobby!.player.get(v.uId);
+                      console.log(v, k, player);
                       if (v.position[0] > 0 && v.position[1] > 0 && player) {
-                        console.log(this.placedBots.indexOf(player.uId));
                         if (this.placedBots.indexOf(player.uId) == -1) {
                           let bot: Bot = {
                             trackLength: 1,
@@ -121,10 +117,10 @@ export class PlayComponent implements OnInit {
   checkAllBotsPlaced() {
     if (
       this.simulationService.simulation.bots.size >=
-      this.currentLobby!.player.size
+        this.currentLobby!.player.size &&
+      this.simulationService.simulation.statusVar.simulationStarted == false
     ) {
-      console.log("starting")
-      this.allBotsPlaced = true;
+      console.log('starting');
       this.currentLobby!.settings.simulationSteps =
         (this.currentLobby!.settings.simulationTime * 60 * 1000) /
         this.simulationService.simulation.statusVar.simulationSpeed;

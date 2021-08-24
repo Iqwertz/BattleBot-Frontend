@@ -67,7 +67,7 @@ export class BattleMapComponent implements OnInit {
     public simulationService: SimulationService,
     private db: AngularFireDatabase,
     private store: Store
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.placingBot$.subscribe((val: boolean) => {
@@ -148,13 +148,13 @@ export class BattleMapComponent implements OnInit {
         .ref()
         .child(
           '/games/' +
-          this.currentLobby?.settings.id +
-          '/playerBots/' +
-          this.firebaseUser.uid
+            this.currentLobby?.settings.id +
+            '/playerBots/' +
+            this.firebaseUser.uid
         )
         .child('position')
         .set([x, y]);
-
+      console.log('Bot placed');
       this.store.dispatch(new SetPlacingBot(false));
     }
   }
