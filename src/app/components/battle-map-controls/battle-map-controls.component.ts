@@ -13,9 +13,7 @@ import {
 import { AppState } from '../../store/app.state';
 import { Select, Store } from '@ngxs/store';
 import { Bot } from '../battle-map/battle-map.component';
-import { cloneDeep } from 'lodash';
 import { LobbyRef } from '../../services/firebase-lobby.service';
-import { CursorError } from '@angular/compiler/src/ml_parser/lexer';
 
 @Component({
   selector: 'app-battle-map-controls',

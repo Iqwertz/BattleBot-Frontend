@@ -10,7 +10,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
-import { cloneDeep } from 'lodash';
+import { cloneDeep } from 'lodash-es';
 import { BotCompilerService } from '../../services/bot-compiler.service';
 import { CommandType } from '../editor-ide/editor-ide.component';
 import { Store } from '@ngxs/store';

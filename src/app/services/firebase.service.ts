@@ -13,7 +13,6 @@ import { Store, Select } from '@ngxs/store';
 import { Router } from '@angular/router';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { Injectable } from '@angular/core';
-import { remove } from 'lodash';
 import { Subscription } from 'rxjs';
 import { AlertService } from './alert.service';
 

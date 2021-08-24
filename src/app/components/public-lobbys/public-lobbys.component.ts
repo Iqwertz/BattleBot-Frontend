@@ -44,6 +44,7 @@ export class PublicLobbysComponent implements OnInit {
   }
 
   displayedColumns: string[] = [
+    'name',
     'id',
     'players',
     'size',

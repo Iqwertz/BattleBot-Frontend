@@ -5,7 +5,7 @@ import { Component, OnInit } from '@angular/core';
 import { AppState } from '../../store/app.state';
 import { LobbyRef } from '../../services/firebase-lobby.service';
 import { Select } from '@ngxs/store';
-import { maxBy, round } from 'lodash';
+import { round } from 'lodash-es';
 
 @Component({
   selector: 'app-simulation-stats',

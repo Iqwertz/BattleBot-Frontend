@@ -1,0 +1,23 @@
+@import "./src/scss/variables";
+
+.info-container {
+  width: 100%;
+  height: calc(100% - 20px);
+  background-color: darken($terminal-color, 10%);
+  border-radius: 0 0 15px 15px;
+  padding-top: 20px;
+  overflow: scroll;
+  .stat {
+    color: #fff;
+    font-size: 1.4em;
+    margin-left: 20px;
+
+    &.opponent {
+      padding-left: 60px;
+    }
+  }
+
+  .stat::before {
+    content: "-";
+  }
+}

@@ -4,7 +4,6 @@ import { BrainFunctions } from './bot-compiler.service';
 import { Select } from '@ngxs/store';
 import { AppState } from '../store/app.state';
 import { Bot } from '../components/battle-map/battle-map.component';
-import { toString } from 'lodash';
 
 export interface Terminal {
   commands: Command[];

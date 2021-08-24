@@ -8,6 +8,7 @@
         [disabled]="!isAdmin"
         matInput
         type="text"
+        [maxLength]="30"
         [(ngModel)]="lobbySettings.name"
         (change)="settingChanged()"
       />

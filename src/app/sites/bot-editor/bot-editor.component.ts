@@ -32,8 +32,6 @@ export class BotEditorComponent implements OnInit {
 
   constructor(
     private preCompilerService: PrecompilerService,
-    private db: AngularFireDatabase,
-    private router: Router,
     private store: Store,
     private firebaseService: FirebaseService,
     private alert: AlertService
@@ -59,8 +57,8 @@ export class BotEditorComponent implements OnInit {
         new Date(this.currentLobby.settings.editorEndTimeStamp).getTime() -
         new Date().getTime();
 
-      let minutes = Math.floor((diff % 3.6e5) / 6e4);
-      let seconds = Math.floor((diff % 6e4) / 1000);
+      let minutes = Math.floor(diff / 60000);
+      let seconds = ((diff % 60000) / 1000).toFixed(0);
 
       this.timeLeft = minutes + ':' + seconds;
 

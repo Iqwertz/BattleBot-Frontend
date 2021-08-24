@@ -78,7 +78,7 @@ export class LobbySelectComponent implements OnInit {
         editorTime: environment.defaultLobby.editorTime,
         id: id,
         maxPlayer: environment.defaultLobby.maxPlayer,
-        name: '',
+        name: roboName + 's arena',
         private: environment.defaultLobby.private,
         simulationTime: environment.defaultLobby.simulationTime,
         mode: 'Color',
