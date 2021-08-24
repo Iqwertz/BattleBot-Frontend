@@ -26,6 +26,11 @@ export const defaultBots: Bot[] = [
           left: false,
           right: false,
         },
+        ownTrackRadar: {
+          forward: false,
+          left: false,
+          right: false,
+        },
       },
       default: {
         instructions: [
@@ -131,6 +136,9 @@ export const defaultBots: Bot[] = [
           },
         ],
       },
+      onOwnTrackDetected: {
+        instructions: [],
+      },
       onWallDetected: {
         instructions: [
           {
@@ -229,6 +237,12 @@ export const defaultBots: Bot[] = [
           left: false,
           right: false,
         },
+
+        ownTrackRadar: {
+          forward: false,
+          left: false,
+          right: false,
+        },
       },
       default: {
         instructions: [
@@ -265,6 +279,9 @@ export const defaultBots: Bot[] = [
           'left',
           'forward',
         ],
+      },
+      onOwnTrackDetected: {
+        instructions: [],
       },
       onTrackDetected: {
         instructions: [
@@ -420,6 +437,11 @@ export const defaultBots: Bot[] = [
           left: false,
           right: false,
         },
+        ownTrackRadar: {
+          forward: false,
+          left: false,
+          right: false,
+        },
       },
       default: {
         instructions: [
@@ -452,6 +474,9 @@ export const defaultBots: Bot[] = [
         ],
       },
       onTrackDetected: {
+        instructions: [],
+      },
+      onOwnTrackDetected: {
         instructions: [],
       },
       onWallDetected: {

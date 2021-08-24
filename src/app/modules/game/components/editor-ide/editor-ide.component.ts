@@ -40,7 +40,9 @@ export class EditorIdeComponent implements OnInit, AfterViewInit {
     private botCompiler: BotCompilerService,
     private preCompiler: PrecompilerService,
     public terminalService: TerminalsService
-  ) {}
+  ) {
+    console.log(terminalService.terminals);
+  }
 
   left: Command = {
     type: 'left',

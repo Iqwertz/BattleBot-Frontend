@@ -182,12 +182,20 @@ export class PrecompilerService {
     if (this.checkError()) {
       return;
     }
+    this.consoleService.print('compiling onOwnTrackDetected...');
+    let ownTrackDetect: InstructionSet = this.commandsToInstructionset(
+      terminals.get('onOwnTrackDetected')?.commands
+    );
+    if (this.checkError()) {
+      return;
+    }
 
     let brainData: BrainData = {
       vars: defaultBotVars,
       default: def,
       onTrackDetected: trackDetect,
       onWallDetected: wallDetect,
+      onOwnTrackDetected: ownTrackDetect,
     };
 
     this.lastSuccesfullCompile = JSON.stringify(brainData);
