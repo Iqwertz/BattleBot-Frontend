@@ -139,6 +139,7 @@ export class BattleMapComponent implements OnInit {
     ) {
       this.compiledBot.position = [x, y];
       this.simulationService.setBot(this.compiledBot);
+      console.log(this.compiledBot);
       this.store.dispatch(new SetPlacingBot(false));
     }
 
