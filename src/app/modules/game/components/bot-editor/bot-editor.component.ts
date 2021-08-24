@@ -1,15 +1,18 @@
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { Component, OnInit } from '@angular/core';
 import { faInfo, faTerminal } from '@fortawesome/free-solid-svg-icons';
-import { AppState } from '../../store/app.state';
-import { LobbyRef, GameBotEntry } from '../../services/firebase-lobby.service';
+import { AppState } from '../../../../store/app.state';
+import {
+  LobbyRef,
+  GameBotEntry,
+} from '../../../../services/firebase-lobby.service';
 import { Select, Store } from '@ngxs/store';
-import { PrecompilerService } from '../../services/precompiler.service';
+import { PrecompilerService } from '../../../../services/precompiler.service';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { Router } from '@angular/router';
-import { SimulationService } from '../../services/simulation.service';
-import { SetEditing } from '../../store/app.action';
-import { AlertService } from '../../services/alert.service';
+import { SimulationService } from '../../../../services/simulation.service';
+import { SetEditing } from '../../../../store/app.action';
+import { AlertService } from '../../../../services/alert.service';
 
 @Component({
   selector: 'app-bot-editor',

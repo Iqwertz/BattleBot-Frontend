@@ -13,6 +13,8 @@ import {
   _Operators,
 } from '../../../../services/bot-compiler.service';
 import { AfterViewInit } from '@angular/core';
+import { Store } from '@ngxs/store';
+import { SetCompiledBot } from '../../../../store/app.action';
 import {
   LogicTest,
   BotCompilerService,
@@ -58,10 +60,7 @@ export class DragdropLogicCommandComponent implements OnInit, AfterViewInit {
 
   faDelete = faTimes;
 
-  constructor(
-    private botCompiler: BotCompilerService,
-    private ref: ElementRef
-  ) {}
+  constructor(private botCompiler: BotCompilerService, private store: Store) {}
 
   ngAfterViewInit(): void {
     // console.log(this.ref.nativeElement.getBoundingClientRect());
@@ -81,5 +80,6 @@ export class DragdropLogicCommandComponent implements OnInit, AfterViewInit {
 
   logicTestChanged() {
     this.logicTestData.emit(this.logicTest);
+    this.store.dispatch(new SetCompiledBot(undefined));
   }
 }

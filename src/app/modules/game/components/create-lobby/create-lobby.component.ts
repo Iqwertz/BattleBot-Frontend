@@ -1,5 +1,5 @@
 import { FirebaseService } from 'src/app/services/firebase.service';
-import { SetCurrentLobby, SetFirebaseUser } from './../../store/app.action';
+import { SetCurrentLobby, SetFirebaseUser } from '../../../../store/app.action';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/database';
@@ -7,12 +7,12 @@ import {
   LobbyRef,
   Player,
   FirebaseLobbyService,
-} from '../../services/firebase-lobby.service';
+} from '../../../../services/firebase-lobby.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Select, Store } from '@ngxs/store';
-import { AppState } from '../../store/app.state';
-import { environment } from '../../../environments/environment';
-import { LobbyRefSettings } from '../../services/firebase-lobby.service';
+import { AppState } from '../../../../store/app.state';
+import { environment } from '../../../../../environments/environment';
+import { LobbyRefSettings } from '../../../../services/firebase-lobby.service';
 
 @Component({
   selector: 'app-create-lobby',
@@ -20,7 +20,6 @@ import { LobbyRefSettings } from '../../services/firebase-lobby.service';
   styleUrls: ['./create-lobby.component.scss'],
 })
 export class CreateLobbyComponent implements OnInit, OnDestroy {
-
   @Select(AppState.currentLobby) currentLobby$: any;
   currentLobby: LobbyRef | undefined;
 
@@ -30,7 +29,6 @@ export class CreateLobbyComponent implements OnInit, OnDestroy {
   currentLobbyId: string | null = null;
 
   gameStarted = false;
-
 
   loggedIn: boolean = false;
   leavingCalled: boolean = false;
@@ -43,13 +41,10 @@ export class CreateLobbyComponent implements OnInit, OnDestroy {
     private fireBaseLobbyService: FirebaseLobbyService,
     private firebaseService: FirebaseService,
     private store: Store
-  ) {
-
-  }
+  ) {}
 
   ngOnInit(): void {
-    console.log("init");
-
+    console.log('init');
 
     this.currentLobby$.subscribe((newLobby: LobbyRef | undefined) => {
       this.currentLobby = newLobby;
@@ -61,19 +56,19 @@ export class CreateLobbyComponent implements OnInit, OnDestroy {
   }
 
   lobbySettingChanged(l: LobbyRefSettings) {
-    this.firebaseService.updateLobbySettings(l)
+    this.firebaseService.updateLobbySettings(l);
   }
 
   startGame() {
-    console.log("starting Game")
+    console.log('starting Game');
     if (this.currentLobby) {
       this.currentLobby.settings.gameStarted = true;
       this.currentLobby.settings.editorEndTimeStamp = new Date(
         new Date().getTime() + this.currentLobby.settings.editorTime * 60000
       );
-      console.log(this.currentLobby.settings)
+      console.log(this.currentLobby.settings);
       this.firebaseService.updateLobbySettings(this.currentLobby.settings);
-      this.firebaseService.updateGameState('editor')
+      this.firebaseService.updateGameState('editor');
     }
   }
 

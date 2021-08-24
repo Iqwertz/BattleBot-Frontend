@@ -11,7 +11,6 @@ export class AlertService {
   constructor(private _snackBar: MatSnackBar) {}
 
   notification(message: string) {
-    console.log(message);
     this._snackBar.open(message, 'X', {
       duration: this.duration,
       panelClass: 'snackbar-note',
