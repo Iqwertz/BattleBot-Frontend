@@ -1,9 +1,9 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { Command } from '../components/editor-ide/editor-ide.component';
+import { Command } from '../modules/game/components/editor-ide/editor-ide.component';
 import { BrainFunctions } from './bot-compiler.service';
 import { Select } from '@ngxs/store';
 import { AppState } from '../store/app.state';
-import { Bot } from '../components/battle-map/battle-map.component';
+import { Bot } from '../modules/game/components/battle-map/battle-map.component';
 
 export interface Terminal {
   commands: Command[];

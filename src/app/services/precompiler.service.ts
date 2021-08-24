@@ -1,5 +1,5 @@
 import { ConsoleService } from './console.service';
-import { Command } from './../components/editor-ide/editor-ide.component';
+import { Command } from '../modules/game/components/editor-ide/editor-ide.component';
 import { Injectable } from '@angular/core';
 import { Terminal } from './terminals.service';
 import {

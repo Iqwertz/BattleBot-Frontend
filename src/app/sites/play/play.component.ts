@@ -14,7 +14,7 @@ import {
   SetEditing,
   SetCurrentLobby,
 } from '../../store/app.action';
-import { Bot } from '../../components/battle-map/battle-map.component';
+import { Bot } from '../../modules/game/components/battle-map/battle-map.component';
 import { Player } from '../../services/firebase-lobby.service';
 
 @Component({

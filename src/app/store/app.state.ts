@@ -14,7 +14,7 @@ import { LobbyRef } from './../services/firebase-lobby.service';
 */
 
 import { State, Action, StateContext, Selector } from '@ngxs/store';
-import { Bot } from '../components/battle-map/battle-map.component';
+import { Bot } from '../modules/game/components/battle-map/battle-map.component';
 import { SetEditing } from './app.action';
 import {
   SetCompiledBot,

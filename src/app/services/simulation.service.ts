@@ -1,12 +1,12 @@
 import { SimulationStatsService } from './simulation-stats.service';
 import { ConsoleService } from './console.service';
 import { Injectable, EventEmitter } from '@angular/core';
-import { Bot } from '../components/battle-map/battle-map.component';
+import { Bot } from '../modules/game/components/battle-map/battle-map.component';
 import { cloneDeep } from 'lodash-es';
 import { environment } from 'src/environments/environment';
 import { BotCompilerService, Direction } from './bot-compiler.service';
 import { BattleMapBufferService } from './battle-map-buffer.service';
-import { defaultBots } from '../components/battle-map/battle-map-bots';
+import { defaultBots } from '../modules/game/components/battle-map/battle-map-bots';
 var perlin = require('perlin-noise');
 
 export type GameModes = 'Color';

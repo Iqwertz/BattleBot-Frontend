@@ -1,7 +1,7 @@
 import { ConsoleService } from './console.service';
 import { Injectable } from '@angular/core';
 import { BattleMapBufferService } from './battle-map-buffer.service';
-import { Bot } from '../components/battle-map/battle-map.component';
+import { Bot } from '../modules/game/components/battle-map/battle-map.component';
 import { SimulationData } from './simulation.service';
 import { environment } from '../../environments/environment';
 

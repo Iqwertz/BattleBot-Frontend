@@ -1,0 +1,56 @@
+@import "src/scss/variables";
+
+.battle-map-container {
+  width: 100%;
+  height: 100%;
+  background-color: $default-black;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  flex-grow: 1;
+  flex-basis: auto;
+  //padding: 5px;
+
+  .tile-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    flex-grow: 1;
+    flex-basis: auto;
+
+    .tile {
+      display: flex;
+      flex-grow: 1;
+      border: 0px solid $default-black;
+
+      &.white {
+        background-color: white;
+      }
+
+      &.red {
+        background-color: red;
+      }
+
+      &.black {
+        background-color: black;
+      }
+
+      &.darkred {
+        background-color: darkred;
+      }
+    }
+  }
+}
+
+.botCursor:hover {
+  cursor: url("../../../../../assets/microchip-solid.png"), pointer;
+}
+
+.banCursor:hover {
+  cursor: not-allowed;
+}
+
+.placing:hover {
+  background-color: #09ff00 !important;
+}
