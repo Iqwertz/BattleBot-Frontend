@@ -1,5 +1,5 @@
 import { ConsoleService } from './console.service';
-import { Command } from './../components/editor-ide/editor-ide.component';
+import { Command } from '../modules/game/components/editor-ide/editor-ide.component';
 import { Injectable } from '@angular/core';
 import { Terminal } from './terminals.service';
 import {
@@ -182,12 +182,20 @@ export class PrecompilerService {
     if (this.checkError()) {
       return;
     }
+    this.consoleService.print('compiling onOwnTrackDetected...');
+    let ownTrackDetect: InstructionSet = this.commandsToInstructionset(
+      terminals.get('onOwnTrackDetected')?.commands
+    );
+    if (this.checkError()) {
+      return;
+    }
 
     let brainData: BrainData = {
       vars: defaultBotVars,
       default: def,
       onTrackDetected: trackDetect,
       onWallDetected: wallDetect,
+      onOwnTrackDetected: ownTrackDetect,
     };
 
     this.lastSuccesfullCompile = JSON.stringify(brainData);

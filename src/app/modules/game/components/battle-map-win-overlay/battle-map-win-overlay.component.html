@@ -1,0 +1,32 @@
+<div class="win-overlay" *ngIf="showWinner">
+  <div class="who-won">
+    <ng-container
+      *ngIf="
+        simulationService.simulation.bots.get(
+          simulationStatsService.simulationStatistics.playerColors[0].color
+        )!.name == currentLobby!.player.get(firebaseUser.uid)!.name;
+        else elseTemplate
+      "
+    >
+      Your bot won!
+    </ng-container>
+    <ng-template #elseTemplate> Your bot lost :( </ng-template>
+  </div>
+  <div class="winner-name">
+    <img class="left" src="../../../assets/party.svg" />{{
+      simulationService.simulation.bots.get(
+        simulationStatsService.simulationStatistics.playerColors[0].color
+      )?.name
+    }}<img src="../../../assets/party.svg" />
+  </div>
+  <div class="con-text">is the winner!</div>
+  <app-confetti></app-confetti>
+
+  <div
+    class="restart-button"
+    (click)="restart()"
+    *ngIf="enableRestart && currentLobby?.adminUid == firebaseUser.uid"
+  >
+    Restart
+  </div>
+</div>

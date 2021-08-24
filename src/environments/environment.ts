@@ -4,15 +4,16 @@
 
 export const environment = {
   production: false,
+  alertTime: 3,
   simulationSpeed: 100,
-  defaultMapSize: [20, 20],
+  defaultMapSize: [70, 70],
   defaultTrackLength: 10,
   maxPlayer: 10,
   maxTime: 80,
   maxMapSize: 150,
-  speedRange: [20, 1500],
+  speedRange: [100, 1500],
   obstacleNoiseSettings: {
-    threshold: 0.65,
+    threshold: 0.7,
     octaveCount: 4,
     amplitude: 0.2,
     persistence: 0.1,

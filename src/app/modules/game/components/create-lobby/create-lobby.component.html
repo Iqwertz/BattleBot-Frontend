@@ -1,0 +1,37 @@
+<div class="create-lobby-container">
+  <div class="lobby-infos" *ngIf="currentLobby && firebaseUser">
+    <div
+      class="start-game"
+      *ngIf="currentLobby.adminUid == firebaseUser.uid && checkPlayerReady()"
+      (click)="startGame()"
+    >
+      Start
+    </div>
+    <div class="lobby-code">
+      {{ currentLobby.settings.id }}
+    </div>
+    <div class="settings">
+      <div class="container">
+        <div class="app-lobby-settings" *ngIf="firebaseUser">
+          <app-lobby-settings
+            [isAdmin]="currentLobby.adminUid == firebaseUser.uid"
+            [currentPlayer]="getObjectLength(currentLobby.player)"
+            [setLobbySettings]="currentLobby.settings"
+            (lobbySettingChange)="lobbySettingChanged($event)"
+          ></app-lobby-settings>
+        </div>
+        <div class="map">
+          <app-battle-map></app-battle-map>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="player-list" *ngIf="currentLobby">
+    <app-player-list
+      [player]="currentLobby.player"
+      [admin]="currentLobby.adminUid"
+    >
+    </app-player-list>
+  </div>
+</div>

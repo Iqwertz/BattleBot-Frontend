@@ -1,0 +1,194 @@
+<div class="lobby-settings terminal-scrollbar" *ngIf="lobbySettings">
+  Settings:
+  <div class="input">
+    <div class="label">Name:</div>
+    <mat-form-field class="form-field" appearance="fill">
+      <mat-label>Simulation name</mat-label>
+      <input
+        [disabled]="!isAdmin"
+        matInput
+        type="text"
+        [maxLength]="30"
+        [(ngModel)]="lobbySettings.name"
+        (change)="settingChanged()"
+      />
+    </mat-form-field>
+  </div>
+
+  <div class="input">
+    <div class="label">Private:</div>
+    <mat-checkbox
+      class="checkbox"
+      [disabled]="!isAdmin"
+      [(ngModel)]="lobbySettings.private"
+      (change)="settingChanged()"
+    ></mat-checkbox>
+  </div>
+
+  <div class="input">
+    <div class="label">Player:</div>
+    <mat-form-field class="form-field" appearance="fill">
+      <mat-label>Player</mat-label>
+      <input
+        matInput
+        type="number"
+        min="2"
+        (change)="validatePlayer(); settingChanged()"
+        [(ngModel)]="lobbySettings.maxPlayer"
+        [disabled]="!isAdmin"
+      />
+    </mat-form-field>
+  </div>
+
+  <div class="input">
+    <div class="label">Mode:</div>
+    <mat-form-field class="form-field" appearance="fill">
+      <mat-label>Gamemode</mat-label>
+      <mat-select
+        [disabled]="!isAdmin"
+        [(value)]="lobbySettings.mode"
+        (change)="settingChanged()"
+      >
+        <mat-option *ngFor="let mode of modes" [value]="mode">
+          {{ mode }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="input">
+    <div class="label">Building time:</div>
+    <mat-form-field class="form-field" appearance="fill">
+      <mat-label>time (min)</mat-label>
+      <input
+        matInput
+        type="number"
+        min="1"
+        (change)="validateTime(); settingChanged()"
+        [(ngModel)]="lobbySettings.editorTime"
+        [disabled]="!isAdmin"
+      />
+    </mat-form-field>
+  </div>
+
+  <div class="input">
+    <div class="label">Simulation time:</div>
+    <mat-form-field class="form-field" appearance="fill">
+      <mat-label>time (min)</mat-label>
+      <input
+        matInput
+        type="number"
+        min="1"
+        (change)="validateTime(); settingChanged()"
+        [(ngModel)]="lobbySettings.simulationTime"
+        [disabled]="!isAdmin"
+      />
+    </mat-form-field>
+  </div>
+
+  <div class="input">
+    <div class="label">Simulation speed:</div>
+    <mat-slider
+      class="slider"
+      [max]="100"
+      [min]="1"
+      [step]="1"
+      [thumbLabel]="true"
+      [(ngModel)]="lobbySettings.speed"
+      aria-labelledby="simulation speed"
+      (change)="settingChanged()"
+      [disabled]="!isAdmin"
+    >
+    </mat-slider>
+  </div>
+
+  Map settings:
+  <div class="input">
+    <div class="label">Map size:</div>
+    <mat-form-field class="form-field" appearance="fill">
+      <mat-label>Map size (px)</mat-label>
+      <input
+        matInput
+        type="number"
+        min="5"
+        (change)="validateMap(); settingChanged()"
+        [(ngModel)]="lobbySettings.mapSize"
+        [disabled]="!isAdmin"
+      />
+    </mat-form-field>
+  </div>
+
+  <div class="input">
+    <div class="label">Obstacles:</div>
+    <mat-checkbox
+      (change)="updateMap(); settingChanged()"
+      class="checkbox"
+      [(ngModel)]="lobbySettings.obstacles"
+      [disabled]="!isAdmin"
+    ></mat-checkbox>
+  </div>
+
+  <div class="input indent" *ngIf="lobbySettings.obstacles">
+    <div class="label">Threshold:</div>
+    <mat-slider
+      class="slider"
+      [max]="obstacleMaxSettings.threshold"
+      [min]="0"
+      [step]="0.01"
+      [thumbLabel]="true"
+      [(ngModel)]="lobbySettings.obstacleSettings.threshold"
+      aria-labelledby="threshold"
+      (change)="updateMap(); settingChanged()"
+      [disabled]="!isAdmin"
+    >
+    </mat-slider>
+  </div>
+
+  <div class="input indent" *ngIf="lobbySettings.obstacles">
+    <div class="label">octaveCount:</div>
+    <mat-slider
+      class="slider"
+      [max]="obstacleMaxSettings.octaveCount"
+      [min]="0"
+      [step]="1"
+      [thumbLabel]="true"
+      [(ngModel)]="lobbySettings.obstacleSettings.octaveCount"
+      aria-labelledby="octaveCount"
+      (change)="updateMap(); settingChanged()"
+      [disabled]="!isAdmin"
+    >
+    </mat-slider>
+  </div>
+
+  <div class="input indent" *ngIf="lobbySettings.obstacles">
+    <div class="label">Amplitude:</div>
+    <mat-slider
+      class="slider"
+      [max]="obstacleMaxSettings.amplitude"
+      [min]="0"
+      [step]="0.01"
+      [thumbLabel]="true"
+      [(ngModel)]="lobbySettings.obstacleSettings.amplitude"
+      aria-labelledby="Amplitude"
+      (change)="updateMap(); settingChanged()"
+      [disabled]="!isAdmin"
+    >
+    </mat-slider>
+  </div>
+
+  <div class="input indent" *ngIf="lobbySettings.obstacles">
+    <div class="label">Persistence:</div>
+    <mat-slider
+      class="slider"
+      [max]="obstacleMaxSettings.persistence"
+      [min]="0"
+      [step]="0.01"
+      [thumbLabel]="true"
+      [(ngModel)]="lobbySettings.obstacleSettings.persistence"
+      aria-labelledby="persistence"
+      (change)="updateMap(); settingChanged()"
+      [disabled]="!isAdmin"
+    >
+    </mat-slider>
+  </div>
+</div>

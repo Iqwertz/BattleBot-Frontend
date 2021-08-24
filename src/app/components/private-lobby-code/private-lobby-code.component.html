@@ -3,7 +3,7 @@
     <input
       name="lobby-code"
       [ngModel]="inputCode"
-      (ngModelChange)="inputCode = $event.toUpperCase()"
+      (ngModelChange)="onInput($event)"
       class="input-field-split"
       type="text"
       maxlength="5"

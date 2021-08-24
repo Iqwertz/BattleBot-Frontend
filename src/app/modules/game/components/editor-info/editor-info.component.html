@@ -1,0 +1,37 @@
+<div class="info-container terminal-scrollbar">
+  <div class="stat">
+    Bot name:
+    <i>{{ this.currentLobby?.player?.get(this.firebaseUser.uid)?.name }}</i>
+  </div>
+  <div class="stat">
+    Game name: <i>{{ currentLobby?.settings?.name }}</i>
+  </div>
+  <div class="stat">
+    Editing time: <i>{{ currentLobby?.settings?.editorTime }}min</i>
+  </div>
+  <div class="stat">
+    Simulation time: <i>{{ currentLobby?.settings?.simulationTime }}min</i>
+  </div>
+  <div class="stat">
+    Map size:
+    <i
+      >{{ currentLobby?.settings?.mapSize }} X
+      {{ currentLobby?.settings?.mapSize }}</i
+    >
+  </div>
+  <div class="stat">&nbsp;Opponents:</div>
+  <div *ngFor="let op of this.currentLobby?.player | keyvalue">
+    <div class="opponent stat" *ngIf="op.value.uId != firebaseUser.uid">
+      <i>{{ op.value.name }}</i>
+    </div>
+  </div>
+  <!--
+    Your bot name
+    Game Name
+    simulation Time
+    map Size
+    Player in Game
+
+
+  -->
+</div>

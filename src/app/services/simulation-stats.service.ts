@@ -1,7 +1,6 @@
 import { BattleMapBufferService } from './battle-map-buffer.service';
-import { SimulationService } from './simulation.service';
 import { Injectable, EventEmitter } from '@angular/core';
-import { round } from 'lodash';
+import { round } from 'lodash-es';
 
 export interface SimulationStatistic {
   wholeArea: number;

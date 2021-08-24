@@ -1,7 +1,7 @@
 import { ConsoleService } from './console.service';
 import { Injectable } from '@angular/core';
 import { BattleMapBufferService } from './battle-map-buffer.service';
-import { Bot } from '../components/battle-map/battle-map.component';
+import { Bot } from '../modules/game/components/battle-map/battle-map.component';
 import { SimulationData } from './simulation.service';
 import { environment } from '../../environments/environment';
 
@@ -30,6 +30,9 @@ export const _BotVars = [
   'trackRadarLeft',
   'trackRadarRight',
   'trackRadarForward',
+  'ownTrackRadarLeft',
+  'ownTrackRadarRight',
+  'ownTrackRadarForward',
 ] as const;
 export type BotVarRef = typeof _BotVars[number];
 
@@ -71,10 +74,15 @@ export interface InstructionSet {
 export interface BotVars {
   obstacleRadar: RadarStatus;
   trackRadar: RadarStatus;
+  ownTrackRadar: RadarStatus;
 }
 
 //all Brain Callbyacks
-export type BrainFunctions = 'default' | 'onWallDetected' | 'onTrackDetected';
+export type BrainFunctions =
+  | 'default'
+  | 'onWallDetected'
+  | 'onTrackDetected'
+  | 'onOwnTrackDetected';
 
 //Data of a bots Brain, on.. are callbacks for events
 export interface BrainData {
@@ -82,6 +90,7 @@ export interface BrainData {
   default: InstructionSet;
   onWallDetected: InstructionSet;
   onTrackDetected: InstructionSet;
+  onOwnTrackDetected: InstructionSet;
 }
 
 //the directional Status Values of a radar
@@ -100,6 +109,7 @@ export const emptyRadar: RadarStatus = {
 export const defaultBotVars: BotVars = {
   obstacleRadar: emptyRadar,
   trackRadar: emptyRadar,
+  ownTrackRadar: emptyRadar,
 };
 
 /**
@@ -137,7 +147,7 @@ export class BotCompilerService {
   }
 
   /**
-   * checks if the given parameter is an Instruction or a Logic Instruction, Returns True when it is an Instruction
+   * checks if the given parameter is an Instruction or a Logic Instruction, Returns true when it is an Instruction
    *
    * @param {any} instruction
    * @return {*}  {instruction is Instruction}
@@ -244,6 +254,9 @@ export class BotCompilerService {
     } else if (this.checkTracks(bot)) {
       //check for tracks
       return this.executeLogic(bot.brain.onTrackDetected, 0, bot.brain.vars); //callback
+    } else if (this.checkOwnTracks(bot)) {
+      //check for tracks
+      return this.executeLogic(bot.brain.onOwnTrackDetected, 0, bot.brain.vars); //callback
     }
     return null;
   }
@@ -255,11 +268,32 @@ export class BotCompilerService {
    * @return {*}  {boolean} - true when any track was found
    * @memberof BotCompilerService
    */
+  checkOwnTracks(bot: Bot): boolean {
+    bot.brain.vars.ownTrackRadar = {
+      left: this.checkTrackDir(bot, 'left', false),
+      right: this.checkTrackDir(bot, 'right', false),
+      forward: this.checkTrackDir(bot, 'forward', false),
+    };
+
+    return (
+      bot.brain.vars.ownTrackRadar.left ||
+      bot.brain.vars.ownTrackRadar.right ||
+      bot.brain.vars.ownTrackRadar.forward
+    );
+  }
+
+  /**
+   *checks the fields around the bot (forward, left, right) and updates the bots internal trackRadar
+   *
+   * @param {Bot} bot
+   * @return {*}  {boolean} - true when any track was found
+   * @memberof BotCompilerService
+   */
   checkTracks(bot: Bot): boolean {
     bot.brain.vars.trackRadar = {
-      left: this.checkTrackDir(bot, 'left'),
-      right: this.checkTrackDir(bot, 'right'),
-      forward: this.checkTrackDir(bot, 'forward'),
+      left: this.checkTrackDir(bot, 'left', true),
+      right: this.checkTrackDir(bot, 'right', true),
+      forward: this.checkTrackDir(bot, 'forward', true),
     };
 
     return (
@@ -291,14 +325,14 @@ export class BotCompilerService {
   }
 
   /**
-   *checks a tile in the given direction from the bot for an enemy track tile
+   *checks a tile in the given direction from the bot for an track tile, when enemy is true it detects enemy tiles else only the own tiles
    *
    * @param {Bot} bot
    * @param {Instruction} ins - direction to check
    * @return {*}  {boolean} - true when track was found in the direction
    * @memberof BotCompilerService
    */
-  checkTrackDir(bot: Bot, ins: Instruction): boolean {
+  checkTrackDir(bot: Bot, ins: Instruction, enemy: boolean): boolean {
     let detected = false;
     let absolutePos: number[] = this.getRelativePosition(
       bot.direction,
@@ -311,18 +345,28 @@ export class BotCompilerService {
         absolutePos[0],
         absolutePos[1]
       ); //get the value of the tile
-      if (posVal != bot.trackColor) {
-        //check if it is not the own track
-        if (
-          //check if it is na enemy Player track
-          this.isPlayerTrackByte(
-            this.battleMapBufferService.getBattleMapBufferValue(
-              absolutePos[0],
-              absolutePos[1]
-            )
+      if (
+        //check if it is na enemy Player track
+        this.isPlayerTrackByte(
+          this.battleMapBufferService.getBattleMapBufferValue(
+            absolutePos[0],
+            absolutePos[1]
           )
-        ) {
-          detected = true;
+        )
+      ) {
+        if (posVal != bot.trackColor) {
+          //check if it is not the own track
+          if (enemy) {
+            detected = true;
+          } else {
+            detected = false;
+          }
+        } else {
+          if (!enemy) {
+            detected = true;
+          } else {
+            detected = false;
+          }
         }
       }
     }
@@ -545,6 +589,12 @@ export class BotCompilerService {
       return bVar.trackRadar.left.toString();
     } else if (ref == 'trackRadarRight') {
       return bVar.trackRadar.right.toString();
+    } else if (ref == 'ownTrackRadarForward') {
+      return bVar.ownTrackRadar.forward.toString();
+    } else if (ref == 'ownTrackRadarLeft') {
+      return bVar.ownTrackRadar.left.toString();
+    } else if (ref == 'ownTrackRadarRight') {
+      return bVar.ownTrackRadar.right.toString();
     }
 
     return '';

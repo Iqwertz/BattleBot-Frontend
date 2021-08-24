@@ -1,0 +1,31 @@
+button {
+  z-index: 20;
+  position: absolute;
+  border: none;
+  padding: 0.5rem;
+  background: #fddde3;
+  color: #8e5d5d;
+  width: 200px;
+  height: 50px;
+  font-size: 21px;
+  box-shadow: 0px 1px 4px 0px #d59d9d;
+  margin-top: 2rem;
+  cursor: pointer;
+}
+
+canvas {
+  height: 100%; /* we need these for full-screen effect */
+  width: 100%;
+  position: absolute;
+  pointer-events: none;
+  top: 0;
+  left: 0;
+}
+
+.container {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}

@@ -1,0 +1,41 @@
+<div class="editor-container">
+  <div class="ide-container">
+    <app-editor-ide> </app-editor-ide>
+  </div>
+  <div class="side-panel">
+    <div class="info-container">
+      <div class="label">{{ infoToggle.value }}:</div>
+      <div class="toggle">
+        <mat-button-toggle-group
+          name="fontStyle"
+          aria-label="Font Style"
+          #infoToggle="matButtonToggleGroup"
+        >
+          <mat-button-toggle [checked]="true" value="Console">
+            <div class="icon"><fa-icon [icon]="faTerminal"></fa-icon></div
+          ></mat-button-toggle>
+          <mat-button-toggle value="Info"
+            ><div class="icon"><fa-icon [icon]="faInfo"></fa-icon></div
+          ></mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
+      <div class="timer">{{ timeLeft }}</div>
+      <div *ngIf="infoToggle.value == 'Info'" class="terminal">
+        <app-editor-info></app-editor-info>
+      </div>
+      <div *ngIf="infoToggle.value == 'Console'" class="terminal">
+        <app-console></app-console>
+      </div>
+    </div>
+    <div class="bottom-right">
+      <div class="map-container">
+        <div class="map">
+          <app-battle-map></app-battle-map>
+        </div>
+      </div>
+      <div class="controls">
+        <app-battle-map-controls></app-battle-map-controls>
+      </div>
+    </div>
+  </div>
+</div>

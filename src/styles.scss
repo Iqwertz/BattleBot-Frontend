@@ -47,7 +47,7 @@ body {
 }
 body {
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-family: "JetBrains Mono", monospace;
 }
 
 .terminal-scrollbar {
@@ -69,4 +69,24 @@ body {
 
 .terminal-scrollbar::-webkit-scrollbar-corner {
   display: none;
+}
+
+.snackbar-note {
+  font-family: "JetBrains Mono", monospace !important;
+  color: #fff !important; // green
+  background-color: $default-black !important;
+  border: 2px solid #fbff00 !important;
+  .mat-simple-snackbar-action {
+    color: #ff9090 !important;
+  }
+}
+
+.snackbar-error {
+  font-family: "JetBrains Mono", monospace !important;
+  color: #fff !important; // green
+  background-color: $default-black !important;
+  border: 2px solid #ff1100 !important;
+  .mat-simple-snackbar-action {
+    color: #ff9090 !important;
+  }
 }

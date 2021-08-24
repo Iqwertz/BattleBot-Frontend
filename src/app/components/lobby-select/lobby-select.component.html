@@ -1,5 +1,5 @@
 <div class="lobby-select">
-  <span class="label">Join private lobby:</span>
+  <span class="label" (click)="note()">Join private lobby:</span>
   <div class="top-line">
     <div class="private-lobby-code-container">
       <app-private-lobby-code></app-private-lobby-code>
@@ -8,7 +8,7 @@
       Create new Lobby
     </div>
   </div>
-  <span class="label" (click)="clearAuth()">Public lobbys:</span>
+  <span class="label" (click)="error()">Public lobbys:</span>
   <div class="public-lobbys-container">
     <app-public-lobbys></app-public-lobbys>
   </div>

@@ -1,0 +1,97 @@
+@import "./src/scss/variables";
+
+.simulation-leaderboard {
+  position: absolute;
+  top: 5%;
+  left: 25px;
+  height: 90%;
+  width: 25%;
+  background-color: $default-black;
+  border-radius: 15px;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: flex-start;
+
+  .titel {
+    color: #fff;
+    font-size: 3em;
+    margin: 20px 0;
+    font-family: "JetBrains Mono", monospace;
+  }
+
+  .splitter {
+    width: 80%;
+    height: 1px;
+    background-color: #fff;
+    margin-bottom: 30px;
+  }
+
+  .rank-container {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-flow: column;
+    margin: 7px;
+
+    .player {
+      height: 60px;
+      border-radius: 60px;
+      margin: 5px 0;
+      font-size: 1.4em;
+      color: #fff;
+      font-family: "JetBrains Mono", monospace;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &.self {
+        border: 4px solid rgb(0, 247, 255);
+      }
+
+      &.first {
+        width: 80%;
+      }
+
+      &.second {
+        width: 70%;
+      }
+
+      &.third {
+        width: 63%;
+      }
+
+      .icon {
+        position: absolute;
+        top: 0;
+        width: 60px;
+        height: 60px;
+
+        border-radius: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &.robo {
+          background-color: #fff;
+          left: 0;
+        }
+
+        &.rank {
+          top: 0;
+          right: 0;
+        }
+
+        img {
+          width: 35px;
+          height: 35px;
+          position: relative;
+          right: 1px; //ugly fix for a weird bug :)
+        }
+      }
+    }
+  }
+}

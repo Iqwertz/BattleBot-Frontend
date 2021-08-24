@@ -1,3 +1,4 @@
+import { FirebaseService } from 'src/app/services/firebase.service';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
@@ -7,6 +8,7 @@ import { Store, Select } from '@ngxs/store';
 import { SetFirebaseUser } from '../store/app.action';
 import { AppState } from '../store/app.state';
 import { GameModes } from './simulation.service';
+import { AlertService } from './alert.service';
 
 export interface Player {
   uId: string;
@@ -39,10 +41,13 @@ export interface LobbyRefSettings {
   simulationSteps: number;
 }
 
+export type GameState = 'lobby' | 'editor' | 'play';
+
 export interface LobbyRef {
   settings: LobbyRefSettings;
   player: Map<string, Player>;
   adminUid: string;
+  gameState: GameState;
 }
 
 export interface GameEntry {
@@ -73,7 +78,9 @@ export class FirebaseLobbyService {
     public auth: AngularFireAuth,
     private db: AngularFireDatabase,
     private router: Router,
-    private store: Store
+    private store: Store,
+    private firebaseService: FirebaseService,
+    private alert: AlertService
   ) {
     this.lobbyFirebaseRef = db.object('lobbys').valueChanges();
     this.lobbyFirebaseRef.subscribe((changes: any) => {
@@ -87,20 +94,13 @@ export class FirebaseLobbyService {
       this.currentLobby = newLobby;
     });
 
-    auth.onAuthStateChanged((user) => {
-      this.store.dispatch(new SetFirebaseUser(user));
-      if (!user && this.currentLobby) {
-        console.log('user logged out');
-        router.navigate(['']);
-      }
-    });
-
     this.firebaseUser$.subscribe((user: any) => {
       this.firebaseUser = user;
     });
   }
 
   updatePlayer(player: Player | undefined) {
+    console.log(player);
     if (this.currentLobby && player) {
       this.db.database
         .ref()
@@ -120,7 +120,15 @@ export class FirebaseLobbyService {
         .child(id)
         .set(null)
         .then(() => {
-          console.log('kicked Player');
+          this.db.database
+            .ref()
+            .child('/user/')
+            .child(id)
+            .set(null)
+            .then(() => {
+              console.log('kicked Player');
+              this.alert.notification('kicked Player');
+            });
         })
         .catch((e) => {
           console.log(e);
@@ -130,107 +138,73 @@ export class FirebaseLobbyService {
     }
   }
 
-  generateNewLobby() {
-    console.log('newLobby');
-    if (!this.firebaseUser) {
-      this.auth
-        .signInAnonymously()
-        .then(() => {
-          let id = this.getNewSessionId(5);
+  joinLobby(id: string) {
+    this.alert.notification('joining lobby');
+    this.firebaseService.getLobby(id).then((lobbySnap) => {
+      if (lobbySnap.exists()) {
+        if (
+          this.firebaseService.formatPlayerToMap(lobbySnap.val().player).size <
+          lobbySnap.val().settings.maxPlayer
+        ) {
+          this.auth.signInAnonymously().then(() => {
+            if (this.firebaseUser) {
+              this.firebaseService.setNewUser(id);
 
-          let roboName =
-            environment.roboNames[
-              Math.floor(Math.random() * environment.roboNames.length)
-            ];
+              let roboName = this.generateUniqueRobot(
+                this.firebaseService.formatPlayerToMap(lobbySnap.val().player)
+              );
+              let colorId = environment.roboNames.indexOf(roboName) * 2 + 3;
 
-          let colorId = environment.roboNames.indexOf(roboName) * 2 + 3;
+              let player: Player = {
+                uId: this.firebaseUser.uid,
+                name: roboName,
+                isReady: false,
+                colorId: colorId,
+              };
 
-          let player: Player = {
-            uId: this.firebaseUser.uid,
-            name: roboName,
-            isReady: false,
-            colorId: colorId,
-          };
+              console.log(this.firebaseUser.uid);
 
-          let settings: LobbyRefSettings = {
-            editorTime: environment.defaultLobby.editorTime,
-            id: id,
-            maxPlayer: environment.defaultLobby.maxPlayer,
-            name: '',
-            private: environment.defaultLobby.private,
-            simulationTime: environment.defaultLobby.simulationTime,
-            mode: 'Color',
-            mapSize: environment.defaultMapSize[0],
-            obstacleSettings: environment.obstacleNoiseSettings,
-            obstacles: true,
-            speed: 20,
-            gameStarted: false,
-            editorEndTimeStamp: new Date(),
-            simulationSteps: 0,
-          };
-
-          console.log(this.firebaseUser.uid);
-
-          let newLobby: LobbyRef = {
-            settings: settings,
-            adminUid: this.firebaseUser.uid,
-            player: new Map(),
-          };
-
-          console.log(newLobby);
-
-          console.log('set lobbys');
-          this.db.database
-            .ref()
-            .child('/lobbys')
-            .child(id)
-            .update(newLobby)
-            .then(() => {
-              console.log('set player');
               this.db.database
                 .ref()
                 .child('/lobbys/' + id + '/player')
-                .child(player.uId)
+                .child(this.firebaseUser.uid)
                 .update(player)
                 .then(() => {
-                  this.router.navigate(['createLobby', id]);
+                  this.firebaseService.setGameState();
+                  this.router.navigate(['game']);
                 });
-            })
-            .catch((e) => {
-              console.log(e);
-            });
-        })
-        .catch((error) => {
-          var errorCode = error.code;
-          var errorMessage = error.message;
-          console.log(error);
-        });
-    } else {
-      console.log('Error: already in a game');
-    }
+            } else {
+              console.log('Error: Sign In failed');
+              this.alert.error('Error: Sign In failed');
+            }
+          });
+        } else {
+          console.log('Error: Lobby full');
+          this.alert.error('Error: Lobby full');
+        }
+      }
+    });
   }
 
-  generateUniqueRobot(): string {
-    if (this.currentLobby) {
-      let nameFound: boolean = false;
-      let roboName = '';
-      while (!nameFound) {
-        roboName =
-          environment.roboNames[
-            Math.floor(Math.random() * environment.roboNames.length)
-          ];
-        nameFound = true;
-        this.currentLobby.player.forEach((value: Player) => {
-          if (value.name == roboName) {
-            nameFound = false;
-          }
-        });
-      }
+  generateUniqueRobot(player: Map<string, Player>): string {
+    console.log(this.currentLobby);
 
-      return roboName;
+    let nameFound: boolean = false;
+    let roboName = '';
+    while (!nameFound) {
+      roboName =
+        environment.roboNames[
+          Math.floor(Math.random() * environment.roboNames.length)
+        ];
+      nameFound = true;
+      player.forEach((value: Player) => {
+        if (value.name == roboName) {
+          nameFound = false;
+        }
+      });
     }
 
-    return '';
+    return roboName;
   }
 
   formatPlayerToMap(obj: any): Map<string, Player> {

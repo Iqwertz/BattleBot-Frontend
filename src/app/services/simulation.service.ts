@@ -1,12 +1,12 @@
 import { SimulationStatsService } from './simulation-stats.service';
 import { ConsoleService } from './console.service';
 import { Injectable, EventEmitter } from '@angular/core';
-import { Bot } from '../components/battle-map/battle-map.component';
-import { cloneDeep } from 'lodash';
+import { Bot } from '../modules/game/components/battle-map/battle-map.component';
+import { cloneDeep } from 'lodash-es';
 import { environment } from 'src/environments/environment';
 import { BotCompilerService, Direction } from './bot-compiler.service';
 import { BattleMapBufferService } from './battle-map-buffer.service';
-import { defaultBots } from '../components/battle-map/battle-map-bots';
+import { defaultBots } from '../modules/game/components/battle-map/battle-map-bots';
 var perlin = require('perlin-noise');
 
 export type GameModes = 'Color';
@@ -146,10 +146,10 @@ export class SimulationService {
   }
 
   setSpeed(speed: number) {
-    let msSpeed = (environment.speedRange[1] * speed) / 100; //This isnt using the lower range of the defined speed but it doesnt really matter
+    let diff = environment.speedRange[1] - environment.speedRange[0];
+    let msSpeed = environment.speedRange[0] + (diff * speed) / 100;
     this.simulation.statusVar.simulationSpeed = msSpeed;
     this.consoleService.print('set Simulation speed to ' + speed + '%');
-    console.log('set Simulation speed to ' + msSpeed);
   }
 
   setRandomBot() {
@@ -333,8 +333,9 @@ export class SimulationService {
       }
     });
 
-    this.simulation.statusVar.simulatedSteps++;
     this.renderOntoMap(); //render new map
+
+    this.simulation.statusVar.simulatedSteps++;
     this.stepCalculated.emit();
 
     if (
@@ -342,9 +343,7 @@ export class SimulationService {
       this.simulation.statusVar.simulationStarted
     ) {
       setTimeout(() => {
-        requestAnimationFrame(() => {
-          this.simulateStep();
-        });
+        this.simulateStep();
       }, this.simulation.statusVar.simulationSpeed); //set timeout for next step
     }
   }

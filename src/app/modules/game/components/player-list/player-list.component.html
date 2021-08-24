@@ -1,0 +1,74 @@
+<div class="player-list">
+  <div class="titel">Player</div>
+  <div class="player-container" *ngIf="playerList.size > 0 && firebaseUser">
+    <div
+      class="player"
+      [ngClass]="{ self: playerList.get(adminUid)!.uId == firebaseUser.uid }"
+      [style.background-color]="
+        byteColorMap.get((playerList.get(adminUid)!.colorId + 1).toString())
+      "
+    >
+      <div class="icon">
+        <img
+          [src]="'assets/userIcons/' + playerList.get(adminUid)!.name + '.svg'"
+        />
+      </div>
+      {{ playerList.get(adminUid)!.name }}
+      <div class="is-ready">
+        <fa-icon
+          *ngIf="playerList.get(adminUid)!.isReady"
+          class="check"
+          [icon]="faCheck"
+        >
+        </fa-icon>
+        <fa-icon
+          *ngIf="!playerList.get(adminUid)!.isReady"
+          class="times"
+          [icon]="faTimes"
+        >
+        </fa-icon>
+      </div>
+    </div>
+    <div class="spliter"></div>
+    <ng-container *ngFor="let player of playerList | keyvalue">
+      <div
+        class="player"
+        [ngClass]="{ self: player.value.uId == firebaseUser.uid }"
+        [style.background-color]="
+          byteColorMap.get((player.value.colorId + 1).toString())
+        "
+        *ngIf="player.value.uId != adminUid"
+      >
+        <div class="icon">
+          <img [src]="'assets/userIcons/' + player.value.name + '.svg'" />
+        </div>
+        {{ player.value.name }}
+        <div class="is-ready">
+          <fa-icon *ngIf="player.value.isReady" class="check" [icon]="faCheck">
+          </fa-icon>
+          <fa-icon *ngIf="!player.value.isReady" class="times" [icon]="faTimes">
+          </fa-icon>
+        </div>
+
+        <div
+          class="kick-overlay"
+          *ngIf="playerList.get(adminUid)!.uId == firebaseUser.uid"
+          (click)="kickPlayer(player.value.uId)"
+        >
+          <fa-icon [icon]="faTimes"> </fa-icon>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+  <div
+    class="player-ready"
+    *ngIf="firebaseUser && playerList.get(firebaseUser.uid)"
+  >
+    Ready: &nbsp;
+    <mat-checkbox
+      class="checkbox"
+      [(ngModel)]="playerList.get(firebaseUser.uid)!.isReady"
+      (change)="readyChanged()"
+    ></mat-checkbox>
+  </div>
+</div>
