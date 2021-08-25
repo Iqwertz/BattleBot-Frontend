@@ -11,7 +11,7 @@ export const defaultBots: Bot[] = [
     position: [-1, -1],
     track: [],
     trackColor: 4,
-    trackLength: 10,
+    trackLength: 1,
     brain: {
       vars: {
         obstacleRadar: {
@@ -222,7 +222,7 @@ export const defaultBots: Bot[] = [
     position: [-1, -1],
     track: [],
     trackColor: 4,
-    trackLength: 10,
+    trackLength: 1,
     brain: {
       vars: {
         obstacleRadar: {
@@ -422,7 +422,7 @@ export const defaultBots: Bot[] = [
     position: [-1, -1],
     track: [],
     trackColor: 4,
-    trackLength: 10,
+    trackLength: 1,
     brain: {
       vars: {
         obstacleRadar: {

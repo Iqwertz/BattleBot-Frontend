@@ -3,7 +3,7 @@ export const environment = {
   alertTime: 3,
   simulationSpeed: 100,
   defaultMapSize: [40, 40],
-  defaultTrackLength: 10,
+  defaultTrackLength: 1,
   maxPlayer: 10,
   maxTime: 80,
   maxMapSize: 150,
