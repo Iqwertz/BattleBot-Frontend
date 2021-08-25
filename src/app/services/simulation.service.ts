@@ -284,7 +284,6 @@ export class SimulationService {
         //check if bot crashed
 
         let nextInstruction = this.botCompilerService.getNextInstruction(bot); //calculate the next instructions
-
         for (let i = 0; i < nextInstruction.length; i++) {
           //execute the instructions
           bot.direction = this.botCompilerService.calculateMoveDirection(

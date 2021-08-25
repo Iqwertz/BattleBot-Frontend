@@ -1,6 +1,4 @@
 import { Bot } from './battle-map.component';
-import { environment } from '../../../../../environments/environment';
-import { defaultBotVars } from 'src/app/services/bot-compiler.service';
 
 const defaultTrackLength = 25;
 
@@ -10,7 +8,7 @@ export const defaultBots: Bot[] = [
     crashed: false,
     direction: 'up',
     name: 'Testing Bot',
-    position: [62, 52],
+    position: [-1, -1],
     track: [],
     trackColor: 4,
     trackLength: 10,
@@ -221,7 +219,7 @@ export const defaultBots: Bot[] = [
     crashed: false,
     direction: 'up',
     name: 'Testing Bot',
-    position: [46, 53],
+    position: [-1, -1],
     track: [],
     trackColor: 4,
     trackLength: 10,
@@ -421,7 +419,7 @@ export const defaultBots: Bot[] = [
     crashed: false,
     direction: 'up',
     name: 'Testing Bot',
-    position: [12, 15],
+    position: [-1, -1],
     track: [],
     trackColor: 4,
     trackLength: 10,

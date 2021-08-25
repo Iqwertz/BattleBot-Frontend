@@ -201,7 +201,7 @@ export class BotCompilerService {
    */
   getNextInstruction(bot: Bot): Instruction[] {
     let eventInstruction = this.checkForEvents(bot); //checks for event instructions
-    if (!eventInstruction) {
+    if (!eventInstruction || eventInstruction?.length == 0) {
       //when no eventInstruction was triggerd get next default instructions
       let defaultIn: Instruction[] = [];
       let stepFound = false;
@@ -250,7 +250,12 @@ export class BotCompilerService {
   checkForEvents(bot: Bot): Instruction[] | null {
     if (this.checkWalls(bot)) {
       //check for walls
-      return this.executeLogic(bot.brain.onWallDetected, 0, bot.brain.vars); //callback
+      let loschen = this.executeLogic(
+        bot.brain.onWallDetected,
+        0,
+        bot.brain.vars
+      ); //callback
+      return loschen;
     } else if (this.checkTracks(bot)) {
       //check for tracks
       return this.executeLogic(bot.brain.onTrackDetected, 0, bot.brain.vars); //callback
@@ -457,17 +462,16 @@ export class BotCompilerService {
     botVariablen: BotVars
   ): Instruction[] {
     let calculatedInstructions: Instruction[] = [];
-
     for (let i = progress; i < instructionSet.instructions.length; i++) {
       //loop through the instructions in the instruction Set
       let instruction = instructionSet.instructions[i];
       if (this.checkIfDirectionInstruction(instruction)) {
         //check if it is a direction
+        calculatedInstructions.push(instruction); //add instruction to the calculated Instructions
         if (instruction == 'forward') {
           //check if it is a step
           return calculatedInstructions; //stop calculation since a step was found
         }
-        calculatedInstructions.push(instruction); //add instruction to the calculated Instructions
       } else if (this.checkIfCodeFunction(instruction)) {
         this.logInstruction(instruction, botVariablen);
       } else {

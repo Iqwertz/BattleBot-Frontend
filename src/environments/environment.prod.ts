@@ -2,7 +2,7 @@ export const environment = {
   production: false,
   alertTime: 3,
   simulationSpeed: 100,
-  defaultMapSize: [70, 70],
+  defaultMapSize: [40, 40],
   defaultTrackLength: 10,
   maxPlayer: 10,
   maxTime: 80,
@@ -26,7 +26,7 @@ export const environment = {
     simulationTime: 2,
     maxPlayer: 4,
   },
-  availableBotColors: 15,
+  availableBotColors: 14,
   botByteRange: [5, 32],
   roboNames: [
     'AVA',
