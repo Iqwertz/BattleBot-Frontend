@@ -9,7 +9,7 @@ import { AlertService } from '../../services/alert.service';
 import {
   LobbyRef,
   FirebaseLobbyService,
-} from '../../services/firebase-lobby.service';
+} from '../../services/firebase/firebase-lobby.service';
 
 export interface PeriodicElement {
   name: string;

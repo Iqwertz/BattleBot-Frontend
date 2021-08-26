@@ -1,7 +1,7 @@
-import { ConsoleService } from '../../../../services/console.service';
+import { ConsoleService } from '../../../../services/codeenviroment/console.service';
 import { SetPlacingBot } from '../../../../store/app.action';
 import { Component, OnInit } from '@angular/core';
-import { SimulationService } from '../../../../services/simulation.service';
+import { SimulationService } from '../../../../services/simulation/simulation.service';
 import {
   faMicrochip,
   faPause,
@@ -13,7 +13,7 @@ import {
 import { AppState } from '../../../../store/app.state';
 import { Select, Store } from '@ngxs/store';
 import { Bot } from '../battle-map/battle-map.component';
-import { LobbyRef } from '../../../../services/firebase-lobby.service';
+import { LobbyRef } from '../../../../services/firebase/firebase-lobby.service';
 
 @Component({
   selector: 'app-battle-map-controls',

@@ -1,6 +1,6 @@
-import { SimulationService } from './simulation.service';
-import { AppState } from './../store/app.state';
-import { SetFirebaseUser, SetCurrentLobby } from './../store/app.action';
+import { SimulationService } from '../simulation/simulation.service';
+import { AppState } from '../../store/app.state';
+import { SetFirebaseUser, SetCurrentLobby } from '../../store/app.action';
 import {
   Player,
   LobbyRef,
@@ -14,7 +14,8 @@ import { Router } from '@angular/router';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { Injectable } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { AlertService } from './alert.service';
+import { AlertService } from '../alert.service';
+import { environment } from '../../../environments/environment';
 
 export interface User {
   uid: string;
@@ -37,6 +38,8 @@ export class FirebaseService {
   currentLobbySubsription: Subscription | undefined;
 
   gameState: GameState | undefined = undefined;
+
+  private failedTimestampUpdateAttempts: number = 0;
 
   private initialUserChecked: boolean = false;
 
@@ -308,9 +311,19 @@ export class FirebaseService {
             .catch((error) => {
               console.log(error);
             });
+
+          this.failedTimestampUpdateAttempts = 0;
         } else {
           console.log("Error: Cant update timestamp! User doesn't exist!");
-          this.logout();
+          this.failedTimestampUpdateAttempts++;
+          console.log(this.failedTimestampUpdateAttempts);
+          if (
+            this.failedTimestampUpdateAttempts >=
+            environment.maxTimestampUpdateFails
+          ) {
+            this.logout();
+            this.failedTimestampUpdateAttempts = 0;
+          }
         }
       });
     }

@@ -1,5 +1,5 @@
-import { FirebaseLobbyService } from './../../services/firebase-lobby.service';
-import { FirebaseService } from 'src/app/services/firebase.service';
+import { FirebaseLobbyService } from '../../services/firebase/firebase-lobby.service';
+import { FirebaseService } from 'src/app/services/firebase/firebase.service';
 import { Component, OnInit } from '@angular/core';
 import { AlertService } from '../../services/alert.service';
 

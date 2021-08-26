@@ -4,13 +4,13 @@ import { Select, Store } from '@ngxs/store';
 import { Component, HostListener, OnInit } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { defaultBots } from './battle-map-bots';
-import { BattleMapBufferService } from '../../../../services/battle-map-buffer.service';
+import { BattleMapBufferService } from '../../../../services/simulation/battle-map-buffer.service';
 import {
   BrainData,
   Direction,
-} from '../../../../services/bot-compiler.service';
-import { SimulationService } from '../../../../services/simulation.service';
-import { LobbyRef } from '../../../../services/firebase-lobby.service';
+} from '../../../../services/compiler/bot-compiler.service';
+import { SimulationService } from '../../../../services/simulation/simulation.service';
+import { LobbyRef } from '../../../../services/firebase/firebase-lobby.service';
 import { AngularFireDatabase } from '@angular/fire/database';
 
 //configuration of a bot

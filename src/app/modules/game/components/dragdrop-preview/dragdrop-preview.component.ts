@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, AfterViewInit } from '@angular/core';
 import { Command } from '../editor-ide/editor-ide.component';
-import { BotCompilerService } from '../../../../services/bot-compiler.service';
+import { BotCompilerService } from '../../../../services/compiler/bot-compiler.service';
 
 @Component({
   selector: 'app-dragdrop-preview',

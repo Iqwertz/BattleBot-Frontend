@@ -1,14 +1,14 @@
-import { FirebaseService } from 'src/app/services/firebase.service';
+import { FirebaseService } from 'src/app/services/firebase/firebase.service';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Store, Select } from '@ngxs/store';
-import { SetFirebaseUser } from '../store/app.action';
-import { AppState } from '../store/app.state';
-import { GameModes } from './simulation.service';
-import { AlertService } from './alert.service';
+import { SetFirebaseUser } from '../../store/app.action';
+import { AppState } from '../../store/app.state';
+import { GameModes } from '../simulation/simulation.service';
+import { AlertService } from '../alert.service';
 
 export interface Player {
   uId: string;

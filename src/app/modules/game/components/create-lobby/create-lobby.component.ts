@@ -1,4 +1,4 @@
-import { FirebaseService } from 'src/app/services/firebase.service';
+import { FirebaseService } from 'src/app/services/firebase/firebase.service';
 import { SetCurrentLobby, SetFirebaseUser } from '../../../../store/app.action';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
@@ -7,12 +7,12 @@ import {
   LobbyRef,
   Player,
   FirebaseLobbyService,
-} from '../../../../services/firebase-lobby.service';
+} from '../../../../services/firebase/firebase-lobby.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Select, Store } from '@ngxs/store';
 import { AppState } from '../../../../store/app.state';
 import { environment } from '../../../../../environments/environment';
-import { LobbyRefSettings } from '../../../../services/firebase-lobby.service';
+import { LobbyRefSettings } from '../../../../services/firebase/firebase-lobby.service';
 
 @Component({
   selector: 'app-create-lobby',

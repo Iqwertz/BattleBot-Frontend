@@ -11,12 +11,12 @@ import {
 } from '@angular/core';
 import { CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
 import { cloneDeep } from 'lodash-es';
-import { BotCompilerService } from '../../../../services/bot-compiler.service';
+import { BotCompilerService } from '../../../../services/compiler/bot-compiler.service';
 import { CommandType } from '../editor-ide/editor-ide.component';
 import { Store } from '@ngxs/store';
 import { SetCompiledBot } from '../../../../store/app.action';
-import { ConsoleService } from '../../../../services/console.service';
-import { PrecompilerService } from '../../../../services/precompiler.service';
+import { ConsoleService } from '../../../../services/codeenviroment/console.service';
+import { PrecompilerService } from '../../../../services/compiler/precompiler.service';
 
 @Component({
   selector: 'app-drop-terminal',

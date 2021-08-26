@@ -1,20 +1,20 @@
-import { TerminalsService } from '../../../../services/terminals.service';
-import { Instruction } from '../../../../services/bot-compiler.service';
+import { TerminalsService } from '../../../../services/codeenviroment/terminals.service';
+import { Instruction } from '../../../../services/compiler/bot-compiler.service';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import {
   BotCompilerService,
   LogicTest,
-} from '../../../../services/bot-compiler.service';
+} from '../../../../services/compiler/bot-compiler.service';
 import {
   LogicInstructionType,
   BrainFunctions,
-} from '../../../../services/bot-compiler.service';
+} from '../../../../services/compiler/bot-compiler.service';
 import { CdkDropList } from '@angular/cdk/drag-drop';
-import { PrecompilerService } from '../../../../services/precompiler.service';
+import { PrecompilerService } from '../../../../services/compiler/precompiler.service';
 import {
   CodeFunctionType,
   CodeFunctionData,
-} from '../../../../services/bot-compiler.service';
+} from '../../../../services/compiler/bot-compiler.service';
 
 export type FunctionTypes = 'end' | 'else';
 export type CommandType =

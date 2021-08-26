@@ -3,7 +3,7 @@ import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 import {
   Player,
   FirebaseLobbyService,
-} from '../../../../services/firebase-lobby.service';
+} from '../../../../services/firebase/firebase-lobby.service';
 import { Select } from '@ngxs/store';
 import { AppState } from '../../../../store/app.state';
 import { environment } from '../../../../../environments/environment';

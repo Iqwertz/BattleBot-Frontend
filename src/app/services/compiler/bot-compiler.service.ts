@@ -1,9 +1,9 @@
-import { ConsoleService } from './console.service';
+import { ConsoleService } from '../codeenviroment/console.service';
 import { Injectable } from '@angular/core';
-import { BattleMapBufferService } from './battle-map-buffer.service';
-import { Bot } from '../modules/game/components/battle-map/battle-map.component';
-import { SimulationData } from './simulation.service';
-import { environment } from '../../environments/environment';
+import { BattleMapBufferService } from '../simulation/battle-map-buffer.service';
+import { Bot } from '../../modules/game/components/battle-map/battle-map.component';
+import { SimulationData } from '../simulation/simulation.service';
+import { environment } from '../../../environments/environment';
 
 //available Instructions, Instructions are relativew to the bots facing direction
 export type Instruction = 'forward' | 'left' | 'right';

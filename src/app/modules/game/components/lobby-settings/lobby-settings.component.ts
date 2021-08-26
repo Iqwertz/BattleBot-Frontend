@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { environment } from '../../../../../environments/environment';
-import { SimulationService } from '../../../../services/simulation.service';
-import { LobbyRefSettings } from '../../../../services/firebase-lobby.service';
+import { SimulationService } from '../../../../services/simulation/simulation.service';
+import { LobbyRefSettings } from '../../../../services/firebase/firebase-lobby.service';
 
 @Component({
   selector: 'app-lobby-settings',

@@ -1,4 +1,4 @@
-import { LobbyRef } from '../../../../services/firebase-lobby.service';
+import { LobbyRef } from '../../../../services/firebase/firebase-lobby.service';
 import { Component, OnInit } from '@angular/core';
 import { Select } from '@ngxs/store';
 import { AppState } from '../../../../store/app.state';

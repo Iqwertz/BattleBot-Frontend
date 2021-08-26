@@ -4,11 +4,11 @@ import { AppState } from '../../../../store/app.state';
 import {
   LobbyRef,
   GameEntry,
-} from '../../../../services/firebase-lobby.service';
-import { SimulationStatsService } from '../../../../services/simulation-stats.service';
-import { SimulationService } from '../../../../services/simulation.service';
+} from '../../../../services/firebase/firebase-lobby.service';
+import { SimulationStatsService } from '../../../../services/simulation/simulation-stats.service';
+import { SimulationService } from '../../../../services/simulation/simulation.service';
 import { ConfettiService } from '../../../../services/confetti.service';
-import { FirebaseService } from '../../../../services/firebase.service';
+import { FirebaseService } from '../../../../services/firebase/firebase.service';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { SetPlacingBot } from '../../../../store/app.action';
 

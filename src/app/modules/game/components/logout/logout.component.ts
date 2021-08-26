@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
-import { FirebaseService } from '../../../../services/firebase.service';
+import { FirebaseService } from '../../../../services/firebase/firebase.service';
 import { Router } from '@angular/router';
 
 @Component({

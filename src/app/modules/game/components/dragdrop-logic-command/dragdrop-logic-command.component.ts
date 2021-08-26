@@ -11,14 +11,14 @@ import { Command } from '../editor-ide/editor-ide.component';
 import {
   _BotVars,
   _Operators,
-} from '../../../../services/bot-compiler.service';
+} from '../../../../services/compiler/bot-compiler.service';
 import { AfterViewInit } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { SetCompiledBot } from '../../../../store/app.action';
 import {
   LogicTest,
   BotCompilerService,
-} from '../../../../services/bot-compiler.service';
+} from '../../../../services/compiler/bot-compiler.service';
 
 @Component({
   selector: 'app-dragdrop-logic-command',

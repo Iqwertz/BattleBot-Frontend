@@ -1,9 +1,9 @@
-import { ConsoleService } from '../../../../services/console.service';
+import { ConsoleService } from '../../../../services/codeenviroment/console.service';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
-import { BrainData } from '../../../../services/bot-compiler.service';
-import { PrecompilerService } from '../../../../services/precompiler.service';
-import { TerminalsService } from '../../../../services/terminals.service';
+import { BrainData } from '../../../../services/compiler/bot-compiler.service';
+import { PrecompilerService } from '../../../../services/compiler/precompiler.service';
+import { TerminalsService } from '../../../../services/codeenviroment/terminals.service';
 import { Bot } from '../battle-map/battle-map.component';
 import { environment } from '../../../../../environments/environment';
 import { Store, Select } from '@ngxs/store';

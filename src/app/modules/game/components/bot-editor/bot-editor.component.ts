@@ -1,16 +1,16 @@
-import { FirebaseService } from 'src/app/services/firebase.service';
+import { FirebaseService } from 'src/app/services/firebase/firebase.service';
 import { Component, OnInit } from '@angular/core';
 import { faInfo, faTerminal } from '@fortawesome/free-solid-svg-icons';
 import { AppState } from '../../../../store/app.state';
 import {
   LobbyRef,
   GameBotEntry,
-} from '../../../../services/firebase-lobby.service';
+} from '../../../../services/firebase/firebase-lobby.service';
 import { Select, Store } from '@ngxs/store';
-import { PrecompilerService } from '../../../../services/precompiler.service';
+import { PrecompilerService } from '../../../../services/compiler/precompiler.service';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { Router } from '@angular/router';
-import { SimulationService } from '../../../../services/simulation.service';
+import { SimulationService } from '../../../../services/simulation/simulation.service';
 import { SetEditing } from '../../../../store/app.action';
 import { AlertService } from '../../../../services/alert.service';
 

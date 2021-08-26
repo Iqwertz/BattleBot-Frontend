@@ -1,9 +1,9 @@
 import { environment } from '../../../../../environments/environment';
-import { SimulationService } from '../../../../services/simulation.service';
-import { SimulationStatsService } from '../../../../services/simulation-stats.service';
+import { SimulationService } from '../../../../services/simulation/simulation.service';
+import { SimulationStatsService } from '../../../../services/simulation/simulation-stats.service';
 import { Component, OnInit } from '@angular/core';
 import { AppState } from '../../../../store/app.state';
-import { LobbyRef } from '../../../../services/firebase-lobby.service';
+import { LobbyRef } from '../../../../services/firebase/firebase-lobby.service';
 import { Select } from '@ngxs/store';
 import { round } from 'lodash-es';
 

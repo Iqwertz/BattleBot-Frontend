@@ -1,16 +1,16 @@
 import { Router } from '@angular/router';
-import { FirebaseService } from 'src/app/services/firebase.service';
+import { FirebaseService } from 'src/app/services/firebase/firebase.service';
 import { environment } from 'src/environments/environment';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { AppState } from './../../store/app.state';
 import { Select } from '@ngxs/store';
-import { User } from './../../services/firebase.service';
+import { User } from '../../services/firebase/firebase.service';
 import {
   FirebaseLobbyService,
   Player,
   LobbyRefSettings,
   LobbyRef,
-} from './../../services/firebase-lobby.service';
+} from '../../services/firebase/firebase-lobby.service';
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AlertService } from '../../services/alert.service';

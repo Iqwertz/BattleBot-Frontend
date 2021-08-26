@@ -1,7 +1,9 @@
+@import "./src/scss/variables";
+
 .log {
   position: relative;
   height: 50px;
-  background-color: rgb(132, 255, 194);
+  background-color: $function-ins-color;
   border-radius: 10px;
   display: flex;
   align-items: center;

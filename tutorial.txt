@@ -1,0 +1,35 @@
+Tutorial:
+Welcome to the Battlebot editor!
+
+This tutorial will show you how to use the editor and how your bot works.
+
+The bot:
+The bot has
+
+The editor:
+
+Terminals: Each terminal is a drop zone, where you can drop instructions from the commands container. There are four terminals:
+		* default - The instructions in here will be executed every time no callback is made. This terminal is looped (when the instructions are finished it starts from the beginning)
+    * onOwnTrackDetected - This callback is called every time the bot detects his own track around him
+    * onTrackDetected - This callback is called every time the bot detects an enemy track around him
+    * onWallDetected - This callback is called every time the bot detects an obstacle around him
+
+more about callbacks:
+    * a callback is executed once per step. When the code reaches an "forward" instructions it returns, When one callback is executed no other will be. They are sorted in this priority: 1. onWallDetected, 2. onTrackDetected, 3. onOwnTrackDetected
+
+bot-radar:
+    * the bot radar is the visualsystem of the bot. Before every step the radar checks the tiles beside him and in front and saves these values in variables.
+    * the variables are booleans
+    * these are all availabel variables
+          'radarLeft',
+          'radarRight',
+          'radarForward',
+          'trackRadarLeft',
+          'trackRadarRight',
+          'trackRadarForward',
+          'ownTrackRadarLeft',
+          'ownTrackRadarRight',
+          'ownTrackRadarForward',
+
+
+

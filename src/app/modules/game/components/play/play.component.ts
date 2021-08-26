@@ -1,11 +1,11 @@
-import { FirebaseService } from 'src/app/services/firebase.service';
+import { FirebaseService } from 'src/app/services/firebase/firebase.service';
 import { Component, OnInit } from '@angular/core';
-import { SimulationService } from '../../../../services/simulation.service';
+import { SimulationService } from '../../../../services/simulation/simulation.service';
 import {
   GameEntry,
   LobbyRef,
   ObstacleSettings,
-} from '../../../../services/firebase-lobby.service';
+} from '../../../../services/firebase/firebase-lobby.service';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { Select, Store } from '@ngxs/store';
 import { AppState } from '../../../../store/app.state';
@@ -15,7 +15,7 @@ import {
   SetCurrentLobby,
 } from '../../../../store/app.action';
 import { Bot } from '../battle-map/battle-map.component';
-import { Player } from '../../../../services/firebase-lobby.service';
+import { Player } from '../../../../services/firebase/firebase-lobby.service';
 
 @Component({
   selector: 'app-play',

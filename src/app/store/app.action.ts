@@ -1,5 +1,5 @@
-import { User } from './../services/firebase.service';
-import { LobbyRef } from './../services/firebase-lobby.service';
+import { User } from '../services/firebase/firebase.service';
+import { LobbyRef } from '../services/firebase/firebase-lobby.service';
 import { Bot } from '../modules/game/components/battle-map/battle-map.component';
 export class SetCompiledBot {
   static type = 'SetCompiledBot';

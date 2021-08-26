@@ -3,7 +3,7 @@ import { Command } from '../editor-ide/editor-ide.component';
 import {
   _BotVars,
   CodeFunctionData,
-} from '../../../../services/bot-compiler.service';
+} from '../../../../services/compiler/bot-compiler.service';
 import { FormControl } from '@angular/forms';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
