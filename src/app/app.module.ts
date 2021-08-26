@@ -20,6 +20,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { PublicLobbysComponent } from './components/public-lobbys/public-lobbys.component';
 import { PrivateLobbyCodeComponent } from './components/private-lobby-code/private-lobby-code.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MobileComponent } from './sites/mobile/mobile.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     LobbySelectComponent,
     PublicLobbysComponent,
     PrivateLobbyCodeComponent,
+    MobileComponent,
   ],
   imports: [
     BrowserModule,

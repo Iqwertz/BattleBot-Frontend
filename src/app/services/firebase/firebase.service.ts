@@ -23,6 +23,12 @@ export interface User {
   lobbyId: string;
 }
 
+/**
+ *manages all firebase login actions, a flowchart describing the loginsystem: https://miro.com/app/board/o9J_l1SscUw=/
+ *
+ * @export
+ * @class FirebaseService
+ */
 @Injectable({
   providedIn: 'root',
 })
@@ -98,6 +104,13 @@ export class FirebaseService {
     return map;
   }
 
+  /**
+   *converts a json to a map
+   *
+   * @param {*} json
+   * @return {*}  {Map<string, any>}
+   * @memberof FirebaseService
+   */
   jsonToMap(json: any): Map<string, any> {
     let map = new Map();
     for (let key in json) {
@@ -106,6 +119,11 @@ export class FirebaseService {
     return map;
   }
 
+  /**
+   *check current auth state and register user when an existing user is found in firebase
+   *
+   * @memberof FirebaseService
+   */
   checkAuth() {
     if (this.firebaseUser) {
       this.getUser(this.firebaseUser.uid)
@@ -144,6 +162,13 @@ export class FirebaseService {
     }
   }
 
+  /**
+   *get a game from firebase
+   *
+   * @param {string} id
+   * @return {*}  {Promise<any>}
+   * @memberof FirebaseService
+   */
   getGame(id: string): Promise<any> {
     return this.db.database
       .ref()
@@ -151,6 +176,13 @@ export class FirebaseService {
       .get();
   }
 
+  /**
+   *get a lobby from firebase
+   *
+   * @param {string} id
+   * @return {*}  {Promise<any>}
+   * @memberof FirebaseService
+   */
   getLobby(id: string): Promise<any> {
     return this.db.database
       .ref()
@@ -158,6 +190,12 @@ export class FirebaseService {
       .get();
   }
 
+  /**
+   *update the gamestate in firebase
+   *
+   * @param {GameState} state
+   * @memberof FirebaseService
+   */
   updateGameState(state: GameState) {
     if (this.currentLobby) {
       this.db.database
@@ -173,6 +211,12 @@ export class FirebaseService {
     }
   }
 
+  /**
+   *update the settings of the current lobby in firebase
+   *
+   * @param {LobbyRefSettings} l
+   * @memberof FirebaseService
+   */
   updateLobbySettings(l: LobbyRefSettings) {
     console.log('update L');
     if (this.currentLobby) {
@@ -193,6 +237,13 @@ export class FirebaseService {
     }
   }
 
+  /**
+   *get a user from firebase
+   *
+   * @param {string} id
+   * @return {*}  {Promise<any>}
+   * @memberof FirebaseService
+   */
   getUser(id: string): Promise<any> {
     return this.db.database
       .ref()
@@ -200,6 +251,12 @@ export class FirebaseService {
       .get();
   }
 
+  /**
+   *sets the current user to a firebase lobby
+   *
+   * @param {string} lobbyId
+   * @memberof FirebaseService
+   */
   setNewUser(lobbyId: string) {
     let newUser: User = {
       lastSeen: new Date().toUTCString(),
@@ -213,6 +270,11 @@ export class FirebaseService {
       .set(newUser);
   }
 
+  /**
+   *logs the current user out and navigate to landing
+   *
+   * @memberof FirebaseService
+   */
   logout() {
     this.removeUser();
     this.resetVars();
@@ -220,6 +282,11 @@ export class FirebaseService {
     this.router.navigate(['']);
   }
 
+  /**
+   *reset current vars (cutting the connection to firebase)
+   *
+   * @memberof FirebaseService
+   */
   resetVars() {
     if (this.currentLobbySubsription) {
       this.currentLobbySubsription.unsubscribe();
@@ -229,6 +296,11 @@ export class FirebaseService {
     this.gameState = undefined;
   }
 
+  /**
+   *reset the positon of the bot in firebase
+   *
+   * @memberof FirebaseService
+   */
   resetBotPositions() {
     this.currentLobby?.player.forEach((val: Player, key: string) => {
       this.db.database
@@ -241,6 +313,11 @@ export class FirebaseService {
     });
   }
 
+  /**
+   *remove the own user from the game, lobby and user objects in the firebase
+   *
+   * @memberof FirebaseService
+   */
   removeUser() {
     if (this.firebaseUser) {
       this.removeUserFromGame(this.firebaseUser.uid);
@@ -259,6 +336,12 @@ export class FirebaseService {
     }
   }
 
+  /**
+   *removes a user from the current game in firebase
+   *
+   * @param {string} uid
+   * @memberof FirebaseService
+   */
   removeUserFromGame(uid: string) {
     if (this.currentLobby) {
       console.log('removing from game');
@@ -278,6 +361,12 @@ export class FirebaseService {
     }
   }
 
+  /**
+   *removes a user from the current lobby in firebase
+   *
+   * @param {string} uid
+   * @memberof FirebaseService
+   */
   removeUserFromLobby(uid: string) {
     if (this.currentLobby) {
       console.log('removing from Lobby');
@@ -299,6 +388,11 @@ export class FirebaseService {
     }
   }
 
+  /**
+   *updates the timestamp of the current user, when the timestamp cant be set (due to server removal) user will be logged out
+   *
+   * @memberof FirebaseService
+   */
   updateUserOnline() {
     if (this.firebaseUser) {
       this.getUser(this.firebaseUser.uid).then((userSnap) => {
@@ -329,6 +423,11 @@ export class FirebaseService {
     }
   }
 
+  /**
+   *updates the obstaclemap of a game in the firebase
+   *
+   * @memberof FirebaseService
+   */
   setGame() {
     if (this.currentLobby) {
       if (this.firebaseUser.uid == this.currentLobby.adminUid) {
@@ -350,6 +449,13 @@ export class FirebaseService {
     }
   }
 
+  /**
+   *submits a bot to the firebase, with the current firebaseuser uid
+   *
+   * @param {GameBotEntry} bot the bot to submit
+   * @return {*}  {Promise<any>}
+   * @memberof FirebaseService
+   */
   submitBot(bot: GameBotEntry): Promise<any> {
     if (this.currentLobby) {
       return this.db.database
@@ -362,27 +468,34 @@ export class FirebaseService {
     }
   }
 
+  /**
+   *checks the current state of the game and updates the variables accordingly
+   *
+   * @memberof FirebaseService
+   */
   setGameState() {
     this.getUser(this.firebaseUser.uid).then((userSnap) => {
       if (userSnap.exists()) {
+        //check if user exists
         this.getLobby(userSnap.val().lobbyId).then((lobbySnap) => {
           if (lobbySnap.exists()) {
+            //check if the lobby exists
             console.log('lobby Found');
-            this.gameState = lobbySnap.val().gameState;
-            console.log(this.currentLobby);
+            this.gameState = lobbySnap.val().gameState; //get the gameState
 
             if (this.currentLobbySubsription) {
-              this.currentLobbySubsription.unsubscribe();
+              this.currentLobbySubsription.unsubscribe(); //unsubsribe from previous lobby observable
             }
 
             let lobbyRef = this.db
               .object('lobbys/' + lobbySnap.val().settings.id)
               .valueChanges();
             this.currentLobbySubsription = lobbyRef.subscribe(
+              //subsribe to the lobby changes
               (changes: any) => {
                 if (changes) {
                   changes.player = this.formatPlayerToMap(changes.player);
-                  this.store.dispatch(new SetCurrentLobby(changes));
+                  this.store.dispatch(new SetCurrentLobby(changes)); //set the lobbystore
                 }
               }
             );
@@ -396,6 +509,13 @@ export class FirebaseService {
     });
   }
 
+  /**
+   *sets a new Lobby in firebase, and navigates to the game on success
+   *
+   * @param {LobbyRef} lobby the lobby to set
+   * @param {Player} admin the player object of the admin
+   * @memberof FirebaseService
+   */
   setNewLobby(lobby: LobbyRef, admin: Player) {
     console.log('set lobby');
     this.alert.notification('Generated new lobby');
@@ -421,6 +541,13 @@ export class FirebaseService {
       });
   }
 
+  /**
+   *generate unique sessionId
+   *
+   * @param {number} digits digits of the id
+   * @return {*}
+   * @memberof FirebaseService
+   */
   getNewSessionId(digits: number) {
     //generates a new unique session id
     let generatedId: string = this.getRandomId(digits, false, true, false);

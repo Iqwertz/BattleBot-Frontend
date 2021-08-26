@@ -30,6 +30,3 @@ bot-radar:
           'ownTrackRadarLeft',
           'ownTrackRadarRight',
           'ownTrackRadarForward',
-
-
-

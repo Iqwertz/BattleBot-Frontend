@@ -31,6 +31,12 @@ export interface SimulationStatusVar {
   simulatedSteps: number;
 }
 
+/**
+ *Manages the simulation -> Handles Controls and Executes simulation steps
+ *
+ * @export
+ * @class SimulationService
+ */
 @Injectable({
   providedIn: 'root',
 })
@@ -60,6 +66,16 @@ export class SimulationService {
     private simulationStatsService: SimulationStatsService
   ) {}
 
+  /**
+   *Generate a new Simulation enviroment.
+   *
+   * @param {number[]} size the size of the new map
+   * @param {boolean} clearOnStep clear the map on each step
+   * @param {boolean} [obstacles] should obstacles be generated
+   * @param {*} [obstacleMapSettings] perlin noise settings for the obstacles
+   * @param {boolean[][]} [obstacleMap] a pre generated obstacle map for the simulation
+   * @memberof SimulationService
+   */
   generateNewSimulation(
     size: number[],
     clearOnStep: boolean,
@@ -67,7 +83,7 @@ export class SimulationService {
     obstacleMapSettings?: any,
     obstacleMap?: boolean[][]
   ) {
-    this.clear();
+    this.clear(); //clear old simulation
 
     if (obstacleMap) {
       this.simulation.obstacleMap = obstacleMap;
@@ -93,19 +109,26 @@ export class SimulationService {
     this.consoleService.print('');
   }
 
+  /**
+   *add a bot to the current simulation
+   *
+   * @param {Bot} bot the bot to add
+   * @return {*}
+   * @memberof SimulationService
+   */
   setBot(bot: Bot) {
     if (!bot) {
       return;
     }
-    let clonedBot = cloneDeep(bot);
+    let clonedBot = cloneDeep(bot); //clone bot to avoid parse by ref artefacts
     if (this.simulation.statusVar.simulationGenerated) {
       if (
-        this.botCompilerService.checkPositionOutOfBounds(clonedBot.position)
+        this.botCompilerService.checkPositionOutOfBounds(clonedBot.position) //check if the bot position is valid
       ) {
-        this.setRandomStart(clonedBot, 3);
+        this.setRandomStart(clonedBot, 3); //if invalid position generate an randomstart
       }
-      this.simulation.bots.set(clonedBot.color, clonedBot);
-      this.renderOntoMap();
+      this.simulation.bots.set(clonedBot.color, clonedBot); //set bot onto map
+      this.renderOntoMap(); //rerender to display the new bot
     }
   }
 
@@ -122,6 +145,11 @@ export class SimulationService {
     this.simulateStep();
   }
 
+  /**
+   *clears the simulation and sets a new empty simulation
+   *
+   * @memberof SimulationService
+   */
   clear() {
     this.simulation.statusVar.simulationGenerated = false;
     this.simulation.statusVar.simulationStarted = false;
@@ -130,17 +158,32 @@ export class SimulationService {
     this.consoleService.print('cleared Simulation');
   }
 
+  /**
+   *pause the simulation
+   *
+   * @memberof SimulationService
+   */
   pause() {
     this.simulation.statusVar.simulationPaused = true;
     this.consoleService.print('paused Simulation');
   }
 
+  /**
+   *resume the simulation
+   *
+   * @memberof SimulationService
+   */
   resume() {
     this.simulation.statusVar.simulationPaused = false;
     this.simulateStep();
     this.consoleService.print('resumed Simulation');
   }
 
+  /**
+   *reset the simulation by clearing all bots and the map
+   *
+   * @memberof SimulationService
+   */
   reset() {
     this.consoleService.print('reset Simulation');
     this.simulation.bots = new Map();
@@ -148,6 +191,12 @@ export class SimulationService {
     this.renderOntoMap();
   }
 
+  /**
+   *set the speed of the simulation
+   *
+   * @param {number} speed speed in % min and max are defined in the enviroment file
+   * @memberof SimulationService
+   */
   setSpeed(speed: number) {
     let diff = environment.speedRange[1] - environment.speedRange[0];
     let msSpeed = environment.speedRange[0] + (diff * speed) / 100;
@@ -155,6 +204,12 @@ export class SimulationService {
     this.consoleService.print('set Simulation speed to ' + speed + '%');
   }
 
+  /**
+   *generates a random bot and sets it on the map (bots are defined in the battle-map component folder)
+   *
+   * @return {*}
+   * @memberof SimulationService
+   */
   setRandomBot() {
     let bot = defaultBots[Math.floor(Math.random() * defaultBots.length)];
     let simBots = this.simulation.bots;
@@ -427,6 +482,15 @@ export class SimulationService {
     }
   }
 
+  /**
+   *generates a random int between two numbers
+   *
+   * @private
+   * @param {number} min
+   * @param {number} max
+   * @return {*}  {number}
+   * @memberof SimulationService
+   */
   private getRandomInt(min: number, max: number): number {
     min = Math.ceil(min);
     max = Math.floor(max);

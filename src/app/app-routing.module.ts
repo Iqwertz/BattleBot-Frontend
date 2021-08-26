@@ -1,6 +1,7 @@
-import { NgModule, Component } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LandingComponent } from './sites/landing/landing.component';
+import { MobileComponent } from './sites/mobile/mobile.component';
 
 //    canActivate: [AngularFireAuthGuard],
 //data: { authGuardPipe: loggedIn },
@@ -8,7 +9,7 @@ import { LandingComponent } from './sites/landing/landing.component';
 const routes: Routes = [
   {
     path: '',
-    component: LandingComponent,
+    component: window.screen.width > 1000 ? LandingComponent : MobileComponent,
   },
   {
     path: 'game',

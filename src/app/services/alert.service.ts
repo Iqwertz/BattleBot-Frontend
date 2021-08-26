@@ -2,6 +2,12 @@ import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { environment } from '../../environments/environment';
 
+/**
+ *Manages alerts with matsnackbar
+ *
+ * @export
+ * @class AlertService
+ */
 @Injectable({
   providedIn: 'root',
 })
@@ -10,6 +16,12 @@ export class AlertService {
 
   constructor(private _snackBar: MatSnackBar) {}
 
+  /**
+   *Trigger a snackbar with the snackbar-note class and set the given message
+   *
+   * @param {string} message text of the notification
+   * @memberof AlertService
+   */
   notification(message: string) {
     this._snackBar.open(message, 'X', {
       duration: this.duration,
@@ -17,6 +29,12 @@ export class AlertService {
     });
   }
 
+  /**
+   *Trigger a snackbar with the snackbar-error class and set the given message
+   *
+   * @param {string} message text of the error
+   * @memberof AlertService
+   */
   error(message: string) {
     this._snackBar.open(message, 'X', {
       duration: this.duration,
