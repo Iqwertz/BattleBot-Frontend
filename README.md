@@ -1,27 +1,42 @@
-# BattleBotFrontend
+<h1 align="center">Welcome to battle-bot-frontend 👋</h1>
+<p>
+</p>
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.0.5.
+> Battlebots is an browser based coding game. The goal of the game is to program a bot that can navigate in an arena without colliding with obstacles, while covering an as big as possible area of it with his paint. 
+> The application is written in angular and it uses firebase with an node.js backend to enable multiplayer. The backend Repo: https://github.com/Iqwertz/BattleBot-Backend 
 
-## Development server
+### 🏠 [Homepage](https://github.com/Iqwertz/BattleBot-Frontend)
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+### ✨ [Demo](https://iqwertz.github.io/Battlebots/#/)
 
-## Code scaffolding
+## Install
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+```sh
+npm install
+```
 
-## Build
+## Usage
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Dev server:
+```sh
+ng serve
+```
 
-## Running unit tests
+Build app:
+```sh
+ng build
+```
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Author
 
-## Running end-to-end tests
+👤 **Julius Hussl**
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+* Website: https://iqwertz.github.io/
+* Github: [@Iqwertz](https://github.com/Iqwertz)
 
-## Further help
+## Show your support
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+Give a ⭐️ if this project helped you!
+
+***
+_This README was generated with ❤️ by [readme-md-generator](https://github.com/kefranabg/readme-md-generator)_
