@@ -171,7 +171,7 @@ export const defaultBots: Bot[] = [
                           instructions: ['right', 'forward'],
                         },
                         else: {
-                          instructions: ['right', 'right', 'forward'],
+                          instructions: ['left', 'left', 'forward'],
                         },
                       },
                     ],
@@ -180,34 +180,7 @@ export const defaultBots: Bot[] = [
               ],
             },
             else: {
-              instructions: [
-                {
-                  type: 'if',
-                  test: {
-                    operator: '==',
-                    value: 'false',
-                    variable: 'radarLeft',
-                  },
-                  whenTrue: {
-                    instructions: ['left', 'forward'],
-                  },
-                  else: {
-                    instructions: [
-                      {
-                        type: 'if',
-                        test: {
-                          operator: '==',
-                          value: 'true',
-                          variable: 'radarRight',
-                        },
-                        whenTrue: {
-                          instructions: ['right', 'forward'],
-                        },
-                      },
-                    ],
-                  },
-                },
-              ],
+              instructions: ['forward'],
             },
           },
         ],
@@ -345,7 +318,7 @@ export const defaultBots: Bot[] = [
                     variable: 'radarLeft',
                   },
                   whenTrue: {
-                    instructions: ['left'],
+                    instructions: ['left', 'forward'],
                   },
                   else: {
                     instructions: [
@@ -357,10 +330,10 @@ export const defaultBots: Bot[] = [
                           variable: 'radarRight',
                         },
                         whenTrue: {
-                          instructions: ['right'],
+                          instructions: ['right', 'forward'],
                         },
                         else: {
-                          instructions: ['right', 'right'],
+                          instructions: ['left', 'left', 'forward'],
                         },
                       },
                     ],
@@ -369,45 +342,7 @@ export const defaultBots: Bot[] = [
               ],
             },
             else: {
-              instructions: [
-                {
-                  type: 'if',
-                  test: {
-                    operator: '==',
-                    value: 'true',
-                    variable: 'radarLeft',
-                  },
-                  whenTrue: {
-                    instructions: [],
-                  },
-                  else: {
-                    instructions: [
-                      {
-                        type: 'if',
-                        test: {
-                          operator: '==',
-                          value: 'true',
-                          variable: 'radarLeft',
-                        },
-                        whenTrue: {
-                          instructions: ['forward'],
-                        },
-                      },
-                      {
-                        type: 'if',
-                        test: {
-                          operator: '==',
-                          value: 'true',
-                          variable: 'radarRight',
-                        },
-                        whenTrue: {
-                          instructions: ['forward'],
-                        },
-                      },
-                    ],
-                  },
-                },
-              ],
+              instructions: ['forward'],
             },
           },
         ],
@@ -496,7 +431,7 @@ export const defaultBots: Bot[] = [
                     variable: 'radarLeft',
                   },
                   whenTrue: {
-                    instructions: ['left'],
+                    instructions: ['left', 'forward'],
                   },
                   else: {
                     instructions: [
@@ -508,10 +443,10 @@ export const defaultBots: Bot[] = [
                           variable: 'radarRight',
                         },
                         whenTrue: {
-                          instructions: ['right'],
+                          instructions: ['right', 'forward'],
                         },
                         else: {
-                          instructions: ['right', 'right'],
+                          instructions: ['left', 'left', 'forward'],
                         },
                       },
                     ],
@@ -520,45 +455,7 @@ export const defaultBots: Bot[] = [
               ],
             },
             else: {
-              instructions: [
-                {
-                  type: 'if',
-                  test: {
-                    operator: '==',
-                    value: 'true',
-                    variable: 'radarLeft',
-                  },
-                  whenTrue: {
-                    instructions: [],
-                  },
-                  else: {
-                    instructions: [
-                      {
-                        type: 'if',
-                        test: {
-                          operator: '==',
-                          value: 'true',
-                          variable: 'radarLeft',
-                        },
-                        whenTrue: {
-                          instructions: ['forward'],
-                        },
-                      },
-                      {
-                        type: 'if',
-                        test: {
-                          operator: '==',
-                          value: 'true',
-                          variable: 'radarRight',
-                        },
-                        whenTrue: {
-                          instructions: ['forward'],
-                        },
-                      },
-                    ],
-                  },
-                },
-              ],
+              instructions: ['forward'],
             },
           },
         ],

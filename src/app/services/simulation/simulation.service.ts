@@ -10,6 +10,7 @@ import {
 } from '../compiler/bot-compiler.service';
 import { BattleMapBufferService } from './battle-map-buffer.service';
 import { defaultBots } from '../../modules/game/components/battle-map/battle-map-bots';
+import { AlertService } from '../alert.service';
 var perlin = require('perlin-noise');
 
 export type GameModes = 'Color';
@@ -63,7 +64,8 @@ export class SimulationService {
     private botCompilerService: BotCompilerService,
     private battleMapBufferService: BattleMapBufferService,
     private consoleService: ConsoleService,
-    private simulationStatsService: SimulationStatsService
+    private simulationStatsService: SimulationStatsService,
+    private alert: AlertService
   ) {}
 
   /**
@@ -125,7 +127,11 @@ export class SimulationService {
       if (
         this.botCompilerService.checkPositionOutOfBounds(clonedBot.position) //check if the bot position is valid
       ) {
-        this.setRandomStart(clonedBot, 3); //if invalid position generate an randomstart
+        if (!this.setRandomStart(clonedBot, 3)) {
+          //if invalid position generate an randomstart
+          this.alert.error('No valid bot position found!');
+          return;
+        }
       }
       this.simulation.bots.set(clonedBot.color, clonedBot); //set bot onto map
       this.renderOntoMap(); //rerender to display the new bot
@@ -435,16 +441,19 @@ export class SimulationService {
   }
 
   /**
-   *creates a random stArting point in an clear area on the map
+   *creates a random starting point in an clear area on the map and sets the position on the bot, returns false when no position was found
    *
    * @param {Bot} bot
    * @param {number} area
+   * @return {*}  {boolean} true when position successfully found
    * @memberof SimulationService
    */
-  setRandomStart(bot: Bot, area: number) {
+  setRandomStart(bot: Bot, area: number): boolean {
     let foundValid = false;
+    let invalidCounter: number = 0;
+    const maxInvalid: number = 10;
 
-    while (!foundValid) {
+    while (!foundValid && invalidCounter <= maxInvalid) {
       let randomStart = [
         Math.floor(Math.random() * this.simulation.size[0] - 2 * area) + area,
         Math.floor(Math.random() * this.simulation.size[1] - 2 * area) + area,
@@ -479,6 +488,13 @@ export class SimulationService {
         bot.position = randomStart;
         foundValid = true;
       }
+      invalidCounter++;
+    }
+
+    if (foundValid) {
+      return true;
+    } else {
+      return false;
     }
   }
 

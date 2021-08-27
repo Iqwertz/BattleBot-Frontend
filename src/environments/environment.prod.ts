@@ -1,6 +1,7 @@
 export const environment = {
   production: false,
   alertTime: 3,
+  maxTimestampUpdateFails: 4,
   simulationSpeed: 100,
   defaultMapSize: [40, 40],
   defaultTrackLength: 1,
