@@ -80,6 +80,7 @@ export class FirebaseService {
       this.store.dispatch(new SetFirebaseUser(user));
       if (this.initialUserChecked) {
         if (!user) {
+          console.log('no user');
           this.removeUser();
           this.router.navigate(['']);
         } else {
@@ -276,6 +277,7 @@ export class FirebaseService {
    * @memberof FirebaseService
    */
   logout() {
+    console.log('logout');
     this.removeUser();
     this.resetVars();
     this.auth.signOut();
@@ -319,6 +321,7 @@ export class FirebaseService {
    * @memberof FirebaseService
    */
   removeUser() {
+    console.log('removing user');
     if (this.firebaseUser) {
       this.removeUserFromGame(this.firebaseUser.uid);
       this.removeUserFromLobby(this.firebaseUser.uid);

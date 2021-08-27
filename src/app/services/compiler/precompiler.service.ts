@@ -200,7 +200,7 @@ export class PrecompilerService {
 
     this.lastSuccesfullCompile = JSON.stringify(brainData);
 
-    this.consoleService.print('Compiled successfull...');
+    this.consoleService.print('Compiled successfully...');
     return brainData;
   }
 
