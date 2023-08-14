@@ -4,6 +4,7 @@ const defaultTrackLength = 25;
 
 export const defaultBots: Bot[] = [
   {
+    npcId: 1,
     color: 3,
     crashed: false,
     direction: 'up',
@@ -188,6 +189,7 @@ export const defaultBots: Bot[] = [
     },
   },
   {
+    npcId: 2,
     color: 3,
     crashed: false,
     direction: 'up',
@@ -350,6 +352,7 @@ export const defaultBots: Bot[] = [
     },
   },
   {
+    npcId: 3,
     color: 3,
     crashed: false,
     direction: 'up',

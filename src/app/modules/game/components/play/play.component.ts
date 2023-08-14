@@ -84,7 +84,6 @@ export class PlayComponent implements OnInit {
 
                       let player: Player | undefined =
                         this.currentLobby!.player.get(v.uId);
-                      console.log(v, k, player);
                       if (v.position[0] > 0 && v.position[1] > 0 && player) {
                         if (this.placedBots.indexOf(player.uId) == -1) {
                           let bot: Bot = {
@@ -98,7 +97,6 @@ export class PlayComponent implements OnInit {
                             direction: 'up',
                             brain: JSON.parse(v.botBrainData),
                           };
-                          console.log(bot);
                           simulationService.setBot(bot);
                           this.placedBots.push(player.uId);
                         }

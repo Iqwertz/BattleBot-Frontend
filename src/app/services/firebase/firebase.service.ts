@@ -16,6 +16,10 @@ import { Injectable } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AlertService } from '../alert.service';
 import { environment } from '../../../environments/environment';
+import { Bot } from 'src/app/modules/game/components/battle-map/battle-map.component';
+import { cloneDeep } from 'lodash-es';
+import { defaultBots } from 'src/app/modules/game/components/battle-map/battle-map-bots';
+import { PrecompilerService } from '../compiler/precompiler.service';
 
 export interface User {
   uid: string;
@@ -316,6 +320,20 @@ export class FirebaseService {
   }
 
   /**
+   * add a NPC to the current game in firebase
+   *
+   * @param {string} name
+   * @param {Player} config
+   * @memberof FirebaseService
+   */
+  addNPC(name: string, config: Player) {
+    this.db.database
+      .ref()
+      .child('/lobbys/' + this.currentLobby?.settings.id + '/player/' + name)
+      .set(config);
+  }
+
+  /**
    *remove the own user from the game, lobby and user objects in the firebase
    *
    * @memberof FirebaseService
@@ -448,7 +466,52 @@ export class FirebaseService {
               this.currentLobby.settings.obstacleSettings
             )
           );
+
+        for (let npc of this.currentLobby.player.values()) {
+          if (npc.NPCid) {
+            this.placeNPC(npc);
+          }
+        }
       }
+    }
+  }
+
+  /**
+   *place a npc on the map
+   *
+   * @param {Player} npcConfig
+   * @memberof BattleMapComponent
+   */
+  placeNPC(npcConfig: Player) {
+    let npcBotEntry: GameBotEntry = {
+      botBrainData: '',
+      position: [0, 0],
+      uId: npcConfig.uId,
+    };
+
+    let botPreset: Bot | undefined = defaultBots[0];
+
+    defaultBots.forEach((bot: Bot) => {
+      if (bot.npcId == npcConfig.NPCid) {
+        botPreset = cloneDeep(bot);
+      }
+    });
+
+    if (botPreset != undefined) {
+      this.simulationService.setRandomStart(botPreset, 2);
+      npcBotEntry.position = botPreset.position;
+      npcBotEntry.botBrainData = JSON.stringify(botPreset.brain);
+      this.db.database
+        .ref()
+        .child(
+          '/games/' +
+            this.currentLobby?.settings.id +
+            '/playerBots/' +
+            npcConfig.uId
+        )
+        .set(npcBotEntry);
+    } else {
+      console.error('Couldnt place NPC');
     }
   }
 
@@ -496,8 +559,10 @@ export class FirebaseService {
             this.currentLobbySubsription = lobbyRef.subscribe(
               //subsribe to the lobby changes
               (changes: any) => {
+                console.warn(changes);
                 if (changes) {
                   changes.player = this.formatPlayerToMap(changes.player);
+                  console.warn(changes);
                   this.store.dispatch(new SetCurrentLobby(changes)); //set the lobbystore
                 }
               }

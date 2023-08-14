@@ -10,12 +10,17 @@ import {
   Direction,
 } from '../../../../services/compiler/bot-compiler.service';
 import { SimulationService } from '../../../../services/simulation/simulation.service';
-import { LobbyRef } from '../../../../services/firebase/firebase-lobby.service';
+import {
+  LobbyRef,
+  Player,
+} from '../../../../services/firebase/firebase-lobby.service';
 import { AngularFireDatabase } from '@angular/fire/database';
+import { cloneDeep } from 'lodash-es';
 
 //configuration of a bot
 export interface Bot {
   name: string;
+  npcId?: number;
   position: number[];
   color: number;
   track: number[][];
@@ -85,12 +90,11 @@ export class BattleMapComponent implements OnInit {
       this.editing = edit;
     });
 
-    this.currentLobby$.subscribe((newLobby: LobbyRef | undefined) => {
-      this.currentLobby = newLobby;
-    });
-
     this.firebaseUser$.subscribe((user: any) => {
       this.firebaseUser = user;
+      this.currentLobby$.subscribe((newLobby: LobbyRef | undefined) => {
+        this.currentLobby = newLobby;
+      });
     });
 
     //this.simulationService.generateNewSimulation([50, 50], false, true);

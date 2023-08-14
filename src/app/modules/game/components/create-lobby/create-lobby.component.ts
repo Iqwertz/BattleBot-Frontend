@@ -62,6 +62,16 @@ export class CreateLobbyComponent implements OnInit, OnDestroy {
   startGame() {
     console.log('starting Game');
     if (this.currentLobby) {
+      console.log(this.currentLobby.settings.maxPlayer);
+      console.log(this.currentLobby.player.size);
+      console.log(this.currentLobby);
+      if (
+        this.currentLobby.settings.maxPlayer > this.currentLobby.player.size
+      ) {
+        this.addNpcs(
+          this.currentLobby.settings.maxPlayer - this.currentLobby.player.size
+        );
+      }
       this.currentLobby.settings.gameStarted = true;
       this.currentLobby.settings.editorEndTimeStamp = new Date(
         new Date().getTime() + this.currentLobby.settings.editorTime * 60000
@@ -69,6 +79,23 @@ export class CreateLobbyComponent implements OnInit, OnDestroy {
       console.log(this.currentLobby.settings);
       this.firebaseService.updateLobbySettings(this.currentLobby.settings);
       this.firebaseService.updateGameState('editor');
+    }
+  }
+
+  addNpcs(npcCount: number) {
+    for (let i = 0; i < npcCount; i++) {
+      const npcSettings: Player = {
+        isReady: true,
+        uId: 'Bot ' + i,
+        NPCid: Math.floor(Math.random() * environment.npcPresets),
+        colorId: Math.floor(Math.random() * environment.availableBotColors),
+        name:
+          environment.roboNames[
+            Math.floor(Math.random() * environment.roboNames.length)
+          ] + ' [NPC]',
+      };
+
+      this.firebaseService.addNPC(npcSettings.uId, npcSettings);
     }
   }
 

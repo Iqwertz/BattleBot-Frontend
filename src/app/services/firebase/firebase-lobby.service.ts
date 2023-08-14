@@ -15,6 +15,7 @@ export interface Player {
   name: string;
   isReady: boolean;
   colorId: number;
+  NPCid?: number; //if its an NPC it has an id corresponding to the Bot preset defined in battle-map-bots.ts
 }
 
 export interface ObstacleSettings {
@@ -56,7 +57,7 @@ export interface GameEntry {
 }
 
 export interface GameBotEntry {
-  position: [0, 0];
+  position: number[];
   botBrainData: string;
   uId: string;
 }

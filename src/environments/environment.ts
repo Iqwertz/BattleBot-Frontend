@@ -26,13 +26,14 @@ export const environment = {
     persistence: 1,
   },
   defaultLobby: {
-    editorTime: 5,
+    editorTime: 0.1,
     private: false,
     simulationTime: 2,
     maxPlayer: 4,
   },
   availableBotColors: 14,
   botByteRange: [5, 32],
+  npcPresets: 3, //number of presets in battle-map-bots.ts
   roboNames: [
     'AVA',
     'B-4',
