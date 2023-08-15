@@ -9,9 +9,8 @@
       class="player first"
       [ngClass]="{
         self:
-          simulationService.simulation.bots.get(
-            simulationStatsService.simulationStatistics.playerColors[0].color
-          )!.name == currentLobby!.player.get(firebaseUser.uid)!.name
+          getBotName(0, false) ==
+          currentLobby!.player.get(firebaseUser.uid)!.name
       }"
       [style.background-color]="
         byteColorMap.get(
@@ -20,21 +19,9 @@
       "
     >
       <div class="icon robo">
-        <img
-          [src]="
-            'assets/userIcons/' +
-            simulationService.simulation.bots.get(
-              simulationStatsService.simulationStatistics.playerColors[0].color
-            )!.name +
-            '.svg'
-          "
-        />
+        <img [src]="'assets/userIcons/' + getBotName(0, true) + '.svg'" />
       </div>
-      {{
-        simulationService.simulation.bots.get(
-          simulationStatsService.simulationStatistics.playerColors[0].color
-        )!.name
-      }}
+      {{ getBotName(0, false) }}
       <div class="icon rank">
         <img [src]="'assets/trophy.svg'" />
       </div>
@@ -49,9 +36,8 @@
       class="player second"
       [ngClass]="{
         self:
-          simulationService.simulation.bots.get(
-            simulationStatsService.simulationStatistics.playerColors[1].color
-          )!.name == currentLobby!.player.get(firebaseUser.uid)!.name
+          getBotName(1, false) ==
+          currentLobby!.player.get(firebaseUser.uid)!.name
       }"
       [style.background-color]="
         byteColorMap.get(
@@ -60,21 +46,9 @@
       "
     >
       <div class="icon robo">
-        <img
-          [src]="
-            'assets/userIcons/' +
-            simulationService.simulation.bots.get(
-              simulationStatsService.simulationStatistics.playerColors[1].color
-            )!.name +
-            '.svg'
-          "
-        />
+        <img [src]="'assets/userIcons/' + getBotName(1, true) + '.svg'" />
       </div>
-      {{
-        simulationService.simulation.bots.get(
-          simulationStatsService.simulationStatistics.playerColors[1].color
-        )!.name
-      }}
+      {{ getBotName(1, false) }}
       <div class="icon rank">
         <img [src]="'assets/trophy - second.svg'" />
       </div>
@@ -89,9 +63,8 @@
       class="player third"
       [ngClass]="{
         self:
-          simulationService.simulation.bots.get(
-            simulationStatsService.simulationStatistics.playerColors[2].color
-          )!.name == currentLobby!.player.get(firebaseUser.uid)!.name
+          getBotName(2, false) ==
+          currentLobby!.player.get(firebaseUser.uid)!.name
       }"
       [style.background-color]="
         byteColorMap.get(
@@ -100,15 +73,7 @@
       "
     >
       <div class="icon robo">
-        <img
-          [src]="
-            'assets/userIcons/' +
-            simulationService.simulation.bots.get(
-              simulationStatsService.simulationStatistics.playerColors[2].color
-            )!.name +
-            '.svg'
-          "
-        />
+        <img [src]="'assets/userIcons/' + getBotName(2, true) + '.svg'" />
       </div>
       {{
         simulationService.simulation.bots.get(

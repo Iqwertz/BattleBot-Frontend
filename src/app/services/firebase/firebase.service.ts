@@ -468,6 +468,7 @@ export class FirebaseService {
           );
 
         for (let npc of this.currentLobby.player.values()) {
+          console.log('NPC ID:' + npc.NPCid);
           if (npc.NPCid) {
             this.placeNPC(npc);
           }
@@ -483,6 +484,7 @@ export class FirebaseService {
    * @memberof BattleMapComponent
    */
   placeNPC(npcConfig: Player) {
+    console.log(npcConfig);
     let npcBotEntry: GameBotEntry = {
       botBrainData: '',
       position: [0, 0],
@@ -501,6 +503,7 @@ export class FirebaseService {
       this.simulationService.setRandomStart(botPreset, 2);
       npcBotEntry.position = botPreset.position;
       npcBotEntry.botBrainData = JSON.stringify(botPreset.brain);
+      console.log('Placing NPC ' + npcConfig.uId);
       this.db.database
         .ref()
         .child(

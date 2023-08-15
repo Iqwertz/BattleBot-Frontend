@@ -84,8 +84,13 @@ export class PlayComponent implements OnInit {
 
                       let player: Player | undefined =
                         this.currentLobby!.player.get(v.uId);
+                      console.warn(player);
                       if (v.position[0] > 0 && v.position[1] > 0 && player) {
+                        console.log(player.uId);
+                        console.log(this.placedBots.indexOf(player.uId));
+                        console.log(this.placedBots);
                         if (this.placedBots.indexOf(player.uId) == -1) {
+                          console.log('generating Bot');
                           let bot: Bot = {
                             trackLength: 1,
                             trackColor: player.colorId + 1,

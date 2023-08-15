@@ -42,6 +42,21 @@ export class SimulationLeaderboardComponent implements OnInit {
     });
   }
 
+  getBotName(rank: number, stripNPCTag: boolean): string {
+    let bot = this.simulationService.simulation.bots.get(
+      this.simulationStatsService.simulationStatistics.playerColors[rank].color
+    );
+    if (bot) {
+      let name = bot.name;
+      if (stripNPCTag) {
+        name = name.replace(' [NPC]', '');
+      }
+      return name;
+    } else {
+      return '';
+    }
+  }
+
   restart() {
     //this.enableRestart = false;
     this.confettiService.setConfetti();

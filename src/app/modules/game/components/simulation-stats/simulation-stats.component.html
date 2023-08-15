@@ -49,7 +49,11 @@
         class="stat"
         [style.color]="byteColorMap.get(player.color.toString())"
       >
-        {{ simulationService.simulation.bots.get(player.color)!.name }}
+        {{
+          simulationService.simulation.bots.get(player.color)
+            ? simulationService.simulation.bots.get(player.color)!.name
+            : ""
+        }}
       </div>
       <div class="value">
         <i>{{ player.coverdArea }} | {{ player.coverdAreaPercent }}%</i>
